@@ -1,0 +1,10 @@
+# Folders
+node_modules/
+pathfinder/
+
+# Files
+dist/*
+package-lock.json
+
+# Keep folders with .gitkeep file
+!.gitkeep
