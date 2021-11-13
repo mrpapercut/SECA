@@ -1,9 +1,10 @@
 # Folders
 node_modules/
 pathfinder/
+dumps/
 
 # Files
-dist/*
+dist/
 package-lock.json
 
 # Keep folders with .gitkeep file
