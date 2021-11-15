@@ -40,4 +40,9 @@ declare namespace APIRequests {
     export interface SystemEstimatedScanValuesRequest extends DefaultSystemRequest {}
 
     export interface SystemStationsRequest extends DefaultSystemRequest {}
+
+    export interface SystemStationMarketRequest extends DefaultSystemRequest {
+        marketId?: null | number,
+        stationName?: string
+    }
 }

@@ -172,7 +172,23 @@ class APIClient {
         this.logOutput(systemStations);
     }
 
-    public async getSystemStationMarket() {}
+    public async getSystemStationMarket(systemName: string, marketId?: number, systemId?: number, stationName?: string): Promise<APIResponses.SystemStationMarketResponse> {
+        const params: APIRequests.SystemStationMarketRequest = {
+            systemName
+        }
+
+        if (marketId) params.marketId = marketId;
+        if (systemId) params.systemId = systemId;
+        if (stationName) params.stationName = stationName;
+
+        const response = await this.request('/api-system-v1/stations/market', params);
+
+        return await response.json();
+    }
+
+    public parseSystemStationMarket(systemStationMarket: APIResponses.SystemStationMarketResponse): void {
+        this.logOutput(systemStationMarket);
+    }
 
     public async getSystemStationShipyard() {}
 
@@ -219,9 +235,10 @@ class APIClient {
     // client.parseCommanderLastPosition(await client.getCommanderLastPosition());
     // client.parseSystemCelestialBodies(await client.getSystemCelestialBodies(testSystem[0]));
     // client.parseSystemEstimatedScanValues(await client.getSystemEstimatedScanValues(testSystem[2]));
-    // client.parseSystemStations(await client.getSystemStations(testSystems[1]));
+    // client.parseSystemStations(await client.getSystemStations(testSystemsSmall[1]));
+    client.parseSystemStationMarket(await client.getSystemStationMarket(testSystemsSmall[1], null, null, 'Ehrlich City'));
 
     // testSystems.forEach(async s => client.parseSystemEstimatedScanValues(await client.getSystemEstimatedScanValues(s)))
-    testSystemsSmall.forEach(async s => client.parseSystemStations(await client.getSystemStations(s)))
+    // testSystemsSmall.forEach(async s => client.parseSystemStations(await client.getSystemStations(s)))
 })();
 

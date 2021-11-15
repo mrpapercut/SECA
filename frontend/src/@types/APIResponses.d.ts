@@ -154,4 +154,23 @@ declare namespace APIResponses {
             }
         }>
     }
+
+    export interface SystemStationMarketResponse {
+        id: number,
+        id64: number,
+        name: string,
+        marketId: number,
+        sId: number,
+        sName: string,
+        url: string,
+        commodities: Array<{
+            id: string,
+            name: string,
+            buyPrice: number,
+            stock: number,
+            sellPrice: number,
+            demand: number,
+            stockBracket: number
+        }>
+    }
 }
