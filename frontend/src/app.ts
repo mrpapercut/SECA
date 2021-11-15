@@ -190,15 +190,90 @@ class APIClient {
         this.logOutput(systemStationMarket);
     }
 
-    public async getSystemStationShipyard() {}
+    public async getSystemStationShipyard(systemName: string, marketId?: number, systemId?: number, stationName?: string): Promise<APIResponses.SystemStationShipyardResponse> {
+        const params: APIRequests.SystemStationMarketRequest = {
+            systemName
+        }
 
-    public async getSystemStationOutfitting() {}
+        if (marketId) params.marketId = marketId;
+        if (systemId) params.systemId = systemId;
+        if (stationName) params.stationName = stationName;
 
-    public async getSystemFactions() {}
+        const response = await this.request('/api-system-v1/stations/shipyard', params);
 
-    public async getSystemTraffic() {}
+        return await response.json();
+    }
 
-    public async getSystemDeaths() {}
+    public parseSystemStationShipyard(systemStationShipyard: APIResponses.SystemStationShipyardResponse): void {
+        this.logOutput(systemStationShipyard);
+    }
+
+    public async getSystemStationOutfitting(systemName: string, marketId?: number, systemId?: number, stationName?: string): Promise<APIResponses.SystemStationOutfittingResponse> {
+        const params: APIRequests.SystemStationMarketRequest = {
+            systemName
+        }
+
+        if (marketId) params.marketId = marketId;
+        if (systemId) params.systemId = systemId;
+        if (stationName) params.stationName = stationName;
+
+        const response = await this.request('/api-system-v1/stations/outfitting', params);
+
+        return await response.json();
+    }
+
+    public parseSystemStationOutfitting(systemStationOutfitting: APIResponses.SystemStationOutfittingResponse): void {
+        this.logOutput(systemStationOutfitting);
+    }
+
+    public async getSystemFactions(systemName: string, systemId?: number, showHistory: 0 | 1 = 0): Promise<APIResponses.SystemFactionsResponse> {
+        const params: APIRequests.SystemFactionsRequest = {
+            systemName,
+            showHistory
+        }
+
+        if (systemId) params.systemId = systemId;
+
+        const response = await this.request('/api-system-v1/factions', params);
+
+        return await response.json();
+    }
+
+    public parseSystemFactions(systemFactions: APIResponses.SystemFactionsResponse): void {
+        this.logOutput(systemFactions);
+    }
+
+    public async getSystemTraffic(systemName: string, systemId?: number): Promise<APIResponses.SystemTrafficResponse> {
+        const params: APIRequests.SystemTrafficRequest = {
+            systemName
+        }
+
+        if (systemId) params.systemId = systemId;
+
+        const response = await this.request('/api-system-v1/traffic', params);
+
+        return await response.json();
+    }
+
+    public parseSystemTraffic(systemTraffic: APIResponses.SystemTrafficResponse): void {
+        this.logOutput(systemTraffic);
+    }
+
+    public async getSystemDeaths(systemName: string, systemId?: number): Promise<APIResponses.SystemDeathsResponse> {
+        const params: APIRequests.SystemDeathsRequest = {
+            systemName
+        }
+
+        if (systemId) params.systemId = systemId;
+
+        const response = await this.request('/api-system-v1/deaths', params);
+
+        return await response.json();
+    }
+
+    public parseSystemDeaths(systemDeaths: APIResponses.SystemDeathsResponse): void {
+        this.logOutput(systemDeaths);
+    }
 }
 
 (async () => {
@@ -211,7 +286,8 @@ class APIClient {
         'Deciat',
         'Sol',
         'HIP 33303',
-        'Maia'
+        'Maia',
+        'Swoilz KV-Z c2-13'
     ];
     const testSystemsMedium = [
         'HIP 40174',
@@ -233,12 +309,18 @@ class APIClient {
     // client.parseCommanderMaterials(await client.getCommanderMaterials());
     // client.parseFlightLogs(await client.getFlightLogs());
     // client.parseCommanderLastPosition(await client.getCommanderLastPosition());
-    // client.parseSystemCelestialBodies(await client.getSystemCelestialBodies(testSystem[0]));
-    // client.parseSystemEstimatedScanValues(await client.getSystemEstimatedScanValues(testSystem[2]));
+    // client.parseSystemCelestialBodies(await client.getSystemCelestialBodies('Swoilz KV-Z c2-13'));
+    // client.parseSystemEstimatedScanValues(await client.getSystemEstimatedScanValues('Swoilz KV-Z c2-13'));
     // client.parseSystemStations(await client.getSystemStations(testSystemsSmall[1]));
-    client.parseSystemStationMarket(await client.getSystemStationMarket(testSystemsSmall[1], null, null, 'Ehrlich City'));
+    // client.parseSystemStationMarket(await client.getSystemStationMarket(testSystemsSmall[1], null, null, 'Ehrlich City'));
+    // client.parseSystemStationShipyard(await client.getSystemStationShipyard(testSystemsSmall[1], null, null, 'Ehrlich City'));
+    // client.parseSystemStationOutfitting(await client.getSystemStationOutfitting(testSystemsSmall[1], null, null, 'Ehrlich City'));
+    // client.parseSystemFactions(await client.getSystemFactions(testSystemsSmall[1]));
+    // testSystemsLarge.forEach(async s => client.parseSystemFactions(await client.getSystemFactions(s)))
+    // client.parseSystemTraffic(await client.getSystemTraffic(testSystemsSmall[4]));
+    // testSystemsLarge.forEach(async s => client.parseSystemTraffic(await client.getSystemTraffic(s)));
+    // client.parseSystemDeaths(await client.getSystemDeaths(testSystemsSmall[4]));
+    testSystemsLarge.forEach(async s => client.parseSystemDeaths(await client.getSystemDeaths(s)));
 
-    // testSystems.forEach(async s => client.parseSystemEstimatedScanValues(await client.getSystemEstimatedScanValues(s)))
-    // testSystemsSmall.forEach(async s => client.parseSystemStations(await client.getSystemStations(s)))
+
 })();
-
