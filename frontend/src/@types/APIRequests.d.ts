@@ -14,6 +14,14 @@ declare namespace APIRequests {
         stationName?: string
     }
 
+    interface DefaultSystemInformationRequest {
+        showId: IntBoolean,
+        showCoordinates: IntBoolean,
+        showPermit: IntBoolean,
+        showInformation: IntBoolean,
+        showPrimaryStar: IntBoolean
+    }
+
     export interface CommanderRanksRequest extends DefaultAuthRequest {}
 
     export type CommanderCreditsPeriod = null | '7DAY' | '1MONTH' | '3MONTH' | '6MONTH';
@@ -32,12 +40,12 @@ declare namespace APIRequests {
         systemName?: null | string,
         startDateTime?: null | string,
         endDateTime?: null | string,
-        showId: 0 | 1
+        showId: IntBoolean
     }
 
     export interface CommanderLastPositionRequest extends DefaultAuthRequest {
-        showId: 0 | 1,
-        showCoordinates: 0 | 1
+        showId: IntBoolean,
+        showCoordinates: IntBoolean
     }
 
     export interface SystemCelestialBodiesRequest extends DefaultSystemRequest {}
@@ -53,10 +61,41 @@ declare namespace APIRequests {
     export interface SystemStationOutfittingRequest extends DefaultSystemStationRequest {}
 
     export interface SystemFactionsRequest extends DefaultSystemRequest {
-        showHistory: 0 | 1
+        showHistory: IntBoolean
     }
 
     export interface SystemTrafficRequest extends DefaultSystemRequest {}
 
     export interface SystemDeathsRequest extends DefaultSystemRequest {}
+
+    export interface SystemInformationRequest extends DefaultSystemInformationRequest {
+        systemName: string,
+        includeHidden: IntBoolean
+    }
+
+    export interface SystemsInformationRequest extends DefaultSystemInformationRequest  {
+        systemName: string | Array<string>,
+        startDateTime?: null | string,
+        endDateTime?: null | string,
+        onlyKnownCoordinates?: null | 1,
+        onlyUnknownCoordinates?: null | 1,
+        includeHidden: IntBoolean
+    }
+
+    export interface SystemsInSphereRequest extends DefaultSystemInformationRequest {
+        systemName: null | string,
+        x: null | number,
+        y: null | number,
+        z: null | number,
+        minRadius?: number,
+        radius?: number
+    }
+
+    export interface SystemsInCubeRequest extends DefaultSystemInformationRequest {
+        systemName: null | string,
+        x: null | number,
+        y: null | number,
+        z: null | number,
+        size?: number
+    }
 }

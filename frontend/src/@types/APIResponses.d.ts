@@ -274,4 +274,47 @@ declare namespace APIResponses {
             day: number
         }
     }
+
+    export interface SystemInformationResponse {
+        name: string,
+        id: number,
+        id64: number,
+        duplicates?: Array<number>,
+        coords: Coordinates,
+        coordsLocked: boolean,
+        requirePermit: boolean,
+        permitName?: string,
+        information: {} | {
+            allegiance: StationAllegiance,
+            government: StationGovernment,
+            faction: string,
+            factionState: FactionState,
+            population: number,
+            security: SystemSecurity,
+            economy: StationEconomy,
+            secondEconomy: StationEconomy,
+            reserve: SystemReserve
+        },
+        primaryStar: {} | {
+            type: string,
+            name: string,
+            isScoopable: boolean
+        }
+    }
+    
+    export type SystemsInformationResponse = Array<SystemInformationResponse>
+
+    interface SystemInSphereResponse extends SystemInformationResponse {
+        distance: number,
+        bodyCount: null | number
+    }
+
+    export type SystemsInSphereResponse = Array<SystemInSphereResponse>
+
+    interface SystemInCubeResponse extends SystemInformationResponse {
+        distance: number,
+        bodyCount: null | number
+    }
+    
+    export type SystemsInCubeResponse = Array<SystemsInCubeResponse>
 }

@@ -3,3 +3,5 @@ type Coordinates = {
     y: number,
     z: number
 }
+
+type IntBoolean = 0 | 1
