@@ -4,6 +4,19 @@ declare namespace APIResponses {
         msgnum: number
     }
 
+    interface DefaultSystemResponse {
+        id: number,
+        id64: number,
+        name: string,
+        url: string
+    }
+
+    interface DefaultSystemStationResponse extends DefaultSystemResponse {
+        marketId: number,
+        sId: number,
+        sName: string
+    }
+
     export interface ServerStatusResponse {
         lastUpdate: string,
         type: string,
@@ -95,20 +108,12 @@ declare namespace APIResponses {
         url: string
     }
 
-    export interface SystemCelestialBodiesResponse {
-        id: number,
-        id64: number,
+    export interface SystemCelestialBodiesResponse extends DefaultSystemResponse {
         bodyCount: number,
-        name: string,
-        url: string,
         bodies: Array<Star | Planet>
     }
 
-    export interface SystemEstimatedScanValuesResponse {
-        id: number,
-        id64: number,
-        name: string,
-        url: string,
+    export interface SystemEstimatedScanValuesResponse extends DefaultSystemResponse {
         estimatedValue: number,
         estimatedValueMapped: number,
         valuableBodies: Array<{
@@ -119,9 +124,7 @@ declare namespace APIResponses {
         }>
     }
 
-    export interface SystemStationsResponse {
-        id: number,
-        name: string,
+    export interface SystemStationsResponse extends DefaultSystemResponse {
         stations: Array<{
             id: number,
             marketId: number,
@@ -155,14 +158,7 @@ declare namespace APIResponses {
         }>
     }
 
-    export interface SystemStationMarketResponse {
-        id: number,
-        id64: number,
-        name: string,
-        marketId: number,
-        sId: number,
-        sName: string,
-        url: string,
+    export interface SystemStationMarketResponse extends DefaultSystemStationResponse {
         commodities: Array<{
             id: string,
             name: string,
@@ -172,5 +168,110 @@ declare namespace APIResponses {
             demand: number,
             stockBracket: number
         }>
+    }
+
+    export interface SystemStationShipyardResponse extends DefaultSystemStationResponse {
+        ships: Array<{
+            id: number,
+            name: string
+        }>
+    }
+
+    export interface SystemStationOutfittingResponse extends DefaultSystemStationResponse {
+        outfitting: Array<{
+            id: string,
+            name: string
+        }>
+    }
+
+    export interface SystemFactionsResponse extends DefaultSystemResponse {
+        controllingFaction?: {
+            id: number,
+            name: string,
+            allegiance: StationAllegiance,
+            government: StationGovernment
+        },
+        factions: Array<{
+            id: number,
+            name: string,
+            allegiance: StationAllegiance,
+            government: StationGovernment,
+            influence: number,
+            state: FactionState,
+            happiness: FactionHappiness,
+            isPlayer: boolean,
+            lastUpdate: number,
+            activeStates: Array<{
+                state: FactionState
+            }>,
+            recoveringStates: Array<{
+                state: FactionState,
+                trend: number
+            }>,            
+            pendingStates: Array<{
+                state: FactionState,
+                trend: number
+            }>
+        }>
+    }
+
+    export interface SystemTrafficResponse extends DefaultSystemResponse {
+        discovery: {
+            commander: string,
+            date: string
+        },
+        traffic: {
+            total: number,
+            week: number,
+            day: number
+        },
+        breakdown: {
+            Adder?: number,
+            'Alliance Challenger'?: number,
+            'Alliance Chieftain'?: number,
+            'Alliance Crusader'?: number,
+            Anaconda?: number,
+            'Asp Explorer'?: number,
+            'Asp Scout'?: number,
+            'Beluga Liner'?: number,
+            'Cobra MkIII'?: number,
+            'Cobra MkIV'?: number,
+            'Diamondback Explorer'?: number,
+            'Diamondback Scout'?: number,
+            Dolphin?: number,
+            'Eagle MkII'?: number,
+            'Federal Assault Ship'?: number,
+            'Federal Corvette'?: number,
+            'Federal Dropship'?: number,
+            'Federal Gunship'?: number,
+            'Fer-de-Lance'?: number,
+            Hauler?: number,
+            'Imperial Clipper'?: number,
+            'Imperial Courier'?: number,
+            'Imperial Cutter'?: number,
+            'Imperial Eagle'?: number,
+            'Keelback'?: number,
+            'Krait MkII'?: number,
+            'Krait Phantom'?: number,
+            Mamba?: number,
+            Orca?: number,
+            Python?: number,
+            Sidewinder?: number,
+            'Type-10 Defender'?: number,
+            'Type-6 Transporter'?: number,
+            'Type-7 Transporter'?: number,
+            'Type-9 Heavy'?: number,
+            'Viper MkIII'?: number,
+            'Viper MkIV'?: number,
+            Vulture?: number
+        }
+    }
+
+    export interface SystemDeathsResponse extends DefaultSystemResponse {
+        deaths: {
+            total: number,
+            week: number,
+            day: number
+        }
     }
 }

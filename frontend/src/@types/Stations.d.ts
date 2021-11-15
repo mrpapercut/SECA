@@ -2,7 +2,8 @@ type StationAllegiance =
     'Alliance' |
     'Empire' |
     'Federation' |
-    'Independent'
+    'Independent' |
+    'Pilots Federation'
 
 type StationGovernment =
     'Anarchy' |

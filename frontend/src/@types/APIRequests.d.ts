@@ -9,6 +9,11 @@ declare namespace APIRequests {
         systemId?: null | number
     }
 
+    interface DefaultSystemStationRequest extends DefaultSystemRequest {
+        marketId?: null | number,
+        stationName?: string
+    }
+
     export interface CommanderRanksRequest extends DefaultAuthRequest {}
 
     export type CommanderCreditsPeriod = null | '7DAY' | '1MONTH' | '3MONTH' | '6MONTH';
@@ -41,8 +46,17 @@ declare namespace APIRequests {
 
     export interface SystemStationsRequest extends DefaultSystemRequest {}
 
-    export interface SystemStationMarketRequest extends DefaultSystemRequest {
-        marketId?: null | number,
-        stationName?: string
+    export interface SystemStationMarketRequest extends DefaultSystemStationRequest {}
+
+    export interface SystemStationShipyardRequest extends DefaultSystemStationRequest {}
+
+    export interface SystemStationOutfittingRequest extends DefaultSystemStationRequest {}
+
+    export interface SystemFactionsRequest extends DefaultSystemRequest {
+        showHistory: 0 | 1
     }
+
+    export interface SystemTrafficRequest extends DefaultSystemRequest {}
+
+    export interface SystemDeathsRequest extends DefaultSystemRequest {}
 }
