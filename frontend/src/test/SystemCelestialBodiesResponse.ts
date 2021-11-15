@@ -1,3 +1,5 @@
+/// <reference path="../@types/APIResponses.d.ts" />
+
 const celestialBodies: APIResponses.SystemCelestialBodiesResponse = {
     "id": 1547,
     "id64": 6681123623626,

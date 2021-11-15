@@ -1,3 +1,5 @@
+/// <reference path="../@types/APIResponses.d.ts" />
+
 const lastPosition: APIResponses.CommanderLastPositionResponse = {
     "msgnum": 100,
     "msg": "OK",

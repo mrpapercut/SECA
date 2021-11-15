@@ -1,3 +1,5 @@
+/// <reference path="../@types/APIResponses.d.ts" />
+
 const materials: APIResponses.CommanderMaterialsResponse = {
     "msgnum": 100,
     "msg": "OK",

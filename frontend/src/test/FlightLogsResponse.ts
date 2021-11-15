@@ -1,3 +1,5 @@
+/// <reference path="../@types/APIResponses.d.ts" />
+
 const flightLogs: APIResponses.FlightLogsResponse = {
     "msgnum": 100,
     "msg": "OK",

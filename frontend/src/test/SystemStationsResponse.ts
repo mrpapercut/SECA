@@ -1,7 +1,10 @@
+/// <reference path="../@types/APIResponses.d.ts" />
+
 const systemStations: APIResponses.SystemStationsResponse = {
     "id": 27,
     "id64": 10477373803,
     "name": "Sol",
+    
     "url": "https://www.edsm.net/en/system/stations/id/27/name/Sol",
     "stations": [{
         "id": 2747,
