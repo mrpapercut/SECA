@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "module": "es6",
-        "target": "es5",
+        "target": "ES2021",
         "moduleResolution": "node",
         "sourceMap": true,
         "outDir": "dist",
@@ -15,6 +15,7 @@
         "./src/@types/Ranks.d.ts",
         "./src/@types/CelestialBodies.d.ts",
         "./src/@types/Materials.d.ts",
+        "./src/@types/Systems.d.ts",
         "./src/@types/Stations.d.ts",
         "./src/@types/Factions.d.ts",
         "./src/@types/Ships.d.ts",

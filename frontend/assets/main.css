@@ -34,6 +34,6 @@ body {
     border: 1px solid var(--orange-background);
     color: var(--orange-text);
     background: var(--dark-grey-background);
-    width: 60vw;
+    width: 95vw;
     height: 100vh;
 }
