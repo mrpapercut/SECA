@@ -15,6 +15,8 @@
         "./src/@types/Ranks.d.ts",
         "./src/@types/CelestialBodies.d.ts",
         "./src/@types/Materials.d.ts",
-        "./src/@types/Stations.d.ts"
+        "./src/@types/Stations.d.ts",
+        "./src/@types/Factions.d.ts",
+        "./src/@types/Ships.d.ts",
     ]
 }
