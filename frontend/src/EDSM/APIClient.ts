@@ -12,6 +12,10 @@ class APIClient {
         messages.forEach(message => output.value += JSON.stringify(message, null, 2) + ',\n');
     }
 
+    public debug(...messages: any[]): void {
+        this.logOutput(...messages);
+    }
+
     private async request(url: string = '', parameters: object) {
         const baseUrl: string = 'https://www.edsm.net';
 
@@ -40,10 +44,6 @@ class APIClient {
         return await response.json();
     }
 
-    public parseServerStatus(serverStatus: APIResponses.ServerStatusResponse): void {
-        this.logOutput(serverStatus);
-    }
-
     public async getCommanderRanks(): Promise<APIResponses.CommanderRanksResponse> {
         const params: APIRequests.CommanderRanksRequest = {
             apiKey: this.apiKey,
@@ -53,10 +53,6 @@ class APIClient {
         const response = await this.request('/api-commander-v1/get-ranks', params);
 
         return await response.json();
-    }
-
-    public parseCommanderRanks(commanderRanks: APIResponses.CommanderRanksResponse): void {
-        this.logOutput(commanderRanks);
     }
 
     public async getCommanderCredits(period: APIRequests.CommanderCreditsPeriod = null): Promise<APIResponses.CommanderCreditsResponse> {
@@ -71,10 +67,6 @@ class APIClient {
         return await response.json();
     }
 
-    public parseCommanderCredits(commanderCredits: APIResponses.CommanderCreditsResponse): void {
-        this.logOutput(commanderCredits);
-    }
-
     public async getCommanderMaterials(type: APIRequests.CommanderMaterialsType = 'materials'): Promise<APIResponses.CommanderMaterialsResponse> {
         const params: APIRequests.CommanderMaterialsRequest = {
             apiKey: this.apiKey,
@@ -85,10 +77,6 @@ class APIClient {
         const response = await this.request('/api-commander-v1/get-materials', params);
 
         return await response.json();
-    }
-
-    public parseCommanderMaterials(commanderMaterials: APIResponses.CommanderMaterialsResponse): void {
-        this.logOutput(commanderMaterials);
     }
 
     public async getFlightLogs(systemName: string = null, startDateTime: string = null, endDateTime: string = null, showId: 0 | 1 = 1): Promise<APIResponses.FlightLogsResponse> {
@@ -107,10 +95,6 @@ class APIClient {
         return await response.json();
     }
 
-    public parseFlightLogs(flightLogs: APIResponses.FlightLogsResponse): void {
-        this.logOutput(flightLogs);
-    }
-
     public async getCommanderLastPosition(): Promise<APIResponses.CommanderLastPositionResponse> {
         const params: APIRequests.CommanderLastPositionRequest = {
             apiKey: this.apiKey,
@@ -122,10 +106,6 @@ class APIClient {
         const response = await this.request('/api-logs-v1/get-position', params);
 
         return await response.json();
-    }
-
-    public parseCommanderLastPosition(commanderLastPosition: APIResponses.CommanderLastPositionResponse): void {
-        this.logOutput(commanderLastPosition);
     }
 
     public async getSystemCelestialBodies(systemName: string, systemId?: number): Promise<APIResponses.SystemCelestialBodiesResponse> {
@@ -140,10 +120,6 @@ class APIClient {
         return await response.json();
     }
 
-    public parseSystemCelestialBodies(systemCelestialBodies: APIResponses.SystemCelestialBodiesResponse): void {
-        this.logOutput(systemCelestialBodies);
-    }
-
     public async getSystemEstimatedScanValues(systemName: string, systemId?: number): Promise<APIResponses.SystemEstimatedScanValuesResponse> {
         const params: APIRequests.SystemEstimatedScanValuesRequest = {
             systemName
@@ -156,10 +132,6 @@ class APIClient {
         return await response.json();
     }
 
-    public parseSystemEstimatedScanValues(systemEstimatedScanValues: APIResponses.SystemEstimatedScanValuesResponse): void {
-        this.logOutput(systemEstimatedScanValues);
-    }
-
     public async getSystemStations(systemName: string, systemId?: number): Promise<APIResponses.SystemStationsResponse> {
         const params: APIRequests.SystemStationsRequest = {
             systemName
@@ -170,10 +142,6 @@ class APIClient {
         const response = await this.request('/api-system-v1/stations', params);
 
         return await response.json();
-    }
-
-    public parseSystemStations(systemStations: APIResponses.SystemStationsResponse): void {
-        this.logOutput(systemStations);
     }
 
     public async getSystemStationMarket(systemName: string, marketId?: number, systemId?: number, stationName?: string): Promise<APIResponses.SystemStationMarketResponse> {
@@ -190,10 +158,6 @@ class APIClient {
         return await response.json();
     }
 
-    public parseSystemStationMarket(systemStationMarket: APIResponses.SystemStationMarketResponse): void {
-        this.logOutput(systemStationMarket);
-    }
-
     public async getSystemStationShipyard(systemName: string, marketId?: number, systemId?: number, stationName?: string): Promise<APIResponses.SystemStationShipyardResponse> {
         const params: APIRequests.SystemStationMarketRequest = {
             systemName
@@ -206,10 +170,6 @@ class APIClient {
         const response = await this.request('/api-system-v1/stations/shipyard', params);
 
         return await response.json();
-    }
-
-    public parseSystemStationShipyard(systemStationShipyard: APIResponses.SystemStationShipyardResponse): void {
-        this.logOutput(systemStationShipyard);
     }
 
     public async getSystemStationOutfitting(systemName: string, marketId?: number, systemId?: number, stationName?: string): Promise<APIResponses.SystemStationOutfittingResponse> {
@@ -226,10 +186,6 @@ class APIClient {
         return await response.json();
     }
 
-    public parseSystemStationOutfitting(systemStationOutfitting: APIResponses.SystemStationOutfittingResponse): void {
-        this.logOutput(systemStationOutfitting);
-    }
-
     public async getSystemFactions(systemName: string, systemId?: number, showHistory: 0 | 1 = 0): Promise<APIResponses.SystemFactionsResponse> {
         const params: APIRequests.SystemFactionsRequest = {
             systemName,
@@ -241,10 +197,6 @@ class APIClient {
         const response = await this.request('/api-system-v1/factions', params);
 
         return await response.json();
-    }
-
-    public parseSystemFactions(systemFactions: APIResponses.SystemFactionsResponse): void {
-        this.logOutput(systemFactions);
     }
 
     public async getSystemTraffic(systemName: string, systemId?: number): Promise<APIResponses.SystemTrafficResponse> {
@@ -259,10 +211,6 @@ class APIClient {
         return await response.json();
     }
 
-    public parseSystemTraffic(systemTraffic: APIResponses.SystemTrafficResponse): void {
-        this.logOutput(systemTraffic);
-    }
-
     public async getSystemDeaths(systemName: string, systemId?: number): Promise<APIResponses.SystemDeathsResponse> {
         const params: APIRequests.SystemDeathsRequest = {
             systemName
@@ -275,17 +223,13 @@ class APIClient {
         return await response.json();
     }
 
-    public parseSystemDeaths(systemDeaths: APIResponses.SystemDeathsResponse): void {
-        this.logOutput(systemDeaths);
-    }
-
     public async getSystemInformation(
-        systemName: string, 
-        showId: 0 | 1 = 1, 
-        showCoordinates: 0 | 1 = 1, 
-        showPermit: 0 | 1 = 1, 
-        showInformation: 0 | 1 = 1, 
-        showPrimaryStar: 0 | 1 = 1, 
+        systemName: string,
+        showId: 0 | 1 = 1,
+        showCoordinates: 0 | 1 = 1,
+        showPermit: 0 | 1 = 1,
+        showInformation: 0 | 1 = 1,
+        showPrimaryStar: 0 | 1 = 1,
         includeHidden: 0 | 1 = 0
     ): Promise<APIResponses.SystemInformationResponse> {
         const params: APIRequests.SystemInformationRequest = {
@@ -303,21 +247,17 @@ class APIClient {
         return await response.json();
     }
 
-    public parseSystemInformation(system: APIResponses.SystemInformationResponse): void {
-        this.logOutput(system);
-    }
-
     public async getSystemsInformation(
-        systemName: string | Array<string>, 
-        showId: 0 | 1 = 1, 
-        showCoordinates: 0 | 1 = 1, 
-        showPermit: 0 | 1 = 1, 
-        showInformation: 0 | 1 = 1, 
-        showPrimaryStar: 0 | 1 = 1, 
-        startDateTime: null | string = null, 
-        endDateTime: null | string = null, 
-        onlyKnownCoordinates: null | 1 = null, 
-        onlyUnknownCoordinates: null | 1 = null, 
+        systemName: string | Array<string>,
+        showId: 0 | 1 = 1,
+        showCoordinates: 0 | 1 = 1,
+        showPermit: 0 | 1 = 1,
+        showInformation: 0 | 1 = 1,
+        showPrimaryStar: 0 | 1 = 1,
+        startDateTime: null | string = null,
+        endDateTime: null | string = null,
+        onlyKnownCoordinates: null | 1 = null,
+        onlyUnknownCoordinates: null | 1 = null,
         includeHidden: 0 | 1 = 0
     ): Promise<APIResponses.SystemsInformationResponse> {
         const params: APIRequests.SystemsInformationRequest = {
@@ -340,21 +280,17 @@ class APIClient {
         return await response.json();
     }
 
-    public parseSystemsInformation(systems: APIResponses.SystemsInformationResponse): void {
-        this.logOutput(systems);
-    }
-
     public async getSystemsInSphere(
-        systemName: null | string, 
-        x: null | number = null, 
-        y: null | number = null, 
-        z: null | number = null, 
-        minRadius: number = 0, 
+        systemName: null | string,
+        x: null | number = null,
+        y: null | number = null,
+        z: null | number = null,
+        minRadius: number = 0,
         radius: number = 50,
-        showId: 0 | 1 = 1, 
-        showCoordinates: 0 | 1 = 1, 
-        showPermit: 0 | 1 = 1, 
-        showInformation: 0 | 1 = 1, 
+        showId: 0 | 1 = 1,
+        showCoordinates: 0 | 1 = 1,
+        showPermit: 0 | 1 = 1,
+        showInformation: 0 | 1 = 1,
         showPrimaryStar: 0 | 1 = 1
     ): Promise<APIResponses.SystemsInSphereResponse> {
         const params: APIRequests.SystemsInSphereRequest = {
@@ -374,20 +310,16 @@ class APIClient {
         return await response.json();
     }
 
-    public parseSystemsInSphere(systems: APIResponses.SystemsInSphereResponse) {
-        this.logOutput(systems);
-    }
-
     public async getSystemsInCube(
-        systemName: null | string, 
-        x: null | number = null, 
-        y: null | number = null, 
-        z: null | number = null, 
-        size: number = 100, 
-        showId: 0 | 1 = 1, 
-        showCoordinates: 0 | 1 = 1, 
-        showPermit: 0 | 1 = 1, 
-        showInformation: 0 | 1 = 1, 
+        systemName: null | string,
+        x: null | number = null,
+        y: null | number = null,
+        z: null | number = null,
+        size: number = 100,
+        showId: 0 | 1 = 1,
+        showCoordinates: 0 | 1 = 1,
+        showPermit: 0 | 1 = 1,
+        showInformation: 0 | 1 = 1,
         showPrimaryStar: 0 | 1 = 1
     ): Promise<APIResponses.SystemsInCubeResponse> {
         const params: APIRequests.SystemsInCubeRequest = {
@@ -404,10 +336,6 @@ class APIClient {
         const response = await this.request('/api-v1/cube-systems', params);
 
         return await response.json();
-    }
-
-    public parseSystemsInCube(systems: APIResponses.SystemsInCubeResponse) {
-        this.logOutput(systems);
     }
 }
 
