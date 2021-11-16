@@ -9,15 +9,19 @@
     },
     "files": [
         "./src/app.ts",
-        "./src/@types/APIRequests.d.ts",
-        "./src/@types/APIResponses.d.ts",
-        "./src/@types/Generic.d.ts",
-        "./src/@types/Ranks.d.ts",
-        "./src/@types/CelestialBodies.d.ts",
-        "./src/@types/Materials.d.ts",
-        "./src/@types/Systems.d.ts",
-        "./src/@types/Stations.d.ts",
-        "./src/@types/Factions.d.ts",
-        "./src/@types/Ships.d.ts",
+
+        "./src/util/calculateDistance.ts",
+        
+        "./src/EDSM/APIClient.ts",
+        "./src/EDSM/@types/APIRequests.d.ts",
+        "./src/EDSM/@types/APIResponses.d.ts",
+        "./src/EDSM/@types/Generic.d.ts",
+        "./src/EDSM/@types/Ranks.d.ts",
+        "./src/EDSM/@types/CelestialBodies.d.ts",
+        "./src/EDSM/@types/Materials.d.ts",
+        "./src/EDSM/@types/Systems.d.ts",
+        "./src/EDSM/@types/Stations.d.ts",
+        "./src/EDSM/@types/Factions.d.ts",
+        "./src/EDSM/@types/Ships.d.ts",
     ]
 }
