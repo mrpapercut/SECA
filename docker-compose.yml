@@ -1,0 +1,17 @@
+version: '3.9'
+
+networks:
+  default:
+    name: ${COMPOSE_PROJECT_NAME}_network
+
+services:
+  frontend:
+    build: ./frontend
+    container_name: ${COMPOSE_PROJECT_NAME}_frontend
+    command: /bin/sh -c "npm run build && npm run server"
+    environment:
+      COMMANDER_NAME: ${COMMANDER_NAME}
+      EDSM_API_KEY: ${EDSM_API_KEY}
+    ports:
+      - "7000:7000"
+    restart: unless-stopped
