@@ -6,6 +6,7 @@ dumps/
 # Files
 dist/
 package-lock.json
+.env
 
 # Keep folders with .gitkeep file
 !.gitkeep
