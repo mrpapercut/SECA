@@ -2,11 +2,13 @@
 node_modules/
 pathfinder/
 dumps/
+.next/
 
 # Files
 dist/
 package-lock.json
 .env
+.env.local
 
 # Keep folders with .gitkeep file
 !.gitkeep
