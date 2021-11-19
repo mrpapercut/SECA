@@ -1,0 +1,31 @@
+@import 'variables';
+@import 'mixins';
+
+.wrapper {
+    background: $dark-grey-background;
+    color: $orange-text;
+}
+
+.navHeader {
+    @include border-glow;
+
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+
+    a {
+        color: $orange-text;
+        text-transform: uppercase;
+        text-decoration: none;
+        text-align: center;
+        padding: .5rem 0;
+
+        &:hover {
+            background: $orange-background;
+            color: $normal-background;
+        }
+    }
+}
+
+.cmdrProfilePhoto {
+
+}
