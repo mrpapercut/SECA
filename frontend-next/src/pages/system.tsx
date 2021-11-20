@@ -1,41 +1,45 @@
-import { GetServerSideProps } from 'next';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
-import Layout from '../components/Layout';
-
-import APIClient from '../../vendor/EDSM/APIClient';
+import {setCommanderLastPosition} from '../../redux/actions/commander';
+import {setCurrentSystem} from '../../redux/actions/system';
 
 import systemStyles from '../styles/system.module.scss';
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    const client = new APIClient(process.env.EDSM_API_KEY, process.env.COMMANDER_NAME);
+export default function System({EDSMClient}) {
+    const dispatch = useDispatch();
 
-    const cmdrLastPosition = await client.getCommanderLastPosition();
-    const systemInformation = await client.getSystemCelestialBodies(cmdrLastPosition.system);
+    const commanderLastPosition = useSelector(state => state.commander.lastPosition);
+    const systemInformation = useSelector(state => state.system.currentSystem);
 
-    return {
-        props: {
-            systemInformation
+    useEffect(() => {
+        if (!commanderLastPosition) {
+            EDSMClient.getCommanderLastPosition().then(res => {
+                dispatch(setCommanderLastPosition(res));
+            });
+        } else if (!systemInformation) {
+            EDSMClient.getSystemCelestialBodies(commanderLastPosition.system).then(res => {
+                dispatch(setCurrentSystem(res));
+            });
         }
-    }
-}
+    }, [dispatch]);
 
-const System = ({systemInformation}) => {
+    const systemBodies = systemInformation ?
+        systemInformation.bodyCount === systemInformation.bodies.length
+            ? systemInformation.bodyCount
+            : `${systemInformation.bodyCount} (${systemInformation.bodyCount - systemInformation.bodies.length} undiscovered)`
+        : null;
+
     return (
-        <Layout>
+        <>
             <div>
                 <span className={systemStyles.label}>Name:</span>
-                <span className={systemStyles.value}>{systemInformation.name}</span>
+                <span className={systemStyles.value}>{systemInformation ? systemInformation.name : null}</span>
             </div>
             <div>
                 <span className={systemStyles.label}>Bodies:</span>
-                <span className={systemStyles.value}>{
-                    systemInformation.bodyCount === systemInformation.bodies.length
-                    ? systemInformation.bodyCount
-                    : `${systemInformation.bodyCount} (${systemInformation.bodyCount - systemInformation.bodies.length} undiscovered)`
-                }</span>
+                <span className={systemStyles.value}>{systemBodies}</span>
             </div>
-        </Layout>
+        </>
     )
 }
-
-export default System;
