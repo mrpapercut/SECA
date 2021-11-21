@@ -4,6 +4,7 @@ pathfinder/
 dumps/
 .next/
 wallpapers/
+elasticsearch/data
 
 # Files
 dist/
