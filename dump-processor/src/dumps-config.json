@@ -1,0 +1,31 @@
+[{
+    "name": "systemsWithCoordinates",
+    "url": "https://www.edsm.net/dump/systemsWithCoordinates.json.gz",
+    "index": "systems",
+    "mapping": "systems",
+    "action": "insert"
+}, {
+    "name": "systemsWithCoordinates7days",
+    "url": "https://www.edsm.net/dump/systemsWithCoordinates7days.json.gz",
+    "mapping": "systems-update",
+    "index": "systems",
+    "action": "upsert"
+}, {
+    "name": "systemsWithoutCoordinates",
+    "url": "https://www.edsm.net/dump/systemsWithoutCoordinates.json.gz",
+    "index": "systems",
+    "mapping": "systems",
+    "action": "upsert"
+}, {
+    "name": "systemsPopulated",
+    "url": "https://www.edsm.net/dump/systemsPopulated.json.gz",
+    "index": "systems-detailed",
+    "mapping": "systems-detailed",
+    "action": "upsert"
+}, {
+    "name": "bodies7days",
+    "url": "https://www.edsm.net/dump/bodies7days.json.gz",
+    "index": "celestial-bodies",
+    "mapping": "celestial-bodies",
+    "action": "upsert"
+}]

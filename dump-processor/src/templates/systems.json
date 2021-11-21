@@ -1,0 +1,63 @@
+{
+    "order": 0,
+    "index_patterns": [
+        "systems"
+    ],
+    "mappings": {
+        "_doc": {
+            "dynamic": false,
+            "numeric_detection": false,
+            "date_detection": false,
+            "properties": {
+                "id": {
+                    "type": "long",
+                    "index": true
+                },
+                "id64": {
+                    "type": "long"
+                },
+                "name": {
+                    "type": "keyword",
+                    "index": true
+                },
+                "coordinates": {
+                    "type": "object",
+                    "properties": {
+                        "x": {
+                            "type": "float"
+                        },
+                        "y": {
+                            "type": "float"
+                        },
+                        "z": {
+                            "type": "float"
+                        }
+                    }
+                },
+                "estimatedCoordinates": {
+                    "type": "object",
+                    "properties": {
+                        "x": {
+                            "type": "float"
+                        },
+                        "y": {
+                            "type": "float"
+                        },
+                        "z": {
+                            "type": "float"
+                        },
+                        "precision": {
+                            "type": "long"
+                        }
+                    }
+                },
+                "created_at": {
+                    "type": "date"
+                },
+                "updated_at": {
+                    "type": "date"
+                }
+            }
+        }
+    }
+}

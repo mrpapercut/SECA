@@ -1,0 +1,42 @@
+{
+    "id": 352512888,
+    "id64": 180144132121872523,
+    "bodyId": 5,
+    "name": "Oochont TI-A d1-4 5",
+    "type": "Planet",
+    "subType": "High metal content world",
+    "parents": [{
+            "Star": 0
+        }
+    ],
+    "distanceToArrival": 1307,
+    "isLandable": false,
+    "gravity": 0.9239163083578539,
+    "earthMasses": 0.646646,
+    "radius": 5335.824,
+    "surfaceTemperature": 1233,
+    "surfacePressure": 1874.1282802862077,
+    "volcanismType": "No volcanism",
+    "atmosphereType": "Hot thick Water",
+    "atmosphereComposition": {
+        "Water": 99.94
+    },
+    "solidComposition": {
+        "Rock": 67.18,
+        "Metal": 32.82,
+        "Ice": 0
+    },
+    "terraformingState": "Candidate for terraforming",
+    "orbitalPeriod": 1261.5816322741898,
+    "semiMajorAxis": 2.622638232571582,
+    "orbitalEccentricity": 0.001124,
+    "orbitalInclination": -0.047732,
+    "argOfPeriapsis": 15.436685,
+    "rotationalPeriod": 1.4372824234722223,
+    "rotationalPeriodTidallyLocked": false,
+    "axialTilt": -0.399931,
+    "updateTime": "2021-11-14 03:09:28",
+    "systemId": 70239732,
+    "systemId64": 147027052683,
+    "systemName": "Oochont TI-A d1-4"
+}
