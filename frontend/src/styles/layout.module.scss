@@ -1,0 +1,71 @@
+@import 'variables';
+@import 'mixins';
+
+.wrapper {
+    color: $orange-text;
+    margin: 1rem;
+    height: calc(100vh - 2rem);
+    position: relative;
+}
+
+.navHeader {
+    @include border-glow;
+    @include glass-effect;
+
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    gap: .5rem;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px 1px rgb(0, 0, 0, 60%);
+
+    a {
+        background: rgba($orange-background, 0.1);
+        color: $orange-text;
+        text-transform: uppercase;
+        text-decoration: none;
+        text-align: center;
+        padding: .25rem 0;
+
+        &:hover {
+            background: rgba($orange-background, 0.4);
+            color: $white-text;
+        }
+    }
+}
+
+.mainContent {
+    @include border-glow;
+    @include glass-effect;
+
+    background: rgba($dark-grey-background, 0.1);
+    text-shadow: 1px 1px 1px rgb(0 0 0 / 60%);
+    padding: 1rem;
+    height: 70vh;
+}
+
+.cmdrProfilePhoto {
+    @include border-glow;
+    border: 1px solid $orange-text !important;
+    border-radius: 50%;
+}
+
+.wallpaperWrapper {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: -1;
+}
+
+// Tables, forms etc
+.label {
+    color: $orange-text;
+    width: 5rem;
+    display: inline-block;
+}
+
+.value {
+    color: $white-text;
+}
+

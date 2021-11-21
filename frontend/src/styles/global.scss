@@ -1,0 +1,10 @@
+@import 'variables';
+@import 'fonts';
+
+body {
+    background: $normal-background;
+    color: $normal-text;
+    font-family: 'Eurostile';
+    margin: 0;
+    line-height: 1.5rem;
+}

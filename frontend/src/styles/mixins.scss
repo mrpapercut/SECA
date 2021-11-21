@@ -1,0 +1,11 @@
+@import 'variables';
+
+@mixin border-glow($color: $orange-text) {
+    border: 1px solid $color;
+    box-shadow: 0 0 2px inset $color, 0 0 3px $color;
+}
+
+@mixin glass-effect() {
+    backdrop-filter: blur(2px);
+    background: rgba(0, 0, 0, 0.15);
+}
