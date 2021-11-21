@@ -103,6 +103,7 @@ class DumpsProcessor {
     extractFile(filename) {
         this.debug('log', `Extracting file ${filename}.json.gz`);
         child_process.spawnSync('gunzip', ['-k', `/app/dumps/${filename}.json.gz`]);
+        this.debug('log', `File extraction complete`);
     }
 
     readFile(dumpConfig) {
@@ -147,7 +148,4 @@ const systemsWithCoordinates7daysConfig = dumpsConfig[1];
 const systemsWithoutCoordinatesConfig = dumpsConfig[2];
 
 const processor = new DumpsProcessor(DEBUG);
-
-[systemsWithCoordinatesConfig, systemsWithCoordinates7daysConfig, systemsWithoutCoordinatesConfig].forEach(config => {
-    await processor.process(config);
-});
+processor.process(systemsWithCoordinatesConfig);
