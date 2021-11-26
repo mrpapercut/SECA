@@ -35,8 +35,9 @@ class DumpsProcessor {
                 await this.deleteFiles(dumpConfig.name);
                 await this.downloadFile(dumpConfig.url, dumpConfig.name);
                 await this.extractFile(dumpConfig.name);
-                await this.readFile(dumpConfig);
-                await this.deleteFiles(dumpConfig.name);
+                await this.splitFile(dumpConfig.name);
+                // await this.readFile(dumpConfig);
+                // await this.deleteFiles(dumpConfig.name);
             }
         }, 1000);
     }
@@ -105,6 +106,11 @@ class DumpsProcessor {
         child_process.spawnSync('gunzip', ['-k', `/app/dumps/${filename}.json.gz`]);
     }
 
+    splitFile(filename) {
+        this.debug('log', `Splitting ${filename}.json into chunks`);
+        child_process.spawnSync('split', ['-d', '-l100000', '--additional-suffix=.json', `/app/dumps/${filename}.json`, `/app/dumps/${filename}-split-`]);
+    }
+
     readFile(dumpConfig) {
         const filepath = path.resolve(this.dumpsPath, `${dumpConfig.name}.json`);
         let counter = 0;
@@ -148,6 +154,6 @@ const systemsWithoutCoordinatesConfig = dumpsConfig[2];
 
 const processor = new DumpsProcessor(DEBUG);
 
-[systemsWithCoordinatesConfig, systemsWithCoordinates7daysConfig, systemsWithoutCoordinatesConfig].forEach(config => {
+[/*systemsWithCoordinatesConfig, systemsWithCoordinates7daysConfig,*/ systemsWithoutCoordinatesConfig].forEach(config => {
     await processor.process(config);
 });
