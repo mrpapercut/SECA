@@ -5,6 +5,8 @@ dumps/
 .next/
 wallpapers/
 elasticsearch/data
+# From EDDiscovery
+**/public/img/Bodies/
 
 # Files
 dist/
