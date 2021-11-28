@@ -35,8 +35,9 @@ class DumpsProcessor {
                 await this.deleteFiles(dumpConfig.name);
                 await this.downloadFile(dumpConfig.url, dumpConfig.name);
                 await this.extractFile(dumpConfig.name);
-                await this.readFile(dumpConfig);
-                await this.deleteFiles(dumpConfig.name);
+                await this.splitFile(dumpConfig.name);
+                // await this.readFile(dumpConfig);
+                // await this.deleteFiles(dumpConfig.name);
             }
         }, 1000);
     }
@@ -104,6 +105,11 @@ class DumpsProcessor {
         this.debug('log', `Extracting file ${filename}.json.gz`);
         child_process.spawnSync('gunzip', ['-k', `/app/dumps/${filename}.json.gz`]);
         this.debug('log', `File extraction complete`);
+    }
+
+    splitFile(filename) {
+        this.debug('log', `Splitting ${filename}.json into chunks`);
+        child_process.spawnSync('split', ['-d', '-l100000', '--additional-suffix=.json', `/app/dumps/${filename}.json`, `/app/dumps/${filename}-split-`]);
     }
 
     readFile(dumpConfig) {
