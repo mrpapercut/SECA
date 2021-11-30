@@ -264,7 +264,7 @@ class CelestialBody {
             if (planetType === PlanetType.WGWL || planetType === PlanetType.GGWB) {
                 if (surfaceTemp < 152) {
                     iconName = 'GGWv24';
-                } else if (st < 155) {
+                } else if (surfaceTemp < 155) {
                     if (this.atmosphereCompositionContains('oxygen')) {
                         iconName = 'GGWv1';
                     } else {
@@ -559,17 +559,17 @@ class CelestialBody {
                     }
                 } else if (surfaceTemp < 500) {
                     iconName = 'HMCv34';
-                } else if (st < 700) {
+                } else if (surfaceTemp < 700) {
                     iconName = 'HMCv32';
-                } else if (st < 900) {
+                } else if (surfaceTemp < 900) {
                     iconName = 'HMCv31';
-                } else if (st < 1000) {
+                } else if (surfaceTemp < 1000) {
                     if (this.isTidallyLocked) {
                         iconName = 'HMCv33';
                     } else {
                         iconName = 'HMCv35';
                     }
-                } else if (st >= 1000) {
+                } else if (surfaceTemp >= 1000) {
                     iconName = 'HMCv36';
                 }
             } else if (!this.isLandable) {

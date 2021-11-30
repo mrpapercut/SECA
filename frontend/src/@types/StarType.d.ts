@@ -14,7 +14,7 @@ export class StarType {
     static readonly K = 'K (Yellow-Orange) Star';
     static readonly K_Giant = 'K (Yellow-Orange giant) Star';
 
-    static readonly M_Dwarf = 'M (Red dwarf) Star';
+    static readonly M = 'M (Red dwarf) Star';
     static readonly M_Giant = 'M (Red giant) Star';
     static readonly M_SuperGiant = 'M (Red super giant) Star';
 
