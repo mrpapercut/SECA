@@ -1,0 +1,20 @@
+version: '3'
+
+networks:
+  o--0.eu:
+
+volumes:
+  o--0.eu:
+
+services:
+  o--0.eu:
+    build:
+      context: ./website
+      dockerfile: ./Dockerfile
+    container_name: o--0.eu
+    command: /bin/sh -c 'npm start'
+    ports:
+      - "4000:4000"
+    restart: always
+    networks:
+      - o--0.eu
