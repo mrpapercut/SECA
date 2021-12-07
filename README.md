@@ -1,6 +1,8 @@
-<p align="center">
-    ![SECA](https://github.com/mrpapercut/SECA/blob/main/website/assets/seca-logo.png)
-    SECA
-    SuperElite Companion App for Elite Dangerous
-    Coming in 3308
+<p align="center" style="margin-bottom: 0px !important;">
+  <img width="300" src="https://github.com/mrpapercut/SECA/blob/main/website/assets/seca-logo.png" alt="SECA" align="center">
 </p>
+<h1 align="center" style="margin-top: 0px;">SECA</h1>
+
+<h2 align="center" >SuperElite Companion App for Elite Dangerous</h2>
+
+<p align="center">Coming in 3308</p>
