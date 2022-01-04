@@ -24,8 +24,8 @@ services:
       - LOGSTASH_PORT_CELESTIAL_BODIES=${LOGSTASH_PORT_CELESTIAL_BODIES}
       - LOGSTASH_PORT_POPULATED_SYSTEMS=${LOGSTASH_PORT_POPULATED_SYSTEMS}
     volumes:
-      - ./new-dump-processor/logstash/logstash-pipeline.conf:/usr/share/logstash/pipeline/logstash.conf
-      - ./new-dump-processor/dumps:/dumps
+      - ./dump-processor/logstash/logstash-pipeline.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./dump-processor/dumps:/dumps
     ports:
       - "5044:5044"
       - "5045:5045"
@@ -43,5 +43,5 @@ services:
       - LOGSTASH_PORT_CELESTIAL_BODIES=${LOGSTASH_PORT_CELESTIAL_BODIES}
       - LOGSTASH_PORT_POPULATED_SYSTEMS=${LOGSTASH_PORT_POPULATED_SYSTEMS}
     volumes:
-      - ./new-dump-processor/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-      - ./new-dump-processor/dumps:/dumps
+      - ./dump-processor/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./dump-processor/dumps:/dumps
