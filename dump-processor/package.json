@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "@elastic/elasticsearch": "^7.15.0",
-    "got": "^11.8.3"
-  },
-  "scripts": {
-    "dumpprocessor": "node ./src/index.js"
-  }
-}

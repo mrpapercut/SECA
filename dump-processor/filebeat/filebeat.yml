@@ -1,0 +1,11 @@
+filebeat.inputs:
+  - input_type: log
+    close_eof: true
+    # ignore_older: 1m
+    # scan_frequency: 1m
+    json.keys_under_root: true
+    paths:
+      - "/dumps/systemsWithCoordinates.json"
+
+output.logstash:
+  hosts: [ "${LOGSTASH_HOST}:${LOGSTASH_PORT_SYSTEMS_WITH_COORDINATES}" ]

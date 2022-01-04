@@ -1,3 +1,3 @@
-FROM elasticsearch:7.9.3
+FROM docker.elastic.co/elasticsearch/elasticsearch:7.16.0
 
 USER elasticsearch
