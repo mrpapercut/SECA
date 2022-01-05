@@ -9,3 +9,33 @@
     backdrop-filter: blur(2px);
     background: rgba(0, 0, 0, 0.15);
 }
+
+@mixin scrollable {
+    @include border-glow;
+
+    /* width */
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+        border-radius: 15px;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: $orange-text;
+        border-radius: 15px;
+    }
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background: $orange-background;
+    }
+
+    &::-webkit-scrollbar-corner {
+        display: none;
+    }
+}

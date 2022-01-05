@@ -1,0 +1,61 @@
+@import 'mixins';
+
+.system {
+    float: left;
+}
+
+.star,
+.body {
+    float: left;
+    clear: left;
+    position: relative;
+    margin: .75rem;
+
+    .name {
+        @include glass-effect;
+        @include border-glow;
+        position: absolute;
+        left: 25%;
+        top: -25%;
+        overflow: visible;
+        transform: rotate(-45deg);
+        z-index: 1;
+        white-space: nowrap;
+        padding: .25rem;
+        display: none;
+    }
+
+    &:hover .name {
+        display: block;
+    }
+}
+
+.star {
+    .name {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.children0,
+.children2 {
+    float: left;
+
+    & > div {
+        float: left;
+    }
+}
+
+.children0 {
+    margin-top: 50px;
+}
+
+.children1,
+.children3 {
+    margin-left: 25px;
+
+    & > div {
+        float: none;
+    }
+}
