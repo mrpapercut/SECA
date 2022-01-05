@@ -1,0 +1,15 @@
+{
+    "name": "SECA_Auth",
+    "index": "cmdr",
+    "fields": {
+        "cmdr": "text",
+        "state": "text",
+        "code_verifier": "text",
+        "code_challenge": "text",
+        "auth_code": "text",
+        "token_type": "text",
+        "access_token": "text",
+        "refresh_token": "text",
+        "expires": "text"
+    }
+}
