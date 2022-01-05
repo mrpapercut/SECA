@@ -12,6 +12,8 @@ services:
     environment:
       COMMANDER_NAME: ${COMMANDER_NAME}
       EDSM_API_KEY: ${EDSM_API_KEY}
+      FDCAPI_CLIENT_ID: ${FDCAPI_CLIENT_ID}
+      FDCAPI_SHARED_KEY: ${FDCAPI_SHARED_KEY}
     ports:
       - "7000:7000"
     restart: unless-stopped
