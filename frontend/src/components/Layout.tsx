@@ -9,7 +9,7 @@ const Layout = ({children}) => {
     return (
         <div>
             <Head>
-                <title>EliteD</title>
+                <title>SECA - SuperElite Companion App</title>
             </Head>
             <Wallpaper />
             <div className={styles.wrapper}>
