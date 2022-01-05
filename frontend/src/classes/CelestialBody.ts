@@ -4,13 +4,20 @@ import {
     AtmosphereProperty,
     AtmosphereType
 } from '../@types/Atmosphere.d';
+import {
+    Star,
+    Planet
+} from '../../vendor/EDSM/@types/CelestialBodies.d';
 
 class CelestialBody {
-    body: object;
+    body: Star|Planet;
+    bodyId: number;
     iconName: string;
+    children: Array<CelestialBody> = [];
 
-    constructor(body: object) {
+    constructor(body: Star|Planet) {
         this.body = body;
+        this.bodyId = body.bodyId;
 
         if (this.isStar) {
             this.setStarIcon();
@@ -24,11 +31,11 @@ class CelestialBody {
     }
 
     get isTerraformable() {
-        return this.body.terraformingState !== 'Not terraformable';
+        return (<Planet>this.body).terraformingState !== 'Not terraformable';
     }
 
     get isLandable() {
-        return this.body.isLandable;
+        return (<Planet>this.body).isLandable;
     }
 
     get isTidallyLocked() {
@@ -36,11 +43,11 @@ class CelestialBody {
     }
 
     get hasAtmosphere() {
-        return this.body.atmosphereType !== 'No atmosphere';
+        return (<Planet>this.body).atmosphereType !== 'No atmosphere';
     }
 
     get atmosphereProperty() {
-        const atmosphereType = this.body.atmosphereType.toLowerCase();
+        const atmosphereType = (<Planet>this.body).atmosphereType.toLowerCase();
 
         let atmosphereProperty = AtmosphereProperty.None;
 
@@ -52,24 +59,32 @@ class CelestialBody {
         return atmosphereProperty;
     }
 
-    hasAtmosphereProperty(property: string) {
+    get parents() {
+        return Object.assign({}, ...(this.body.parents || []));
+    }
+
+    addChild(child: CelestialBody) {
+        this.children.push(child);
+    }
+
+    hasAtmosphereProperty(property: number) {
         return !!((this.atmosphereProperty & property) !== 0);
     }
 
     hasAtmosphereType(type: string) {
-        const atmosphereType = this.body.atmosphereType.toLowerCase();
+        const atmosphereType = (<Planet>this.body).atmosphereType.toLowerCase();
 
         return new RegExp(type).test(atmosphereType);
     }
 
     atmosphereCompositionContains(chemical: string) {
-        return Object.keys(this.body.atmosphereComposition).map(c => c.toLowerCase()).includes(chemical.toLowerCase());
+        return Object.keys((<Planet>this.body).atmosphereComposition).map(c => c.toLowerCase()).includes(chemical.toLowerCase());
     }
 
     setStarIcon() {
-        const starType = this.body.subType;
-        const stellarMass = this.body.solarMasses;
-        const surfaceTemp = this.body.surfaceTemperature;
+        const starType = (<Star>this.body).subType;
+        const stellarMass = (<Star>this.body).solarMasses;
+        const surfaceTemp = (<Star>this.body).surfaceTemperature;
 
         let iconName = '';
 
@@ -221,9 +236,9 @@ class CelestialBody {
     }
 
     setPlanetIcon() {
-        const planetType = this.body.subType;
-        const stellarMass = this.body.earthMasses;
-        const surfaceTemp = this.body.surfaceTemperature;
+        const planetType = (<Planet>this.body).subType;
+        const stellarMass = (<Planet>this.body).earthMasses;
+        const surfaceTemp = (<Planet>this.body).surfaceTemperature;
 
         let iconName = '';
 
@@ -526,7 +541,7 @@ class CelestialBody {
         if (planetType === PlanetType.ELW) {
             iconName = 'ELWv5'; // fallback
 
-            if (parseInt(stellarMass, 10) === 1 && surfaceTemp === 288) { // Earth
+            if (stellarMass.toPrecision(1) === '1' && surfaceTemp === 288) { // Earth
                 iconName = 'ELWv1';
             } else {
                 if (this.isTidallyLocked) {

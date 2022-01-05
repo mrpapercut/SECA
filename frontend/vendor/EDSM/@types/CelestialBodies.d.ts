@@ -25,7 +25,7 @@ type CelestialBody = {
     updateTime: string
 }
 
-interface Star extends CelestialBody {
+export interface Star extends CelestialBody {
     type: 'Star',
     isMainStar: boolean,
     isScoopable: boolean,
@@ -45,7 +45,7 @@ interface Star extends CelestialBody {
     }>
 }
 
-interface Planet extends CelestialBody {
+export interface Planet extends CelestialBody {
     type: 'Planet',
     isLandable: boolean,
     gravity: number,
