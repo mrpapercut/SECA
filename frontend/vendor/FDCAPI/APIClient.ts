@@ -3,23 +3,48 @@ import {
     createHash
 } from 'crypto';
 
+import {resolve} from 'path';
+
+import fetch from 'node-fetch';
+import {config as dotenv} from 'dotenv';
+
+dotenv({
+    path: resolve(__dirname, '../../../.env')
+});
+
 class APIClient {
+    appName: string;
+
     apiClientId: string;
     apiSharedKey: string;
 
+    // TODELETE
+    authCode: string;
+    authState: string;
+
     authUrl: string;
-    apiUrl: string;
+    capiUrl: string;
+
+    access_token: string;
+    refresh_token: string;
+    token_type: string;
 
     code_challenge: string;
     code_verifier: string;
     state_string: string;
 
-    constructor(clientId: string, sharedKey: string) {
+    constructor(clientId: string, sharedKey: string, authCode: string = '', authState: string = '') {
+        this.appName = process.env.FDCAPI_APP_NAME;
+
         this.apiClientId = clientId;
         this.apiSharedKey = sharedKey;
 
+        // TODELETE
+        this.authCode = authCode;
+        this.authState = authState;
+
         this.authUrl = 'https://auth.frontierstore.net';
-        this.apiUrl = ''
+        this.capiUrl = 'https://companion.orerve.net/';
     }
 
     private generateCodeChallenge() {
@@ -41,11 +66,12 @@ class APIClient {
 
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
         headers.append('Accept', 'application/json');
+        headers.append('User-Agent', this.appName);
 
         return headers;
     }
 
-    private getNonAuthParams() {
+    private getAuthParams() {
         const params: URLSearchParams = new URLSearchParams();
 
         if (!this.code_challenge) this.generateCodeChallenge();
@@ -58,45 +84,98 @@ class APIClient {
         params.append('code_challenge', this.code_challenge);
         params.append('code_challenge_method', 'S256');
         params.append('state', this.state_string);
-        params.append('redirect_uri', encodeURIComponent('https://github.com/mrpapercut/elited'));
+        params.append('redirect_uri', decodeURIComponent(process.env.FDCAPI_REDIRECT_URI));
 
         return params.toString();
     }
 
-    private getAuthHeaders() {
+    public async getAuthUrl() {
+        const url = `${this.authUrl}/auth?${this.getAuthParams()}`;
 
+        console.log(url);
+        console.log(this.code_verifier);
+    }
+
+    private getAccessTokenHeaders() {
+        /*
+        const headers: Headers = new Headers();
+
+        headers.append('User-Agent', this.appName);
+        headers.append('Accept', 'application/json');
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        */
+        const headers = {
+           'User-Agent': this.appName,
+            Accept: 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+
+        return headers;
     }
 
     public async getAccessToken() {
-        const url = `${this.authUrl}/auth?${this.getNonAuthParams()}`;
+        const url: string = `${this.authUrl}/token`;
 
-        // const headers = this.getNonAuthHeaders();
-        const params = this.getNonAuthParams();
-        console.log(url);
+        const params: URLSearchParams = new URLSearchParams();
+        params.append('grant_type', 'authorization_code');
+        params.append('client_id', this.apiClientId);
+        params.append('code_verifier', 'wFH9G6r4Qx04aaD26JYjiX0AKh6VqfbpItrWp2UqIgQ'); // TODELETE
+        // params.append('code_verifier', this.code_verifier);
+        params.append('code', this.authCode);
+        params.append('redirect_uri', decodeURIComponent(process.env.FDCAPI_REDIRECT_URI));
 
-        /*
-        fetch(url, {
+        console.log(params.toString());
+
+        const response = await fetch(url, {
+            headers: this.getAccessTokenHeaders(),
             method: 'POST',
-            headers: [
-                ['Content-Type', 'application/x-www-form-urlencoded']
-            ],
             body: params
-        })
-        .then(response => response.json())
-        .then(json => console.log(json));
-        */
+        });
+
+        console.log(response);
+
+        const data = await response.json();
+        console.log(data);
+    }
+
+    private async getRequestHeaders() {
+        const headers: Headers = new Headers();
+
+        headers.append('Authorization', `${this.token_type} ${this.access_token}`);
+        headers.append('User-Agent', this.appName);
     }
 
     public async request() {
 
     }
+
+    public async getEndpoints() {
+
+    }
 }
 
-const clientId = '';
-const sharedKey = '';
+const clientId = process.env.FDCAPI_CLIENT_ID;
+const sharedKey = process.env.FDCAPI_SHARED_KEY;
 
-const client = new APIClient(clientId, sharedKey);
-// client.getAccessToken();
-// Log in in browser
-// Get code at redirect-uri
-// Example: REDIRECT_URI/?code=12a21bcd-0b19-49e2-89ad-ad43e00bd9c3&state=rbHtJluGtMA46n0bbXfy-yt12IAB5OtppTyKzBoz-0s
+const authCode = '';
+const authState = '';
+
+const client = new APIClient(clientId, sharedKey, authCode, authState);
+
+if (authCode.length > 0 && authState.length > 0) {
+    client.getAccessToken();
+} else {
+    console.log('No auth code or state, you need to login');
+}
+
+// client.getAuthUrl();
+
+/** Process
+ * - Get auth url
+ *   - Log in
+ *   - Manually (?) authorize
+ * - Get code at redirect_uri (can be localhost)
+ * - Use code to get access_token, refresh_token and token_type
+ * - Use token_type and access_token to perform requests
+ *  */
+
