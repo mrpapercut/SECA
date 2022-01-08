@@ -1,0 +1,48 @@
+{
+    "template": {
+      "mappings": {
+        "properties": {
+          "@timestamp": {
+            "type": "date"
+          },
+          "date": {
+            "type": "date"
+          },
+          "id": {
+            "type": "long"
+          },
+          "id64": {
+            "type": "long"
+          },
+          "name": {
+            "type": "keyword"
+          },
+          "coords": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "double"
+              },
+              "y": {
+                "type": "double"
+              },
+              "z": {
+                "type": "double"
+              }
+            }
+          },
+          "ecs": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "type": "text"
+              }
+            }
+          }
+        }
+      }
+    },
+    "_meta": {
+      "description": "Mappings for systems_with_coords"
+    }
+  }
