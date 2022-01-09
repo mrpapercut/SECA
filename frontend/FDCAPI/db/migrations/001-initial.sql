@@ -10,7 +10,7 @@ CREATE TABLE SECA_Auth (
     token_type      TEXT    NULL,
     access_token    TEXT    NULL,
     refresh_token   TEXT    NULL,
-    expires         TEXT    NULL
+    expires_at      INTEGER NULL
 )
 
 --------------------------------------------------------------------------------

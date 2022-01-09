@@ -5,7 +5,7 @@ import {
 } from 'sqlite';
 import {Database as sqlite3Database} from 'sqlite3';
 
-const dbSchema = require('./dbschema.json');
+import dbSchema from './dbschema';
 
 type DBSchema = {
     name: string,
@@ -172,13 +172,79 @@ class SQLite {
         return res;
     }
 
-    public async updateAuth(state: string, code: string) {
+    public async updateAuth(state: string, auth_code: string) {
         if (!this.ready()) await this.openDatabase();
 
-        const res = await this.updateRow({
-            state,
-            code
-        }, 'state');
+        const rawQuery = `UPDATE ${this.dbSchema.name} SET auth_code = @auth_code WHERE state = @state`;
+
+        const query = await this.db.prepare(rawQuery);
+
+        const bindValues = {
+            '@auth_code': auth_code,
+            '@state': state
+        }
+
+        await query.bind(bindValues);
+
+        const res = await query.run();
+
+        return res;
+    }
+
+    public async getByAuthCode(auth_code: string) {
+        if (!this.ready()) await this.openDatabase();
+
+        const rawQuery = `SELECT * FROM ${this.dbSchema.name} WHERE auth_code = @auth_code`;
+
+        const query = await this.db.prepare(rawQuery);
+
+        const bindValues = {
+            '@auth_code': auth_code
+        }
+
+        await query.bind(bindValues);
+
+        const res = await query.get();
+
+        return res;
+    }
+
+    public async storeAccessToken(cmdr: string, access_token: string, token_type: string, refresh_token: string, expires_in: number) {
+        if (!this.ready()) await this.openDatabase();
+
+        const rawQuery = `UPDATE ${this.dbSchema.name} SET access_token = @access_token, token_type = @token_type, refresh_token = @refresh_token, expires_at = @expires_at WHERE cmdr = @cmdr`;
+
+        const query = await this.db.prepare(rawQuery);
+
+        const bindValues = {
+            '@access_token': access_token,
+            '@token_type': token_type,
+            '@refresh_token': refresh_token,
+            '@expires_at': +new Date(+new Date() + (expires_in * 1000)),
+            '@cmdr': cmdr
+        }
+
+        await query.bind(bindValues);
+
+        const res = await query.run();
+
+        return res;
+    }
+
+    public async getAccessToken(cmdr: string) {
+        if (!this.ready()) await this.openDatabase();
+
+        const rawQuery = `SELECT access_token, token_type, expires_at, refresh_token FROM ${this.dbSchema.name} WHERE cmdr = @cmdr`;
+
+        const query = await this.db.prepare(rawQuery);
+
+        const bindValues = {
+            '@cmdr': cmdr
+        }
+
+        await query.bind(bindValues);
+
+        const res = await query.get();
 
         return res;
     }
