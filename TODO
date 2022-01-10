@@ -1,0 +1,66 @@
+# SECA
+
+## Infrastructure
+### Elasticsearch
+- Contains systems
+
+### Dump-processor
+- Downloads dumps regularly
+- Updates Elasticsearch with new data
+
+### Website
+- Informational website about app
+- Allows download
+- No interaction with rest of app
+
+### Frontend
+#### Client
+- The actual app
+
+##### Dashboard
+
+##### Commander
+- Commander info
+- Ship info
+
+##### Flight Log
+
+##### System
+- 2D view of current system
+
+##### Nearby
+- 3D view of (known) nearby systems
+
+#### FDCAPI
+- Connects to FD API
+- Processes Journal events
+
+#### ESClient
+- Connects Frontend Client to Elasticsearch
+- Only reads?
+
+## TODO
+### Frontend
+- Dockerize frontend
+#### Nearby
+- Create 3D visualisation of nearby planets
+- Planets are labeled with detailed information
+
+### Elasticsearch
+- Secure Elasticsearch
+- Different users for:
+  - dump-processor (read/write system indices)
+  - FDCAPI (write to journal-index)
+  - ESClient (read system/journal indices)
+
+### ESClient
+- Endpoints per query
+
+### FDCAPI
+- Refresh tokens
+
+### Future
+- React Native for Android
+- React Native for Windows with extra features such as:
+  - live Journal watching
+  - NavRoute.json analysis for exploration
