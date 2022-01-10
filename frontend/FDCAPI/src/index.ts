@@ -7,7 +7,7 @@ const express = require('express');
 import {config as dotenv} from 'dotenv';
 
 dotenv({
-    path: resolve(__dirname, '../../.env')
+    path: resolve(__dirname, '../../../.env')
 });
 
 // HTML templates
