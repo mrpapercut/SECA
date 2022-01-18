@@ -1,0 +1,578 @@
+[
+    {
+        "@timestamp": "2022-01-06T14:05:54.588Z",
+        "date": "2021-12-08T18:52:53.000Z",
+        "id": 32969238,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -580.59375,
+            "y": -1144.21875,
+            "z": 3496.34375
+        },
+        "id64": 82912089490,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju FB-V c16-0",
+        "distance": 0
+    },
+    {
+        "@timestamp": "2022-01-06T11:45:27.099Z",
+        "date": "2018-03-09T19:28:16.000Z",
+        "id": 22955801,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -620.6875,
+            "y": -1144.40625,
+            "z": 3456.96875
+        },
+        "id64": 82844980618,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju AV-W c15-0",
+        "distance": 56.2
+    },
+    {
+        "@timestamp": "2022-01-06T13:34:20.173Z",
+        "date": "2021-01-17T14:56:59.000Z",
+        "id": 22954957,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -599.6875,
+            "y": -1170.0625,
+            "z": 3447.875
+        },
+        "id64": 44719426243,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju NC-M d7-1",
+        "distance": 58.15
+    },
+    {
+        "@timestamp": "2022-01-06T12:11:32.013Z",
+        "date": "2019-01-27T16:59:48.000Z",
+        "id": 22954048,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -592.53125,
+            "y": -1159.75,
+            "z": 3422.96875
+        },
+        "id64": 82844947842,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju YJ-Y c14-0",
+        "distance": 75.94
+    },
+    {
+        "@timestamp": "2022-01-06T13:29:05.038Z",
+        "date": "2020-12-05T10:33:28.000Z",
+        "id": 59364753,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -659.5,
+            "y": -1178.34375,
+            "z": 3462.28125
+        },
+        "id64": 82777838986,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju BQ-W c15-0",
+        "distance": 92.47
+    },
+    {
+        "@timestamp": "2022-01-06T12:54:09.939Z",
+        "date": "2020-01-07T14:43:10.000Z",
+        "id": 47407218,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -639.0625,
+            "y": -1149.78125,
+            "z": 3422.09375
+        },
+        "id64": 82777838978,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju XJ-Y c14-0",
+        "distance": 94.67
+    },
+    {
+        "@timestamp": "2022-01-06T13:12:31.892Z",
+        "date": "2020-06-26T19:39:31.000Z",
+        "id": 53842523,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -666.6875,
+            "y": -1215.9375,
+            "z": 3468.46875
+        },
+        "id64": 82710697354,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju CL-W c15-0",
+        "distance": 115.47
+    },
+    {
+        "@timestamp": "2022-01-06T13:04:15.889Z",
+        "date": "2020-04-10T20:52:42.000Z",
+        "id": 50928959,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -699.8125,
+            "y": -1194.65625,
+            "z": 3452.625
+        },
+        "id64": 82710697346,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju YE-Y c14-0",
+        "distance": 136.63
+    },
+    {
+        "@timestamp": "2022-01-06T13:29:39.629Z",
+        "date": "2020-12-08T05:55:38.000Z",
+        "id": 36494847,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -688.71875,
+            "y": -1167.6875,
+            "z": 3412.3125
+        },
+        "id64": 82710730106,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju SD-A c14-0",
+        "distance": 138.94
+    },
+    {
+        "@timestamp": "2022-01-06T13:29:05.030Z",
+        "date": "2020-12-05T10:27:45.000Z",
+        "id": 59364570,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -666.5625,
+            "y": -1155.375,
+            "z": 3373.71875
+        },
+        "id64": 82710730098,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju OX-B c13-0",
+        "distance": 150.17
+    },
+    {
+        "@timestamp": "2022-01-06T13:12:31.892Z",
+        "date": "2020-06-26T19:39:31.000Z",
+        "id": 53842522,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -689.96875,
+            "y": -1216.6875,
+            "z": 3407.09375
+        },
+        "id64": 82710697338,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju UY-Z c13-0",
+        "distance": 158.68
+    },
+    {
+        "@timestamp": "2022-01-06T13:00:13.146Z",
+        "date": "2020-03-04T10:12:27.000Z",
+        "id": 49573695,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -700.625,
+            "y": -1222.75,
+            "z": 3421.3125
+        },
+        "id64": 10342910659,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju MC-M d7-0",
+        "distance": 161.88
+    },
+    {
+        "@timestamp": "2022-01-06T12:20:30.125Z",
+        "date": "2019-03-25T15:09:13.000Z",
+        "id": 36495001,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -738.1875,
+            "y": -1181.125,
+            "z": 3467
+        },
+        "id64": 82643621258,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju ZP-W c15-0",
+        "distance": 164.5
+    },
+    {
+        "@timestamp": "2022-01-06T12:09:48.165Z",
+        "date": "2019-01-17T02:28:14.000Z",
+        "id": 32321598,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -623,
+            "y": -1144.8125,
+            "z": 3336
+        },
+        "id64": 82844980594,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju OC-C c13-0",
+        "distance": 165.86
+    },
+    {
+        "@timestamp": "2022-01-06T13:00:13.146Z",
+        "date": "2020-03-04T10:12:32.000Z",
+        "id": 49573696,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -671.90625,
+            "y": -1205.1875,
+            "z": 3365.90625
+        },
+        "id64": 82710697330,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju QS-B c13-0",
+        "distance": 170.5
+    },
+    {
+        "@timestamp": "2022-01-06T13:04:15.890Z",
+        "date": "2020-04-10T20:53:31.000Z",
+        "id": 50928994,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -691.03125,
+            "y": -1226.9375,
+            "z": 3393.5625
+        },
+        "id64": 44702632635,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju KR-N d6-1",
+        "distance": 172.05
+    },
+    {
+        "@timestamp": "2022-01-06T13:12:31.892Z",
+        "date": "2020-06-26T19:39:31.000Z",
+        "id": 36494816,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -659.03125,
+            "y": -1190.9375,
+            "z": 3348.28125
+        },
+        "id64": 82777806194,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju RS-B c13-0",
+        "distance": 173.95
+    },
+    {
+        "@timestamp": "2022-01-06T12:20:17.299Z",
+        "date": "2019-03-24T16:29:36.000Z",
+        "id": 36420366,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -652.875,
+            "y": -1281.5,
+            "z": 3395.65625
+        },
+        "id64": 10342894267,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju KR-N d6-0",
+        "distance": 184.96
+    },
+    {
+        "@timestamp": "2022-01-06T11:45:26.386Z",
+        "date": "2018-03-09T16:06:07.000Z",
+        "id": 22950227,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -583.375,
+            "y": -1166.90625,
+            "z": 3307.5625
+        },
+        "id64": 10359687859,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju FQ-P d5-0",
+        "distance": 190.16
+    },
+    {
+        "@timestamp": "2022-01-06T14:00:17.465Z",
+        "date": "2021-10-02T20:38:39.000Z",
+        "id": 25504462,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -741.375,
+            "y": -1144.53125,
+            "z": 3379.34375
+        },
+        "id64": 82643654010,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju PI-A c14-0",
+        "distance": 198.85
+    },
+    {
+        "@timestamp": "2022-01-06T12:20:17.302Z",
+        "date": "2019-03-24T16:30:53.000Z",
+        "id": 36420429,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -693.78125,
+            "y": -1294.0625,
+            "z": 3425.59375
+        },
+        "id64": 10342894275,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju OX-L d7-0",
+        "distance": 200.67
+    },
+    {
+        "@timestamp": "2022-01-06T12:20:17.319Z",
+        "date": "2019-03-24T16:38:02.000Z",
+        "id": 36420810,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -691.8125,
+            "y": -1300.46875,
+            "z": 3434.0625
+        },
+        "id64": 44702632643,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju OX-L d7-1",
+        "distance": 201.65
+    },
+    {
+        "@timestamp": "2022-01-06T12:20:17.323Z",
+        "date": "2019-03-24T16:39:17.000Z",
+        "id": 36420902,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -699.71875,
+            "y": -1296.4375,
+            "z": 3436.15625
+        },
+        "id64": 1293878628,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju UY-S e3-0",
+        "distance": 202.44
+    },
+    {
+        "@timestamp": "2022-01-06T13:04:33.483Z",
+        "date": "2020-04-12T19:13:48.000Z",
+        "id": 51031414,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -701.90625,
+            "y": -1193.59375,
+            "z": 3335.25
+        },
+        "id64": 10342910651,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju IW-N d6-0",
+        "distance": 207.62
+    },
+    {
+        "@timestamp": "2022-01-06T12:20:17.276Z",
+        "date": "2019-03-24T16:23:26.000Z",
+        "id": 36420002,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -618.6875,
+            "y": -1296.46875,
+            "z": 3336.0625
+        },
+        "id64": 10359671483,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju LR-N d6-0",
+        "distance": 224.32
+    },
+    {
+        "@timestamp": "2022-01-06T12:25:29.051Z",
+        "date": "2019-04-24T03:51:49.000Z",
+        "id": 38334771,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -708.59375,
+            "y": -1174.96875,
+            "z": 3311.78125
+        },
+        "id64": 79045610163,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju DQ-P d5-2",
+        "distance": 226.7
+    },
+    {
+        "@timestamp": "2022-01-06T11:52:00.955Z",
+        "date": "2018-05-25T23:01:50.000Z",
+        "id": 25504889,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -715.1875,
+            "y": -1150.34375,
+            "z": 3313.5625
+        },
+        "id64": 10326133427,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju DQ-P d5-0",
+        "distance": 227.07
+    },
+    {
+        "@timestamp": "2022-01-06T12:25:29.046Z",
+        "date": "2019-04-24T03:48:14.000Z",
+        "id": 38334638,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -770.09375,
+            "y": -1206.875,
+            "z": 3352.59375
+        },
+        "id64": 79045610171,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju HW-N d6-2",
+        "distance": 245.97
+    },
+    {
+        "@timestamp": "2022-01-06T12:20:16.938Z",
+        "date": "2019-03-24T16:13:23.000Z",
+        "id": 36418931,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -653.65625,
+            "y": -1282.4375,
+            "z": 3305.21875
+        },
+        "id64": 44702632627,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju GL-P d5-1",
+        "distance": 246.92
+    },
+    {
+        "@timestamp": "2022-01-06T14:05:20.466Z",
+        "date": "2021-12-01T11:45:48.000Z",
+        "id": 70587796,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -777.21875,
+            "y": -1215.78125,
+            "z": 3346.1875
+        },
+        "id64": 44685871803,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju HW-N d6-1",
+        "distance": 257.55
+    },
+    {
+        "@timestamp": "2022-01-06T13:57:49.843Z",
+        "date": "2021-08-30T19:48:07.000Z",
+        "id": 68603926,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -778,
+            "y": -1285.21875,
+            "z": 3375
+        },
+        "id64": 44685855419,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju JR-N d6-1",
+        "distance": 271.25
+    },
+    {
+        "@timestamp": "2022-01-06T14:05:20.466Z",
+        "date": "2021-12-01T11:45:48.000Z",
+        "id": 70587795,
+        "ecs": {
+            "version": "1.12.0"
+        },
+        "coords": {
+            "x": -759.5625,
+            "y": -1266.90625,
+            "z": 3309.5
+        },
+        "id64": 10326117043,
+        "type": "systems_with_coords",
+        "@version": "1",
+        "name": "Droju FL-P d5-0",
+        "distance": 286.34
+    }
+]

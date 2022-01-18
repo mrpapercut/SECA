@@ -1,0 +1,358 @@
+[{
+    "@timestamp": "2022-01-06T12:36:36.923Z",
+    "date": "2019-07-14T20:58:37.000Z",
+    "id": 42060095,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -208.4375,
+        "y": -189.5625,
+        "z": 967.09375
+    },
+    "id64": 668001052457,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector DX-F b39-0",
+    "distance": 10.18
+}, {
+    "@timestamp": "2022-01-06T11:30:47.179Z",
+    "date": "2017-10-13T03:41:36.000Z",
+    "id": 16996188,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -210.125,
+        "y": -191.625,
+        "z": 970.4375
+    },
+    "id64": 1625351473611,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector YZ-G d10-47",
+    "distance": 10.74
+}, {
+    "@timestamp": "2022-01-06T14:01:23.546Z",
+    "date": "2021-10-17T02:00:23.000Z",
+    "id": 69640488,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -205.15625,
+        "y": -198.03125,
+        "z": 971.4375
+    },
+    "id64": 5066047563561,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector DX-F b39-2",
+    "distance": 11.33
+}, {
+    "@timestamp": "2022-01-06T11:48:56.849Z",
+    "date": "2018-04-15T15:55:28.000Z",
+    "id": 24308834,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -218,
+        "y": -195.46875,
+        "z": 969.0625
+    },
+    "id64": 3656929612690,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector PY-P c19-13",
+    "distance": 19.57
+}, {
+    "@timestamp": "2022-01-06T13:23:56.331Z",
+    "date": "2020-10-17T18:58:19.000Z",
+    "id": 57665786,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -211.125,
+        "y": -197.46875,
+        "z": 957.8125
+    },
+    "id64": 83516822418,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "HD 174776",
+    "distance": 21.02
+}, {
+    "@timestamp": "2022-01-06T11:39:21.473Z",
+    "date": "2018-01-13T04:28:58.000Z",
+    "id": 15454480,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -200.875,
+        "y": -202.84375,
+        "z": 958.375
+    },
+    "id64": 668269487913,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector EX-F b39-0",
+    "distance": 21.04
+}, {
+    "@timestamp": "2022-01-06T13:30:10.831Z",
+    "date": "2020-12-12T14:27:21.000Z",
+    "id": 54250534,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -220.75,
+        "y": -192.90625,
+        "z": 967.96875
+    },
+    "id64": 1183028450194,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector PY-P c19-4",
+    "distance": 21.56
+}, {
+    "@timestamp": "2022-01-06T14:02:40.157Z",
+    "date": "2021-10-31T14:12:27.000Z",
+    "id": 12623046,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -216.53125,
+        "y": -198.46875,
+        "z": 961.625
+    },
+    "id64": 633272636306,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector PY-P c19-2",
+    "distance": 22.45
+}, {
+    "@timestamp": "2022-01-06T12:43:04.325Z",
+    "date": "2019-09-16T04:05:22.000Z",
+    "id": 44002613,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -211.875,
+        "y": -190.75,
+        "z": 951.6875
+    },
+    "id64": 2832295891858,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector PY-P c19-10",
+    "distance": 24.49
+}, {
+    "@timestamp": "2022-01-06T13:00:37.760Z",
+    "date": "2020-03-08T02:34:53.000Z",
+    "id": 34732444,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -218.15625,
+        "y": -190.75,
+        "z": 950.65625
+    },
+    "id64": 1694070950347,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector YZ-G d10-49",
+    "distance": 28.78
+}, {
+    "@timestamp": "2022-01-06T12:50:25.782Z",
+    "date": "2019-11-30T20:58:03.000Z",
+    "id": 46236074,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -228.8125,
+        "y": -199.03125,
+        "z": 972.28125
+    },
+    "id64": 1006859405771,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector XZ-G d10-29",
+    "distance": 30.5
+}, {
+    "@timestamp": "2022-01-06T11:17:36.021Z",
+    "date": "2017-04-18T18:52:13.000Z",
+    "id": 11368171,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -214.375,
+        "y": -206.5625,
+        "z": 953.34375
+    },
+    "id64": 2867024242465,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector BM-H b38-1",
+    "distance": 30.59
+}, {
+    "@timestamp": "2022-01-06T12:38:45.030Z",
+    "date": "2019-08-06T16:18:47.000Z",
+    "id": 42754661,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -209.65625,
+        "y": -212.40625,
+        "z": 954.65625
+    },
+    "id64": 697638537675,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector YZ-G d10-20",
+    "distance": 32.08
+}, {
+    "@timestamp": "2022-01-06T12:00:43.703Z",
+    "date": "2018-09-26T23:46:13.000Z",
+    "id": 10274915,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -205.375,
+        "y": -201.8125,
+        "z": 943.6875
+    },
+    "id64": 1728430688715,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector YZ-G d10-50",
+    "distance": 32.97
+}, {
+    "@timestamp": "2022-01-06T11:39:33.835Z",
+    "date": "2018-01-14T18:22:02.000Z",
+    "id": 20637632,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -228.3125,
+        "y": -207.59375,
+        "z": 967.5625
+    },
+    "id64": 7264802318121,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector ES-F b39-3",
+    "distance": 34.6
+}, {
+    "@timestamp": "2022-01-06T13:36:02.335Z",
+    "date": "2021-01-30T13:26:52.000Z",
+    "id": 25397064,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -222.15625,
+        "y": -204.46875,
+        "z": 951.78125
+    },
+    "id64": 2557417984914,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector PY-P c19-9",
+    "distance": 34.7
+}, {
+    "@timestamp": "2022-01-06T13:52:06.840Z",
+    "date": "2021-06-20T13:02:27.000Z",
+    "id": 66916266,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -217.78125,
+        "y": -214.75,
+        "z": 959.0625
+    },
+    "id64": 5066047498025,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector FS-F b39-2",
+    "distance": 34.95
+}, {
+    "@timestamp": "2022-01-06T11:35:53.472Z",
+    "date": "2017-12-06T19:03:28.000Z",
+    "id": 12749360,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -228.3125,
+        "y": -207.375,
+        "z": 959.6875
+    },
+    "id64": 667732551465,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector ES-F b39-0",
+    "distance": 36.59
+}, {
+    "@timestamp": "2022-01-06T12:03:05.745Z",
+    "date": "2018-11-02T20:38:47.000Z",
+    "id": 29860051,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -229.375,
+        "y": -210.59375,
+        "z": 971.25
+    },
+    "id64": 5065779062569,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector ES-F b39-2",
+    "distance": 36.84
+}, {
+    "@timestamp": "2022-01-06T12:02:37.287Z",
+    "date": "2018-10-25T17:20:53.000Z",
+    "id": 23106107,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -211.09375,
+        "y": -210.6875,
+        "z": 943.65625
+    },
+    "id64": 5066047498017,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector BM-H b38-2",
+    "distance": 38.78
+}, {
+    "@timestamp": "2022-01-06T12:03:05.749Z",
+    "date": "2018-11-02T20:39:39.000Z",
+    "id": 29860110,
+    "ecs": {
+        "version": "1.12.0"
+    },
+    "coords": {
+        "x": -222.25,
+        "y": -200.53125,
+        "z": 943.46875
+    },
+    "id64": 2867024308001,
+    "type": "systems_with_coords",
+    "@version": "1",
+    "name": "Col 359 Sector ZQ-H b38-1",
+    "distance": 38.95
+}]
