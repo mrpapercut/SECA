@@ -47,8 +47,6 @@ services:
       ELASTIC_PASS: ${ELASTIC_PASS}
       INDEX_SYSTEMS_WITH_COORDINATES: ${INDEX_SYSTEMS_WITH_COORDINATES}
       INDEX_SYSTEMS_WITHOUT_COORDINATES: ${INDEX_SYSTEMS_WITHOUT_COORDINATES}
-    # ports:
-    #   - "${ESCLIENT_PORT}:${ESCLIENT_PORT}"
-    expose:
-      - "${ESCLIENT_PORT}"
+    ports:
+      - "${ESCLIENT_PORT}:${ESCLIENT_PORT}"
     restart: unless-stopped
