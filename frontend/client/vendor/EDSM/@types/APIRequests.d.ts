@@ -73,7 +73,7 @@ declare namespace APIRequests {
         includeHidden: IntBoolean
     }
 
-    export interface SystemsInformationRequest extends DefaultSystemInformationRequest  {
+    export interface SystemsInformationRequest extends DefaultSystemInformationRequest {
         systemName: string | Array<string>,
         startDateTime?: null | string,
         endDateTime?: null | string,
