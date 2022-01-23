@@ -4,8 +4,11 @@ import {
 } from 'crypto';
 
 import fetch from 'node-fetch';
+import { AccessTokenResponse } from './@types/APIClient';
 
 import SQLite from './SQLite';
+
+import JournalParser from './JournalParser';
 
 class APIClient {
     db: SQLite;
@@ -124,7 +127,7 @@ class APIClient {
             body
         });
 
-        const json = await response.json();
+        const json: AccessTokenResponse = await response.json();
 
         if (response.ok) {
             const {access_token, token_type, refresh_token, expires_in} = json;
@@ -143,7 +146,13 @@ class APIClient {
     public async getAccessToken(cmdr: string) {
         if (!this.db.ready()) await this.db.init();
 
-        const {access_token, token_type, expires_at, refresh_token} = await this.db.getAccessToken(cmdr);
+        const dbAccessToken = await this.db.getAccessToken(cmdr);
+
+        if (!dbAccessToken) {
+            throw Error(`No access_token stored for cmdr ${cmdr}`);
+        }
+
+        const {access_token, token_type, expires_at, refresh_token} = dbAccessToken;
 
         if (new Date() > new Date(expires_at)) {
             console.log('Access token expired, fetching new one');
@@ -168,9 +177,22 @@ class APIClient {
             body
         });
 
-        const json = await response.json();
+        const json: AccessTokenResponse = await response.json();
 
-        console.log(json);
+        try {
+            const {access_token, token_type, expires_in, refresh_token} = json;
+
+            await this.db.storeAccessToken(cmdr, access_token, token_type, refresh_token, expires_in);
+        } catch (e) {
+            console.error(e);
+        }
+
+        const dbAccessToken = await this.db.getAccessToken(cmdr);
+
+        return {
+            access_token: dbAccessToken.access_token,
+            token_type: dbAccessToken.token_type
+        };
     }
 
     private getRequestHeaders(access_token: string, token_type: string) {
@@ -300,6 +322,8 @@ class APIClient {
             return {};
         }
 
+        const parser: JournalParser = new JournalParser();
+
         // Need to reformat response to get valid JSON
         const textContents = await response.text();
         const journalEntries = [];
@@ -313,6 +337,8 @@ class APIClient {
                 }
             }
         });
+
+        const parsed = await parser.process(journalEntries);
 
         return journalEntries;
     }

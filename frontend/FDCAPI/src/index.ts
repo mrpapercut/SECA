@@ -12,6 +12,7 @@ dotenv({
 
 // HTML templates
 import homeTemplate from './htmltemplates/home';
+import authUrlTemplate from './htmltemplates/authUrl';
 
 import APIClient from './APIClient';
 
@@ -80,14 +81,23 @@ server.get('/fleetcarrier', async (req, res) => {
 });
 
 server.get('/journal', async (req, res) => {
-    const journal = await client.getJournal();
+    const currentDate = new Date();
+    const year = req.query.year || currentDate.getUTCFullYear();
+    const month = req.query.month || (currentDate.getUTCMonth() + 1).toString().padStart(2, '0');
+    const day = req.query.day.padStart(2, '0') || currentDate.getUTCDate().toString().padStart(2, '0');
+
+    const reqDate = new Date(`${year}-${month}-${day}`);
+
+    const journal = await client.getJournal(reqDate);
 
     res.send(journal);
 });
 
 // Don't unnecessarily call this
 server.get('/auth_url', async (req, res) => {
-    res.send(await client.getAuthUrl());
+    const authUrl = await client.getAuthUrl();
+
+    res.send(authUrlTemplate(authUrl));
 });
 
 // Should only ever get called as redirect uri
