@@ -3,11 +3,13 @@ import {
     COMMANDER_SET_CREDITS
 } from '../actions/commander';
 
+import { CMDRNAME } from '../../config';
+
 let lastPosition: APIResponses.CommanderLastPositionResponse;
 let credits: APIResponses.CommanderCreditsResponse;
 
-const initialState = {
-    name: process.env.NEXT_PUBLIC_COMMANDER_NAME,
+const initialState: ReduxStates.CommanderState = {
+    name: CMDRNAME,
     lastPosition,
     credits
 }

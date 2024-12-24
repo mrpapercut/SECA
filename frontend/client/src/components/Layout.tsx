@@ -11,7 +11,7 @@ const Layout = ({children}) => {
             <Head>
                 <title>SECA - SuperElite Companion App</title>
             </Head>
-            <Wallpaper />
+            {/* <Wallpaper /> */}
             <div className={styles.wrapper}>
                 <NavHeader />
                 <main className={styles.mainContent}>{children}</main>
