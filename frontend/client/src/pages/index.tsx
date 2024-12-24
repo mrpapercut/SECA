@@ -106,6 +106,7 @@ export default function Home({EDSMClient} : {EDSMClient: APIClient}) {
             const vb = valuableBodies[i];
 
             const body = commanderCurrentSystem.bodies.find(b => b.id === vb.bodyId);
+            if (!body) continue;
 
             const estimatedValue = calculateEstimatedValue('Planet', body.subType, body.earthMasses, body.terraformingState === 'Candidate for terraforming', {
                 haveMapped: true,
