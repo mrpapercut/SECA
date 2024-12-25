@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import APIClient from '../../vendor/EDSM/APIClient';
+import JournalClient from '../../vendor/Journal/client';
 
 import {
     setCommanderLastPosition,
@@ -17,10 +18,11 @@ import {
 import styles from '../styles/layout.module.scss';
 import calculateEstimatedValue from '../util/calculateEstimatedValue';
 import { CMDRNAME } from '../../config';
+import { setJournalRoute } from '../../redux/actions/journal';
 
 const refreshInterval = 10;
 
-export default function Home({EDSMClient} : {EDSMClient: APIClient}) {
+export default function Home({EDSMClient, JournalClient} : {EDSMClient: APIClient, JournalClient: JournalClient}) {
     const dispatch = useDispatch();
 
     const commanderLastPosition = useSelector((state: ReduxStates.ReduxState) => state.commander.lastPosition);
@@ -29,6 +31,8 @@ export default function Home({EDSMClient} : {EDSMClient: APIClient}) {
 
     const commanderCurrentSystem = useSelector((state: ReduxStates.ReduxState) => state.system.currentSystem);
     const systemScanValues = useSelector((state: ReduxStates.ReduxState) => state.system.scanValues);
+
+    const journalRoute = useSelector((state: ReduxStates.ReduxState) => state.journal.route);
 
     const [countdown, setCountdown] = useState(refreshInterval);
 
@@ -48,14 +52,15 @@ export default function Home({EDSMClient} : {EDSMClient: APIClient}) {
 
         if (commanderLastPosition && (!commanderCurrentSystem || commanderLastPosition.systemId64 !== cmdrLastPos.systemId64)) {
             dispatch(setCommanderLastPosition(cmdrLastPos));
-            // console.log('Getting current system');
-            // EDSMClient.getSystemCelestialBodies(commanderLastPosition.system).then(res => {
-            //     dispatch(setCurrentSystem(res));
-            // });
 
             console.log('Getting commander credits');
             EDSMClient.getCommanderCredits().then(res => {
                 dispatch(setCommanderCredits(res))
+            });
+
+            console.log('Updating route');
+            JournalClient.getRoute().then(res => {
+                dispatch(setJournalRoute(res));
             });
         }
 
@@ -118,6 +123,8 @@ export default function Home({EDSMClient} : {EDSMClient: APIClient}) {
             valuableBodies[i].valueMax = estimatedValue;
         }
     }
+
+    console.log(journalRoute);
 
     return (
         <div>

@@ -10,8 +10,13 @@ declare namespace ReduxStates {
         scanValues: APIResponses.SystemEstimatedScanValuesResponse
     }
 
+    export interface JournalState {
+        route: NavRoute.Route
+    }
+
     export interface ReduxState {
         commander: CommanderState,
-        system: SystemState
+        system: SystemState,
+        journal: JournalState
     }
 }
