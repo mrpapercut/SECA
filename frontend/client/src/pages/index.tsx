@@ -2,6 +2,8 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import CurrentRoute from '../components/CurrentRoute';
+
 import APIClient from '../../vendor/EDSM/APIClient';
 import JournalClient from '../../vendor/Journal/client';
 
@@ -15,10 +17,13 @@ import {
     setScanValues
 } from '../../redux/actions/system';
 
-import styles from '../styles/layout.module.scss';
-import calculateEstimatedValue from '../util/calculateEstimatedValue';
-import { CMDRNAME } from '../../config';
 import { setJournalRoute } from '../../redux/actions/journal';
+
+import styles from '../styles/layout.module.scss';
+
+import calculateEstimatedValue from '../util/calculateEstimatedValue';
+
+import { CMDRNAME } from '../../config';
 
 const refreshInterval = 10;
 
@@ -92,7 +97,7 @@ export default function Home({EDSMClient, JournalClient} : {EDSMClient: APIClien
         return () => clearInterval(interval);
     }, [commanderLastPosition, commanderCurrentSystem]);
 
-    const currentSystem = commanderLastPosition ? `${commanderLastPosition.system} ${commanderLastPosition.firstDiscover ? '*' : ''}` : 'Unknown';
+    const currentSystem = commanderLastPosition ? commanderLastPosition.system : 'Unknown';
 
     const credits = commanderCredits ? `${commanderCredits.credits[0].balance.toLocaleString()} cr` : null;
 
@@ -124,7 +129,10 @@ export default function Home({EDSMClient, JournalClient} : {EDSMClient: APIClien
         }
     }
 
-    console.log(journalRoute);
+    let currentRoute = null;
+    if (journalRoute && journalRoute.Route.length > 0) {
+        currentRoute = <CurrentRoute EDSMClient={EDSMClient} route={journalRoute} />;
+    }
 
     return (
         <div>
@@ -138,19 +146,27 @@ export default function Home({EDSMClient, JournalClient} : {EDSMClient: APIClien
                 <div>Credits:</div>
                 <div>{credits}</div>
 
+                <hr className={styles.divider} />
+
                 <div>System:</div>
-                <div>{currentSystem}</div>
+                <div className={commanderLastPosition && commanderLastPosition.firstDiscover ? styles.newDiscovered : null}>{currentSystem}</div>
 
                 <div>Discovered:</div>
-                <div>{amountDiscovered}</div>
+                <div className={amountDiscovered === '100.00%' ? styles.highlight : null}>{amountDiscovered}</div>
 
                 <div>Scan values (mapped):</div>
                 <div>{scanValues} ({mappedScanValues})</div>
 
                 {valuableBodies.length > 0 && <>
                     <div>Valuable bodies:</div>
-                    <div>{valuableBodies.map((b, i) => <div key={`vb${i}`}>{b.bodyName}<br />{b.valueMax.toLocaleString()} cr {b.distance} ls</div>)}</div>
+                    <div className={styles.highlight}>{valuableBodies.map((b, i) => <div key={`vb${i}`}>{b.bodyName}<br />{b.valueMax.toLocaleString()} cr {b.distance} ls</div>)}</div>
                 </>}
+
+                <hr className={styles.divider} />
+
+                {currentRoute}
+
+                <hr className={styles.divider} />
 
                 <div><em>Last updated:</em></div>
                 <div><em>{lastUpdated}</em></div>
