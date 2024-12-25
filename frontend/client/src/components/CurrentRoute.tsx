@@ -11,7 +11,7 @@ import styles from '../styles/layout.module.scss';
 const CurrentRoute = ({EDSMClient, route}: {EDSMClient: APIClient, route: NavRoute.Route}) => {
     const nextStop = route.Route[1];
     const destination = route.Route[route.Route.length - 1];
-    const totalJumps = route.Route.length;
+    const totalJumps = route.Route.length - 1;
     const totalDistance = getTotalDistance(route);
 
     const [nextStopSystem, setNextStopSystem] = useState({} as APIResponses.SystemTrafficResponse);
