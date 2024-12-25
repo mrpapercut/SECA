@@ -160,8 +160,9 @@ export default function Home({EDSMClient, JournalClient} : {EDSMClient: APIClien
                 {valuableBodies.length > 0 && <>
                     <div>Valuable bodies:</div>
                     <div className={styles.highlight}>{valuableBodies.map((b, i) => <div key={`vb${i}`}>{b.bodyName}<br />{b.valueMax.toLocaleString()} cr {b.distance} ls</div>)}</div>
-                    <hr className={styles.divider} />
                 </>}
+
+                <hr className={styles.divider} />
 
                 {currentRoute}
 
