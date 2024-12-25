@@ -12,9 +12,13 @@ let currentRoute = {}
 fs.watch(navrouteFilePath, (event, filename) => {
     if (event === 'change') {
         const contents = fs.readFileSync(navrouteFilePath, { encoding: 'utf8' });
-        const route = JSON.parse(contents);
 
-        console.log(route);
+        try {
+            const route = JSON.parse(contents);
+            currentRoute = route;
+        } catch (err) {
+            console.log(err);
+        }
     }
 });
 
