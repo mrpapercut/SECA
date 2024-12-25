@@ -130,8 +130,8 @@ export default function Home({EDSMClient, JournalClient} : {EDSMClient: APIClien
     }
 
     let currentRoute = null;
-    if (journalRoute && Object.hasOwn(journalRoute, 'Route') && journalRoute.Route.length > 0) {
-        currentRoute = <CurrentRoute EDSMClient={EDSMClient} route={journalRoute} />;
+    if (commanderCurrentSystem && journalRoute && Object.hasOwn(journalRoute, 'Route') && journalRoute.Route.length > 0) {
+        currentRoute = <CurrentRoute EDSMClient={EDSMClient} route={journalRoute} currentSystem={commanderCurrentSystem.name} />;
     }
 
     return (

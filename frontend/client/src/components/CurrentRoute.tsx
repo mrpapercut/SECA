@@ -8,30 +8,40 @@ import { CMDRNAME } from '../../config';
 
 import styles from '../styles/layout.module.scss';
 
-const CurrentRoute = ({EDSMClient, route}: {EDSMClient: APIClient, route: NavRoute.Route}) => {
-    const nextStop = route.Route[1];
-    const destination = route.Route[route.Route.length - 1];
-    const totalJumps = route.Route.length - 1;
-    const totalDistance = getTotalDistance(route);
+const CurrentRoute = ({EDSMClient, route, currentSystem}: {EDSMClient: APIClient, route: NavRoute.Route, currentSystem: string}) => {
+    const stops = [];
+
+    let foundCurrent = false;
+    for (let i = 0; i < route.Route.length; i++) {
+        if (route.Route[i].StarSystem === currentSystem) {
+            foundCurrent = true;
+            continue;
+        }
+
+        if (foundCurrent) {
+            stops.push(route.Route[i]);
+        }
+    }
+
+    const nextStop = stops[0];
+    const destination = stops[stops.length - 1];
+    const totalJumps = stops.length;
+    const totalDistance = getTotalDistance(stops);
 
     const [nextStopSystem, setNextStopSystem] = useState({} as APIResponses.SystemTrafficResponse);
     const [destinationSystem, setDestinationSystem] = useState({} as APIResponses.SystemTrafficResponse);
 
     useEffect(() => {
         const fetchInfo = async () => {
-            const targets = [route.Route[1].StarSystem];
-            if (route.Route.length > 2) {
-                targets.push(route.Route[route.Route.length - 1].StarSystem);
-            }
-
-            EDSMClient.getSystemTraffic(route.Route[1].StarSystem).then(res => {
+            EDSMClient.getSystemTraffic(stops[0].StarSystem).then(res => {
                 setNextStopSystem(res);
             });
 
-            if (route.Route.length > 2)
-            EDSMClient.getSystemTraffic(route.Route[route.Route.length - 1].StarSystem).then(res => {
-                setDestinationSystem(res);
-            });
+            if (stops.length > 2) {
+                EDSMClient.getSystemTraffic(stops[stops.length - 1].StarSystem).then(res => {
+                    setDestinationSystem(res);
+                });
+            }
         }
 
         fetchInfo();
@@ -52,13 +62,13 @@ const CurrentRoute = ({EDSMClient, route}: {EDSMClient: APIClient, route: NavRou
     </>
 };
 
-const getTotalDistance = (route: NavRoute.Route) => {
-    const currentPosition = route.Route[0];
+const getTotalDistance = (route: NavRoute.RouteItem[]) => {
+    const currentPosition = route[0];
 
     let total = 0;
     let prevPos = {x: currentPosition.StarPos[0], y: currentPosition.StarPos[1], z: currentPosition.StarPos[2]};
 
-    route.Route.slice(1).forEach(s => {
+    route.slice(1).forEach(s => {
         const newPos = {x: s.StarPos[0], y: s.StarPos[1], z: s.StarPos[2]};
         const distance = calculateDistance(prevPos, newPos);
         total += distance;
