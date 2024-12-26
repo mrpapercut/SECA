@@ -12,9 +12,12 @@ const CurrentRoute = ({EDSMClient, route, currentSystem}: {EDSMClient: APIClient
     const stops = [];
 
     let foundCurrent = false;
+    let currentIndex = null;
+
     for (let i = 0; i < route.Route.length; i++) {
         if (route.Route[i].StarSystem === currentSystem) {
             foundCurrent = true;
+            currentIndex = i;
             continue;
         }
 
@@ -26,16 +29,18 @@ const CurrentRoute = ({EDSMClient, route, currentSystem}: {EDSMClient: APIClient
     const nextStop = stops[0];
     const destination = stops[stops.length - 1];
     const totalJumps = stops.length;
-    const totalDistance = getTotalDistance(stops);
+    const totalDistance = getTotalDistance([route.Route[currentIndex], ...stops]);
 
     const [nextStopSystem, setNextStopSystem] = useState({} as APIResponses.SystemTrafficResponse);
     const [destinationSystem, setDestinationSystem] = useState({} as APIResponses.SystemTrafficResponse);
 
     useEffect(() => {
         const fetchInfo = async () => {
-            EDSMClient.getSystemTraffic(stops[0].StarSystem).then(res => {
-                setNextStopSystem(res);
-            });
+            if (stops.length > 1) {
+                EDSMClient.getSystemTraffic(stops[0].StarSystem).then(res => {
+                    setNextStopSystem(res);
+                });
+            }
 
             if (stops.length > 2) {
                 EDSMClient.getSystemTraffic(stops[stops.length - 1].StarSystem).then(res => {
