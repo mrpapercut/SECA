@@ -47,8 +47,8 @@ const CurrentRoute = ({EDSMClient, route, currentSystem}: {EDSMClient: APIClient
         fetchInfo();
     }, []);
 
-    const nextStopDiscovered = Object.keys(nextStopSystem).length === 0 || nextStopSystem.discovery.commander === CMDRNAME;
-    const destinationDiscovered = Object.keys(destinationSystem).length === 0 || destinationSystem.discovery.commander === CMDRNAME;
+    const nextStopDiscovered = Object.keys(nextStopSystem).length === 0 || nextStopSystem.discovery === null || nextStopSystem.discovery?.commander === CMDRNAME;
+    const destinationDiscovered = Object.keys(destinationSystem).length === 0 || destinationSystem.discovery === null || destinationSystem.discovery?.commander === CMDRNAME;
 
     return <>
         <div>Route:</div>
