@@ -139,7 +139,7 @@ export default function Home({EDSMClient, JournalClient} : {EDSMClient: APIClien
             <div className={styles.grid}>
                 <hr className={styles.divider} style={{width: `${countdown * 10}%`}} />
                 <div><Image src="https://www.edsm.net/img/users/1/8/7/9/1/3/187913.png" className={styles.cmdrProfilePhoto} width={100} height={100} alt={''} /></div>
-                {/* <div>Refreshing in {countdown} seconds</div> */}
+                <div></div>
 
                 <div>Commander:</div>
                 <div>{commanderName}</div>
