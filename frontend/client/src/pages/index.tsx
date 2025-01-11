@@ -61,24 +61,24 @@ export default function Home({EDSMClient, JournalClient} : {EDSMClient: APIClien
             console.log('Getting commander credits');
             EDSMClient.getCommanderCredits().then(res => {
                 dispatch(setCommanderCredits(res))
-            });
+            }).catch(err => console.log(err));;
 
             console.log('Updating route');
             JournalClient.getRoute().then(res => {
                 dispatch(setJournalRoute(res));
-            });
+            }).catch(err => console.log(err));;
         }
 
         if (cmdrLastPos && cmdrLastPos.system) {
             console.log('Getting current system');
             EDSMClient.getSystemCelestialBodies(cmdrLastPos.system).then(res => {
                 dispatch(setCurrentSystem(res));
-            });
+            }).catch(err => console.log(err));;
 
             console.log('Getting system scan values');
             EDSMClient.getSystemEstimatedScanValues(cmdrLastPos.system).then(res => {
                 dispatch(setScanValues(res))
-            });
+            }).catch(err => console.log(err));
         }
     }
 
@@ -110,6 +110,10 @@ export default function Home({EDSMClient, JournalClient} : {EDSMClient: APIClien
     const scanValues = systemScanValues ? `${systemScanValues.estimatedValue.toLocaleString()} cr` : null;
     const mappedScanValues = systemScanValues ? `${systemScanValues.estimatedValueMapped.toLocaleString()} cr` : null;
     const valuableBodies = systemScanValues ? systemScanValues.valuableBodies : [];
+
+    const landableWithAtmosphere = commanderCurrentSystem && commanderCurrentSystem.bodies.length > 0
+        ? commanderCurrentSystem.bodies.filter(b => b.isLandable && b.atmosphereType !== 'No atmosphere')
+        : [];
 
     if (commanderCurrentSystem) {
         for (let i = 0; i < valuableBodies.length; i++) {
@@ -164,6 +168,11 @@ export default function Home({EDSMClient, JournalClient} : {EDSMClient: APIClien
                 </>}
 
                 <hr className={styles.divider} />
+
+                {landableWithAtmosphere.length > 0 && <>
+                    <div>Landable with atmosphere:</div>
+                    <div>{landableWithAtmosphere.map((b, i) => b.name.replace(commanderCurrentSystem.name, '')).join(', ')}</div>
+                </>}
 
                 {currentRoute}
 
