@@ -207,7 +207,7 @@ declare namespace APIResponses {
             recoveringStates: Array<{
                 state: FactionState,
                 trend: number
-            }>,            
+            }>,
             pendingStates: Array<{
                 state: FactionState,
                 trend: number
@@ -301,7 +301,7 @@ declare namespace APIResponses {
             isScoopable: boolean
         }
     }
-    
+
     export type SystemsInformationResponse = Array<SystemInformationResponse>
 
     interface SystemInSphereResponse extends SystemInformationResponse {
@@ -315,6 +315,6 @@ declare namespace APIResponses {
         distance: number,
         bodyCount: null | number
     }
-    
-    export type SystemsInCubeResponse = Array<SystemsInCubeResponse>
+
+    export type SystemsInCubeResponse = Array<SystemInCubeResponse>
 }

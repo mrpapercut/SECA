@@ -14,9 +14,14 @@ declare namespace ReduxStates {
         route: NavRoute.Route
     }
 
+    export interface NearbyState {
+        nearby: APIResponses.SystemsInCubeResponse
+    }
+
     export interface ReduxState {
         commander: CommanderState,
         system: SystemState,
-        journal: JournalState
+        journal: JournalState,
+        nearby: NearbyState
     }
 }
