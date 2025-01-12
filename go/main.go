@@ -1,13 +1,14 @@
 package main
 
 import (
-	"fmt"
-
-	"github.com/mrpapercut/seca/journal"
+	"github.com/mrpapercut/seca/server"
 )
 
 func main() {
-	jw := journal.GetWatcher()
+	// jw := journal.GetWatcher()
 
-	fmt.Printf("Log dir path: %s\n", jw.LogdirPath)
+	// go jw.StartWatcher()
+	go server.StartWebserver()
+
+	select {}
 }
