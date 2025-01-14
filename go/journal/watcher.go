@@ -6,13 +6,41 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/fsnotify/fsnotify"
 )
 
+var eventCache = make(map[string]bool)
+
+type StateShip struct {
+	Type         string  `json:"type,omitempty"`
+	Name         string  `json:"name,omitempty"`
+	FuelLevel    float64 `json:"fuellevel,omitempty"`
+	FuelCapacity float64 `json:"fuelcapacity,omitempty"`
+}
+
+type StateStatistics struct {
+	SystemsVisited int `json:"systems_visited,omitempty"`
+	TotalDistance  int `json:"total_distance,omitempty"`
+	TotalJumps     int `json:"total_jumps,omitempty"`
+}
+
+type CurrentState struct {
+	Commander  string           `json:"commander,omitempty"`
+	Location   string           `json:"location,omitempty"`
+	Credits    int              `json:"credits,omitempty"`
+	Ship       *StateShip       `json:"ship,omitempty"`
+	Statistics *StateStatistics `json:"statistics,omitempty"`
+}
+
+var currentState = &CurrentState{
+	Ship:       &StateShip{},
+	Statistics: &StateStatistics{},
+}
+
 type JournalWatcher struct {
-	logdirPath     string
-	currentLogfile string
+	logdirPath string
 }
 
 func GetWatcher() *JournalWatcher {
@@ -69,8 +97,25 @@ func (jw *JournalWatcher) StartWatcher() {
 
 func (jw *JournalWatcher) handleCreateEvent(path string) {
 	fmt.Printf("handling create event for %s\n", path)
+
+	// new log, new cache for events
+	if strings.HasSuffix(path, ".log") {
+		eventCache = make(map[string]bool)
+	}
 }
 
 func (jw *JournalWatcher) handleWriteEvent(path string) {
-	fmt.Printf("handling write event for %s\n", path)
+	file, err := os.ReadFile(path)
+	if err != nil {
+		fmt.Printf("error reading file: %v", err)
+		return
+	}
+
+	if strings.HasSuffix(path, ".log") {
+		jw.handleJournalUpdate(file)
+	} else if strings.HasSuffix(path, "Status.json") {
+		jw.handleStatusUpdate(file)
+	} else if strings.HasSuffix(path, "Status.json") {
+		jw.handleNavRouteUpdate(file)
+	}
 }

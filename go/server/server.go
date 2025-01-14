@@ -11,7 +11,9 @@ import (
 
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
-		return true
+		origin := r.Header.Get("Origin")
+		fmt.Printf("origin: %s\n", origin)
+		return true // origin == "<http://yourdomain.com>"
 	},
 }
 
@@ -52,10 +54,10 @@ func handleIncoming() {
 	}
 }
 
-func SendMessage(message string) {
+func SendMessage(message []byte) {
 	mutex.Lock()
 	for client := range clients {
-		err := client.WriteMessage(websocket.TextMessage, []byte(message))
+		err := client.WriteMessage(websocket.TextMessage, message)
 		if err != nil {
 			client.Close()
 			delete(clients, client)
@@ -65,10 +67,11 @@ func SendMessage(message string) {
 }
 
 func StartWebserver() {
-	http.HandleFunc("/ws", wsHandler)
+	http.HandleFunc("/", wsHandler)
 	go handleIncoming()
 
-	http.Handle("/", http.FileServer(http.Dir("./frontend")))
+	// http.Handle("/", http.FileServer(http.Dir("./frontend/dist")))
 
+	fmt.Println("Webserver starts listening...")
 	log.Fatal(http.ListenAndServe("127.0.0.1:8080", nil))
 }
