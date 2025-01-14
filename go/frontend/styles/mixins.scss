@@ -1,0 +1,41 @@
+@use 'variables';
+
+@mixin border-glow($color: variables.$orange-text) {
+    border: 1px solid $color;
+    box-shadow: 0 0 2px inset $color, 0 0 3px $color;
+}
+
+@mixin glass-effect() {
+    backdrop-filter: blur(2px);
+    background: rgba(0, 0, 0, 0.15);
+}
+
+@mixin scrollable {
+    @include border-glow;
+
+    /* width */
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+        border-radius: 15px;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: variables.$orange-text;
+        border-radius: 15px;
+    }
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background: variables.$orange-background;
+    }
+
+    &::-webkit-scrollbar-corner {
+        display: none;
+    }
+}

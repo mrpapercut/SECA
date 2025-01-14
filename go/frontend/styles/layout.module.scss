@@ -1,0 +1,107 @@
+@use 'variables';
+@use 'mixins';
+
+.wrapper {
+    color: variables.$orange-text;
+    margin: 1rem;
+    height: calc(100vh - 2rem);
+    position: relative;
+}
+
+.navHeader {
+    @include mixins.border-glow;
+    @include mixins.glass-effect;
+
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    gap: .5rem;
+    margin-bottom: 1rem;
+    text-shadow: 1px 1px 1px rgb(0, 0, 0, 60%);
+
+    a {
+        background: rgba(variables.$orange-background, 0.1);
+        color: variables.$orange-text;
+        text-transform: uppercase;
+        text-decoration: none;
+        text-align: center;
+        padding: .25rem 0;
+
+        &:hover {
+            background: rgba(variables.$orange-background, 0.4);
+            color: variables.$white-text;
+        }
+    }
+}
+
+.mainContent {
+    @include mixins.border-glow;
+    @include mixins.glass-effect;
+    @include mixins.scrollable;
+
+    background: rgba(variables.$dark-grey-background, 0.1);
+    text-shadow: 1px 1px 1px rgb(0 0 0 / 60%);
+    padding: 1rem;
+    max-height: 70vh;
+    overflow: scroll;
+}
+
+.cmdrProfilePhoto {
+    @include mixins.border-glow;
+    border: 1px solid variables.$orange-text !important;
+    border-radius: 50%;
+}
+
+.wallpaperWrapper {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    z-index: -1;
+}
+
+// Tables, forms etc
+.label {
+    color: variables.$orange-text;
+    width: 5rem;
+    display: inline-block;
+}
+
+.value {
+    color: variables.$white-text;
+}
+
+.button {
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: variables.$orange-text;
+    background-color: transparent;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.highlight {
+    color: variables.$white-text;
+}
+
+.newDiscovered {
+    position: relative;
+}
+
+.newDiscovered:after {
+    content: '✨';
+    margin-left: .5rem;
+}
+
+.divider {
+    grid-column: span 2;
+    height: 1px;
+    width: 100%;
+    border: none;
+    background: variables.$orange-text;
+    transition: width 1s linear;
+}

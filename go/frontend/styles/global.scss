@@ -1,0 +1,12 @@
+@use 'variables';
+@use 'fonts';
+@use 'fontawesome/fontawesome';
+@use 'fontawesome/regular';
+
+body {
+    background: variables.$normal-background;
+    color: variables.$normal-text;
+    font-family: 'Eurostile';
+    margin: 0;
+    line-height: 1.5rem;
+}
