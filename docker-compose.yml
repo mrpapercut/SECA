@@ -1,52 +1,24 @@
-version: '3.9'
-
 networks:
   default:
     name: ${COMPOSE_PROJECT_NAME}_network
 
 services:
-  # frontend:
-  #   build: ./frontend/client
-  #   container_name: ${COMPOSE_PROJECT_NAME}_frontend
-  #   command: /bin/sh -c "npm run build && npm run server"
-  #   environment:
-  #     COMMANDER_NAME: ${COMMANDER_NAME}
-  #     EDSM_API_KEY: ${EDSM_API_KEY}
-  #     FRONTEND_CLIENT_PORT: ${FRONTEND_CLIENT_PORT}
-  #     FDCAPI_PORT: ${FDCAPI_PORT}
-  #     ESCLIENT_PORT: ${ESCLIENT_PORT}
-  #   ports:
-  #     - "${FRONTEND_CLIENT_PORT}:${FRONTEND_CLIENT_PORT}"
-  #   restart: unless-stopped
-
-  # fdapi:
-  #   build: ./frontend/FDCAPI
-  #   container_name: ${COMPOSE_PROJECT_NAME}_fdcapi
-  #   command: /bin/sh -c "npm run build && npm start"
-  #   environment:
-  #     FDCAPI_APP_NAME: ${FDCAPI_APP_NAME}
-  #     FDCAPI_CLIENT_ID: ${FDCAPI_CLIENT_ID}
-  #     FDCAPI_SHARED_KEY: ${FDCAPI_SHARED_KEY}
-  #     FDCAPI_REDIRECT_URI: ${FDCAPI_REDIRECT_URI}
-  #     FDCAPI_PORT: ${FDCAPI_PORT}
-  #     SQLITE_DB_NAME: ${SQLITE_DB_NAME}
-  #   ports:
-  #     - "${FDCAPI_PORT}:${FDCAPI_PORT}"
-  #   restart: unless-stopped
-
-  esclient:
-    build: ./frontend/ESClient
-    container_name: ${COMPOSE_PROJECT_NAME}_esclient
-    command: /bin/sh -c "npm run build && npm start"
-    environment:
-      ESCLIENT_PORT: ${ESCLIENT_PORT}
-      ELASTIC_SCHEME: ${ELASTIC_SCHEME}
-      ELASTIC_NODE01: ${ELASTIC_NODE01}
-      ELASTIC_PORT: ${ELASTIC_PORT}
-      ELASTIC_USER: ${ELASTIC_USER}
-      ELASTIC_PASS: ${ELASTIC_PASS}
-      INDEX_SYSTEMS_WITH_COORDINATES: ${INDEX_SYSTEMS_WITH_COORDINATES}
-      INDEX_SYSTEMS_WITHOUT_COORDINATES: ${INDEX_SYSTEMS_WITHOUT_COORDINATES}
+  backend:
+    build:
+      context: ./go
+    container_name: ${COMPOSE_PROJECT_NAME}_backend
+    volumes:
+      - ./go/seca.db:/app/seca.db
+      - ./gamelogs:/app/gamelogs
     ports:
-      - "${ESCLIENT_PORT}:${ESCLIENT_PORT}"
-    restart: unless-stopped
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./go/frontend
+    container_name: ${COMPOSE_PROJECT_NAME}_frontend
+    # command: "/bin/sh -c 'npm run start'"
+    volumes:
+      - ./go/frontend/dist:/app/dist
+    ports:
+      - "3000:3000"

@@ -79,6 +79,24 @@
     background-color: transparent;
 }
 
+.isConnected::after,
+.isNotConnected::after {
+    border: 1px solid #8b3838;
+    border-radius: 50%;
+    background-color: #8b3838;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    top: 5px;
+    right: 0;
+    content: '';
+}
+
+.isConnected::after {
+    border: 1px solid #66adee;
+    background-color: #66adee;
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

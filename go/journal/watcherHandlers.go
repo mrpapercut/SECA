@@ -3,14 +3,19 @@ package journal
 import (
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"strings"
 	"time"
 
+	"github.com/mrpapercut/seca/journal/events"
+	"github.com/mrpapercut/seca/models"
 	"github.com/mrpapercut/seca/server"
 )
 
-func (jw *JournalWatcher) handleJournalUpdate(file []byte) {
-	lines := strings.Split(string(file), "\n")
+var eventHandler = events.EventHandler{}
+
+func (jw *JournalWatcher) handleJournalUpdate(filecontents []byte) {
+	lines := strings.Split(string(filecontents), "\n")
 
 	// Get line index of last session, should start with eventType "Commander"
 	lastSessionIdx := 0
@@ -20,19 +25,23 @@ func (jw *JournalWatcher) handleJournalUpdate(file []byte) {
 		}
 	}
 
-	for _, line := range lines[lastSessionIdx:] {
+	jw.processJournalLines(lines[lastSessionIdx:])
+}
+
+func (jw *JournalWatcher) processJournalLines(lines []string) {
+	for _, line := range lines {
 		if len(line) == 0 {
 			continue
 		}
 
-		var ev GenericEvent
+		var ev events.GenericEvent
 		err := json.Unmarshal([]byte(line), &ev)
 		if err != nil {
-			fmt.Printf("error unmarshalling json: %v", err)
+			slog.Warn(fmt.Sprintf("error unmarshalling event json: %v", err))
 			continue
 		}
 
-		key := fmt.Sprintf("%s|%s", ev.Event.Timestamp.Format(time.RFC3339), ev.Event.Event)
+		key := fmt.Sprintf("%s|%s", ev.Timestamp.Format(time.RFC3339), ev.Event)
 		_, exists := eventCache[key]
 		if exists {
 			continue
@@ -40,63 +49,80 @@ func (jw *JournalWatcher) handleJournalUpdate(file []byte) {
 
 		eventCache[key] = true
 
-		jw.handleJournalEvent(&ev)
+		jw.handleJournalEvent(&ev, line)
+	}
+
+	jw.sendStatusUpdate()
+}
+
+func (jw *JournalWatcher) sendStatusUpdate() {
+	status, err := models.GetStatus()
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error getting status: %v", err))
+		return
+	}
+
+	statusResponse := &server.ResponseStatus{
+		Type:   "getStatus",
+		Status: status,
+	}
+
+	jsonStatus, err := json.Marshal(&statusResponse)
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error marshalling status json: %v", err))
+		return
+	}
+
+	server.SendMessage(jsonStatus)
+}
+
+func (jw *JournalWatcher) handleJournalEvent(event *events.GenericEvent, rawEvent string) {
+	err := eventHandler.HandleEvent(event.Event, rawEvent)
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error processing %s event", event.Event), "error", err)
 	}
 }
 
-type StatisticsExploration map[string]interface{}
-
-// type StatisticsExploration struct {
-// 	Systems_Visited           int
-// 	Total_Hyperspace_Distance int
-// 	Total_Hyperspace_Jumps    int
-// }
-
-// type Statistics struct {
-// 	Exploration StatisticsExploration
-// }
-
-func (jw *JournalWatcher) handleJournalEvent(event *GenericEvent) {
-	switch event.Event.Event {
-	case "Commander":
-		currentState.Commander = event.KeyValue["Name"].(string)
-	case "Location":
-		currentState.Location = event.KeyValue["Body"].(string)
-	case "LoadGame":
-		currentState.Credits = int(event.KeyValue["Credits"].(float64))
-
-		if shipType, exists := event.KeyValue["Ship"]; exists {
-			currentState.Ship.Type = shipType.(string)
-		}
-
-		if shipName, exists := event.KeyValue["ShipName"]; exists {
-			currentState.Ship.Name = shipName.(string)
-		}
-
-		if fuelLevel, exists := event.KeyValue["FuelLevel"]; exists {
-			currentState.Ship.FuelLevel = fuelLevel.(float64)
-		}
-
-		if fuelCapacity, exists := event.KeyValue["FuelCapacity"]; exists {
-			currentState.Ship.FuelCapacity = fuelCapacity.(float64)
-		}
-	case "Statistics":
-		if exploration, exists := event.KeyValue["Exploration"].(map[string]interface{}); exists {
-			currentState.Statistics.SystemsVisited = int(exploration["Systems_Visited"].(float64))
-			currentState.Statistics.TotalDistance = int(exploration["Total_Hyperspace_Distance"].(float64))
-			currentState.Statistics.TotalJumps = int(exploration["Total_Hyperspace_Jumps"].(float64))
-		}
+func (jw *JournalWatcher) handleNavRouteUpdate(filecontents []byte) {
+	var ev events.GenericEvent
+	err := json.Unmarshal([]byte(filecontents), &ev)
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error unmarshalling event navRoute json: %v", err))
+		return
 	}
 
-	response, _ := json.Marshal(&currentState)
+	err = eventHandler.HandleEvent(ev.Event, string(filecontents))
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error processing navRoute event: %v", err))
+	}
 
-	server.SendMessage(response)
+	jw.sendRouteUpdate()
 }
 
-func (jw *JournalWatcher) handleStatusUpdate(file []byte) {
+func (jw *JournalWatcher) sendRouteUpdate() {
+	route, err := models.GetRoute()
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error getting route: %v", err))
+		return
+	}
 
-}
+	routeLength, err := models.GetRouteLength(route)
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error getting route length: %v", err))
+		return
+	}
 
-func (jw *JournalWatcher) handleNavRouteUpdate(file []byte) {
+	routeResponse := &server.ResponseRoute{
+		Type:          "getRoute",
+		Route:         route,
+		TotalDistance: routeLength,
+	}
 
+	jsonRoute, err := json.Marshal(&routeResponse)
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error marshalling route json: %v", err))
+		return
+	}
+
+	server.SendMessage(jsonRoute)
 }

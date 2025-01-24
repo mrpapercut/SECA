@@ -1,77 +1,166 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"sync"
 
 	"github.com/gorilla/websocket"
+	"github.com/mrpapercut/seca/models"
 )
 
-var upgrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool {
-		origin := r.Header.Get("Origin")
-		fmt.Printf("origin: %s\n", origin)
-		return true // origin == "<http://yourdomain.com>"
-	},
+type Webserver struct {
+	clients   map[*websocket.Conn]bool
+	broadcast chan []byte
+	mutex     *sync.Mutex
+	upgrader  websocket.Upgrader
 }
 
-var clients = make(map[*websocket.Conn]bool)
-var broadcast = make(chan []byte)
-var mutex = &sync.Mutex{}
+var webserverInstance *Webserver
+var webserverLock = &sync.Mutex{}
 
-func wsHandler(w http.ResponseWriter, r *http.Request) {
-	conn, err := upgrader.Upgrade(w, r, nil)
+func GetWebserverInstance() *Webserver {
+	if webserverInstance == nil {
+		webserverLock.Lock()
+		defer webserverLock.Unlock()
+
+		if webserverInstance == nil {
+			webserverInstance = &Webserver{
+				clients:   make(map[*websocket.Conn]bool),
+				broadcast: make(chan []byte),
+				mutex:     &sync.Mutex{},
+				upgrader: websocket.Upgrader{
+					CheckOrigin: func(r *http.Request) bool {
+						return true // origin == "<http://yourdomain.com>"
+					},
+				},
+			}
+		}
+	}
+
+	return webserverInstance
+}
+
+func SendMessage(message []byte) {
+	ws := GetWebserverInstance()
+	ws.sendMessage(message)
+}
+
+func (s *Webserver) wsHandler(w http.ResponseWriter, r *http.Request) {
+	conn, err := s.upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Printf("error upgrading connection: %v\n", err)
 		return
 	}
 	defer conn.Close()
 
-	mutex.Lock()
-	clients[conn] = true
-	mutex.Unlock()
+	s.mutex.Lock()
+	s.clients[conn] = true
+	s.mutex.Unlock()
 
 	for {
 		_, message, err := conn.ReadMessage()
 		if err != nil {
-			mutex.Lock()
-			delete(clients, conn)
-			mutex.Unlock()
+			s.mutex.Lock()
+			delete(s.clients, conn)
+			s.mutex.Unlock()
 			break
 		}
 
-		broadcast <- message
+		s.broadcast <- message
 	}
 }
 
-func handleIncoming() {
+type ResponseStatus struct {
+	Type   string         `json:"type"`
+	Status *models.Status `json:"status"`
+}
+
+type ResponseRoute struct {
+	Type          string                     `json:"type"`
+	Route         []*models.RouteWithSystems `json:"route"`
+	TotalDistance float64                    `json:"total_distance"`
+}
+
+func (s *Webserver) handleIncoming() {
 	for {
-		message := <-broadcast
+		message := <-s.broadcast
 
-		fmt.Printf("Received message: %s\n", message)
+		messageToSend := make([]byte, 0)
+
+		switch string(message) {
+		case "getStatus":
+			status, err := models.GetStatus()
+			if err != nil {
+				slog.Warn(fmt.Sprintf("error getting status: %v", err))
+				break
+			}
+
+			statusResponse := &ResponseStatus{
+				Type:   "getStatus",
+				Status: status,
+			}
+
+			jsonStatus, err := json.Marshal(&statusResponse)
+			if err != nil {
+				slog.Warn(fmt.Sprintf("error parsing status to json: %v", err))
+				break
+			}
+
+			messageToSend = jsonStatus
+		case "getRoute":
+			route, err := models.GetRoute()
+			if err != nil {
+				slog.Warn(fmt.Sprintf("error getting route: %v", err))
+				break
+			}
+
+			totalDistance, err := models.GetRouteLength(route)
+			if err != nil {
+				slog.Warn(fmt.Sprintf("error calculating route distance: %v", err))
+				totalDistance = float64(0)
+			}
+
+			routeResponse := &ResponseRoute{
+				Type:          "getRoute",
+				Route:         route,
+				TotalDistance: totalDistance,
+			}
+
+			jsonRoute, err := json.Marshal(&routeResponse)
+			if err != nil {
+				slog.Warn(fmt.Sprintf("error parsing status to json: %v", err))
+				break
+			}
+
+			messageToSend = jsonRoute
+		}
+
+		if len(messageToSend) > 0 {
+			s.sendMessage(messageToSend)
+		}
 	}
 }
 
-func SendMessage(message []byte) {
-	mutex.Lock()
-	for client := range clients {
+func (s *Webserver) sendMessage(message []byte) {
+	s.mutex.Lock()
+	for client := range s.clients {
 		err := client.WriteMessage(websocket.TextMessage, message)
 		if err != nil {
 			client.Close()
-			delete(clients, client)
+			delete(s.clients, client)
 		}
 	}
-	mutex.Unlock()
+	s.mutex.Unlock()
 }
 
-func StartWebserver() {
-	http.HandleFunc("/", wsHandler)
-	go handleIncoming()
+func (s *Webserver) Start() {
+	http.HandleFunc("/", s.wsHandler)
+	go s.handleIncoming()
 
-	// http.Handle("/", http.FileServer(http.Dir("./frontend/dist")))
-
-	fmt.Println("Webserver starts listening...")
-	log.Fatal(http.ListenAndServe("127.0.0.1:8080", nil))
+	slog.Info("Webserver starts listening on port :8080...")
+	log.Fatal(http.ListenAndServe("0.0.0.0:8080", nil))
 }

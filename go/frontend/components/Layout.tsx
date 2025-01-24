@@ -3,8 +3,9 @@ import Head from 'next/head';
 import NavHeader from './NavHeader';
 
 import styles from '../styles/layout.module.scss';
+import { ReactNode } from 'react';
 
-const Layout = ({ children }) => {
+const Layout = ({ children }: { children: ReactNode }) => {
     return (
         <div>
             <Head>

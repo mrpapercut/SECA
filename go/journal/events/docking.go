@@ -49,7 +49,7 @@ type EventEmbark struct {
 	StarSystem    StarSystem
 	SystemAddress SystemAddress
 	Body          BodyName
-	BodyID        BodyID
+	BodySystemID  BodySystemID `json:"BodyID"`
 	OnStation     bool
 	OnPlanet      bool
 	StationName   StationName

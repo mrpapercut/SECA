@@ -3,12 +3,15 @@ package journal
 import (
 	"fmt"
 	"log"
+	"log/slog"
 	"os"
 	"path"
 	"path/filepath"
 	"strings"
 
 	"github.com/fsnotify/fsnotify"
+	"github.com/mrpapercut/seca/config"
+	"github.com/mrpapercut/seca/models"
 )
 
 var eventCache = make(map[string]bool)
@@ -34,25 +37,76 @@ type CurrentState struct {
 	Statistics *StateStatistics `json:"statistics,omitempty"`
 }
 
-var currentState = &CurrentState{
-	Ship:       &StateShip{},
-	Statistics: &StateStatistics{},
-}
-
 type JournalWatcher struct {
 	logdirPath string
 }
 
 func GetWatcher() *JournalWatcher {
-	homedir, err := os.UserHomeDir()
-	if err != nil {
-		log.Fatalf("error getting user home dir")
-	}
+	conf, _ := config.GetConfig()
 
-	logdirPath := path.Join(homedir, "Saved Games", "Frontier Developments", "Elite Dangerous")
+	var logdirPath string
+
+	if conf.JournalFolder != "" {
+		logdirPath = conf.JournalFolder
+	} else {
+		homedir, err := os.UserHomeDir()
+		if err != nil {
+			log.Fatalf("error getting user home dir")
+		}
+
+		logdirPath = path.Join(homedir, "Saved Games", "Frontier Developments", "Elite Dangerous")
+	}
 
 	return &JournalWatcher{
 		logdirPath: logdirPath,
+	}
+}
+
+func (jw *JournalWatcher) ProcessExistingFiles() {
+	files, err := os.ReadDir(jw.logdirPath)
+	if err != nil {
+		slog.Warn("unable to read logdirPath")
+	}
+
+	isFirstRun := models.IsFirstRun()
+
+	var lastJournalFile string
+
+	for _, file := range files {
+		filepath := path.Join(jw.logdirPath, file.Name())
+		slog.Info(fmt.Sprintf("Processing file %s", filepath))
+
+		contents, err := os.ReadFile(filepath)
+		if err != nil {
+			slog.Warn("error reading file %s: %v", filepath, err)
+			continue
+		}
+
+		if strings.HasSuffix(filepath, ".log") {
+			lastJournalFile = filepath
+
+			if isFirstRun {
+				jcontents := strings.Split(string(contents), "\n")
+				jw.processJournalLines(jcontents)
+			}
+			continue
+		}
+
+		if strings.HasSuffix(filepath, "NavRoute.json") {
+			jw.handleNavRouteUpdate(contents)
+			continue
+		}
+	}
+
+	// For Journal, process only the last file in its entirety
+	if !isFirstRun && lastJournalFile != "" {
+		contents, err := os.ReadFile(lastJournalFile)
+		if err != nil {
+			slog.Warn("error reading file %s: %v", lastJournalFile, err)
+		}
+
+		lastJournalContents := strings.Split(string(contents), "\n")
+		jw.processJournalLines(lastJournalContents)
 	}
 }
 
@@ -67,6 +121,8 @@ func (jw *JournalWatcher) StartWatcher() {
 	if err != nil {
 		log.Fatalf("error watching directory: %v", err)
 	}
+
+	slog.Info("Watcher started")
 
 	for {
 		select {
@@ -113,9 +169,9 @@ func (jw *JournalWatcher) handleWriteEvent(path string) {
 
 	if strings.HasSuffix(path, ".log") {
 		jw.handleJournalUpdate(file)
-	} else if strings.HasSuffix(path, "Status.json") {
-		jw.handleStatusUpdate(file)
-	} else if strings.HasSuffix(path, "Status.json") {
+	} else if strings.HasSuffix(path, "NavRoute.json") {
 		jw.handleNavRouteUpdate(file)
-	}
+	} /*else if strings.HasSuffix(path, "Status.json") {
+		jw.handleStatusUpdate(file)
+	}*/
 }
