@@ -143,6 +143,8 @@ export default function Home() {
         }
     }
 
+    console.log(currentState);
+
     return <>
         <div className={isConnected ? styles.isConnected : styles.isNotConnected}>
             <div className={styles.grid}>
@@ -161,8 +163,13 @@ export default function Home() {
                 <div>State:</div>
                 <div>{currentState.is_landed ? 'Landed' : currentState.is_docked ? 'Docked' : 'Flying'}</div>
 
-                <div>Current location:</div>
+                <div>Current system:</div>
                 <div className={!discoveredCurrent ? styles.newDiscovered : ''}>{currentState.current_system}</div>
+
+                {currentState.body !== '' && <>
+                    <div>Current body:</div>
+                    <div>{currentState.body}</div>
+                </>}
 
                 {currentRoute.length > 0 && <>
                     <hr className={styles.divider} />
@@ -179,6 +186,14 @@ export default function Home() {
                     <div>Total stops:</div>
                     <div>{currentRoute.length}</div>
                 </>}
+
+                <hr className={styles.divider} />
+
+                <div>Est. exploration earnings:</div>
+                <div>{ currentState.estimated_exploration_value } cr</div>
+
+                <div>Est. biological earnings:</div>
+                <div>{ currentState.estimated_biological_value } cr</div>
 
                 <hr className={styles.divider} />
 

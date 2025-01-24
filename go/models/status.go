@@ -1,5 +1,7 @@
 package models
 
+import "fmt"
+
 type Status struct {
 	ID             uint    `gorm:"autoIncrement,primaryKey" json:"-"`
 	Identifier     string  `json:"-"`
@@ -34,6 +36,18 @@ func GetStatus() (*Status, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	explorationValue, err := GetTotalEstimatedExplorationScanValue()
+	if err != nil {
+		return nil, fmt.Errorf("error getting exploration value: %v", err)
+	}
+	status.Exploration = explorationValue
+
+	biologicalValue, err := GetTotalEstimatedBiologicalScanValue()
+	if err != nil {
+		return nil, fmt.Errorf("error getting biological value: %v", err)
+	}
+	status.Biological = biologicalValue
 
 	return &status, nil
 }
