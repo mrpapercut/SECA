@@ -50,6 +50,10 @@ func (jw *JournalWatcher) processJournalLines(lines []string) {
 		eventCache[key] = true
 
 		jw.handleJournalEvent(&ev, line)
+
+		if ev.Event == "FSDJump" {
+			jw.sendRouteUpdate()
+		}
 	}
 
 	jw.sendStatusUpdate()

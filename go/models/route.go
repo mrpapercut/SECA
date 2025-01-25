@@ -23,11 +23,26 @@ func GetRoute() ([]*RouteWithSystems, error) {
 		return nil, err
 	}
 
+	status, err := GetStatus()
+	if err != nil {
+		return nil, fmt.Errorf("error getting status: %v", err)
+	}
+
+	foundCurrentPosition := false
+
 	mappedRoute := make([]*RouteWithSystems, 0)
 	for _, r := range route {
 		system, err := GetSystemByAddress(r.SystemAddress)
 		if err != nil {
 			return nil, fmt.Errorf("error getting system for route-stop: %v", err)
+		}
+
+		if system.Name == status.System {
+			foundCurrentPosition = true
+		}
+
+		if !foundCurrentPosition {
+			continue
 		}
 
 		bodies, err := GetBodies(r.SystemAddress)
