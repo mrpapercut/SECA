@@ -15,6 +15,7 @@ interface CurrentState {
     body: string
     is_landed: boolean
     is_docked: boolean
+    is_on_foot: boolean
     estimated_exploration_value: number
     estimated_biological_value: number
     systems_visited: number
@@ -177,23 +178,25 @@ export default function Home() {
                     <div>Next stop:</div>
                     <div className={!discoveredNextStop ? styles.newDiscovered : ''}>{currentRoute[0].system.name}</div>
 
-                    <div>Destination:</div>
-                    <div className={!discoveredDestination ? styles.newDiscovered : ''}>{currentRoute[currentRoute.length - 1].system.name}</div>
+                    {currentRoute.length > 1 && <>
+                        <div>Destination:</div>
+                        <div className={!discoveredDestination ? styles.newDiscovered : ''}>{currentRoute[currentRoute.length - 1].system.name}</div>
+                    </>}
 
                     <div>Route length:</div>
-                    <div>{parseInt(currentRouteDistance.toFixed(0), 10).toLocaleString()} ly</div>
+                    <div>{parseInt(currentRouteDistance.toFixed(2), 10).toLocaleString()} ly</div>
 
                     <div>Total stops:</div>
-                    <div>{currentRoute.length}</div>
+                    <div>{currentRoute.length - 1}</div>
                 </>}
 
                 <hr className={styles.divider} />
 
                 <div>Est. exploration earnings:</div>
-                <div>{ currentState.estimated_exploration_value } cr</div>
+                <div>{ currentState.estimated_exploration_value.toLocaleString() } cr</div>
 
                 <div>Est. biological earnings:</div>
-                <div>{ currentState.estimated_biological_value } cr</div>
+                <div>{ currentState.estimated_biological_value.toLocaleString() } cr</div>
 
                 <hr className={styles.divider} />
 
