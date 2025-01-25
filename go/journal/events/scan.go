@@ -124,5 +124,10 @@ func (eh *EventHandler) handleEventScan(rawEvent string) error {
 
 	scan.EstimatedEarnings = models.GetExplorationScanValue(scan)
 
+	err = models.SaveExplorationScan(scan)
+	if err != nil {
+		return fmt.Errorf("error saving exploration scan: %v", err)
+	}
+
 	return nil
 }
