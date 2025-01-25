@@ -106,6 +106,22 @@ func (eh *EventHandler) HandleEvent(eventType string, rawEvent string) error {
 		return eh.handleEventDied(rawEvent)
 	case "NavRoute":
 		return eh.handleEventNavRoute(rawEvent)
+	case "Docked":
+		return eh.handleEventDocked(rawEvent)
+	case "Undocked":
+		return eh.handleEventUndocked(rawEvent)
+	case "Embark":
+		return eh.handleEventEmbark(rawEvent)
+	case "Disembark":
+		return eh.handleEventDisembark(rawEvent)
+	case "Touchdown":
+		return eh.handleEventTouchdown(rawEvent)
+	case "Liftoff":
+		return eh.handleEventLiftoff(rawEvent)
+	case "ApproachBody":
+		return eh.handleEventApproachBody(rawEvent)
+	case "LeaveBody":
+		return eh.handleEventLeaveBody(rawEvent)
 	}
 
 	return nil

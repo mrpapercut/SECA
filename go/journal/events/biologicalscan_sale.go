@@ -28,12 +28,16 @@ func (eh *EventHandler) handleEventSellOrganicData(rawEvent string) error {
 
 	variants := make(map[string]int, 0)
 
+	totalEarnings := int64(0)
+
 	for _, sale := range event.BioData {
 		if _, exists := variants[sale.Variant]; !exists {
 			variants[sale.Variant] = 1
 		} else {
 			variants[sale.Variant]++
 		}
+
+		totalEarnings += sale.Value + sale.Bonus
 	}
 
 	for variant, count := range variants {
@@ -55,6 +59,17 @@ func (eh *EventHandler) handleEventSellOrganicData(rawEvent string) error {
 				return fmt.Errorf("error updating scan: %v", err)
 			}
 		}
+	}
+
+	status, err := models.GetStatus()
+	if err != nil {
+		return fmt.Errorf("error getting status: %v", err)
+	}
+	status.Balance += totalEarnings
+
+	err = models.UpdateStatus(status)
+	if err != nil {
+		return fmt.Errorf("error updating status: %v", err)
 	}
 
 	return nil
