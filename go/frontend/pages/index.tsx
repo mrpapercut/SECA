@@ -24,8 +24,8 @@ interface CurrentState {
 }
 
 interface CurrentRoute {
-    position: number
-    system: RouteSystem
+    Position: number
+    System: RouteSystem
 }
 
 interface RouteSystem {
@@ -34,7 +34,7 @@ interface RouteSystem {
     StarPosX: number
     StarPosY: number
     StarPosZ: number
-    bodies: RouteBody[]
+    Bodies: RouteBody[]
 }
 
 interface RouteBody {
@@ -132,14 +132,14 @@ export default function Home() {
     let discoveredNextStop = false;
     let discoveredDestination = false;
     if (currentRoute.length > 0) {
-        const currentMainStar = findMainStarInBodies(currentRoute[0].system.bodies);
+        const currentMainStar = findMainStarInBodies(currentRoute[0].System.Bodies);
         discoveredCurrent = currentMainStar.WasDiscovered;
 
-        const destinationMainStar = findMainStarInBodies(currentRoute[currentRoute.length - 1].system.bodies);
+        const destinationMainStar = findMainStarInBodies(currentRoute[currentRoute.length - 1].System.Bodies);
         discoveredDestination = destinationMainStar.WasDiscovered;
 
         if (currentRoute.length > 1) {
-            const nextMainStar = findMainStarInBodies(currentRoute[1].system.bodies);
+            const nextMainStar = findMainStarInBodies(currentRoute[1].System.Bodies);
             discoveredNextStop = nextMainStar.WasDiscovered;
         }
     }
@@ -174,10 +174,10 @@ export default function Home() {
                     <hr className={styles.divider} />
 
                     <div>Next stop:</div>
-                    <div className={!discoveredNextStop ? styles.newDiscovered : ''}>{currentRoute[1].system.Name}</div>
+                    <div className={!discoveredNextStop ? styles.newDiscovered : ''}>{currentRoute[1].System.Name}</div>
 
                     <div>Destination:</div>
-                    <div className={!discoveredDestination ? styles.newDiscovered : ''}>{currentRoute[currentRoute.length - 1].system.Name}</div>
+                    <div className={!discoveredDestination ? styles.newDiscovered : ''}>{currentRoute[currentRoute.length - 1].System.Name}</div>
 
                     <div>Route length:</div>
                     <div>{parseInt(currentRouteDistance.toFixed(2), 10).toLocaleString()} ly</div>
