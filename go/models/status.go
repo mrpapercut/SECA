@@ -112,13 +112,13 @@ func UpdateStatus(status *Status) error {
 	if err != nil {
 		return fmt.Errorf("error getting exploration value: %v", err)
 	}
-	status.Exploration = explorationValue
+	retrievedStatus.Exploration = explorationValue
 
 	biologicalValue, err := GetTotalEstimatedBiologicalScanValue()
 	if err != nil {
 		return fmt.Errorf("error getting biological value: %v", err)
 	}
-	status.Biological = biologicalValue
+	retrievedStatus.Biological = biologicalValue
 
 	return db.Save(&retrievedStatus).Error
 }
