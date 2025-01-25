@@ -34,6 +34,16 @@ func SaveExplorationScan(scan *ExplorationScan) error {
 		return db.Save(&scan).Error
 	}
 
+	if existingScan.Timestamp != scan.Timestamp {
+		if scan.EfficiencyTargetMet && !existingScan.EfficiencyTargetMet {
+			existingScan.EfficiencyTargetMet = true
+		}
+
+		existingScan.EstimatedEarnings = GetExplorationScanValue(scan)
+
+		return db.Save(&existingScan).Error
+	}
+
 	return nil
 }
 
