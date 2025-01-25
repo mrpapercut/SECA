@@ -144,8 +144,6 @@ export default function Home() {
         }
     }
 
-    console.log(currentState);
-
     return <>
         <div className={isConnected ? styles.isConnected : styles.isNotConnected}>
             <div className={styles.grid}>
@@ -172,16 +170,14 @@ export default function Home() {
                     <div>{currentState.body}</div>
                 </>}
 
-                {currentRoute.length > 0 && <>
+                {currentRoute.length > 1 && <>
                     <hr className={styles.divider} />
 
                     <div>Next stop:</div>
-                    <div className={!discoveredNextStop ? styles.newDiscovered : ''}>{currentRoute[0].system.name}</div>
+                    <div className={!discoveredNextStop ? styles.newDiscovered : ''}>{currentRoute[1].system.name}</div>
 
-                    {currentRoute.length > 1 && <>
-                        <div>Destination:</div>
-                        <div className={!discoveredDestination ? styles.newDiscovered : ''}>{currentRoute[currentRoute.length - 1].system.name}</div>
-                    </>}
+                    <div>Destination:</div>
+                    <div className={!discoveredDestination ? styles.newDiscovered : ''}>{currentRoute[currentRoute.length - 1].system.name}</div>
 
                     <div>Route length:</div>
                     <div>{parseInt(currentRouteDistance.toFixed(2), 10).toLocaleString()} ly</div>
