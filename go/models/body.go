@@ -9,56 +9,56 @@ import (
 )
 
 type Body struct {
-	ID                    uint    `gorm:"primaryKey" json:"-"`
-	Name                  string  `gorm:"not null" json:"name"`
-	BodySystemID          int64   `gorm:"not null" json:"body_system_id"`
-	SystemID              uint    `gorm:"not null" json:"system_id"`
-	System                System  `gorm:"foreignKey:SystemID" json:"-"`
-	DistanceFromArrivalLS float64 `json:"distance_from_arrival"`
-	WasDiscovered         bool    `json:"was_discovered"`
-	WasMapped             bool    `json:"was_mapped"`
-	Discovered            bool    `json:"discovered"`
-	Mapped                bool    `json:"mapped"`
-	Footfall              bool    `json:"footfall"`
+	ID                    uint   `gorm:"primaryKey"`
+	Name                  string `gorm:"not null" json:"BodyName"`
+	BodySystemID          int64  `gorm:"not null" json:"BodyID"`
+	SystemID              uint   `gorm:"not null"`
+	System                System `gorm:"foreignKey:SystemID"`
+	DistanceFromArrivalLS float64
+	WasDiscovered         bool
+	WasMapped             bool
+	Discovered            bool
+	Mapped                bool
+	Footfall              bool
 
 	Signals          []Signal          `gorm:"foreignKey:ID" json:"signals"`
 	ExplorationScans []ExplorationScan `gorm:"foreignKey:BodyID" json:"exploration_scans"`
 	BiologicalScans  []BiologicalScan  `gorm:"foreignKey:BodyID" json:"biological_scans"`
 
-	BodyType string `gorm:"not null" json:"body_type"`
+	BodyType string `gorm:"not null"`
 
-	SurfaceTemperature float64 `json:"surface_temperature"`
-	Radius             float64 `json:"radius"`
-	SemiMajorAxis      float64 `json:"semi_major_axis"`
-	Eccentricity       float64 `json:"eccentricity"`
-	OrbitalInclination float64 `json:"orbital_inclination"`
-	Periapsis          float64 `json:"periapsis"`
-	OrbitalPeriod      float64 `json:"orbital_period"`
-	AscendingNode      float64 `json:"ascending_node"`
-	MeanAnomaly        float64 `json:"mean_anomaly"`
-	RotationPeriod     float64 `json:"rotation_period"`
-	AxialTilt          float64 `json:"axial_tilt"`
+	SurfaceTemperature float64
+	Radius             float64
+	SemiMajorAxis      float64
+	Eccentricity       float64
+	OrbitalInclination float64
+	Periapsis          float64
+	OrbitalPeriod      float64
+	AscendingNode      float64
+	MeanAnomaly        float64
+	RotationPeriod     float64
+	AxialTilt          float64
 
 	// Star-specific
-	StarType          StarType `json:"star_type"`
-	Subclass          int      `json:"subclass"`
-	StellarMass       float64  `json:"stellar_mass"`
-	AbsoluteMagnitude float64  `json:"absolute_magnitude"`
-	Age_MY            float64  `json:"age"`
-	Luminosity        string   `json:"luminosity"`
+	StarType          StarType
+	Subclass          int
+	StellarMass       float64
+	AbsoluteMagnitude float64
+	Age_MY            float64
+	Luminosity        string
 
 	// Planet-specific
-	TidalLock      bool           `json:"tidal_lock"`
-	TerraformState TerraformState `json:"terraform_state"`
-	PlanetClass    PlanetClass    `json:"planet_class"`
-	Atmosphere     Atmosphere     `json:"atmosphere"`
-	AtmosphereType AtmosphereType `json:"atmosphere_type"`
+	TidalLock      bool
+	TerraformState TerraformState
+	PlanetClass    PlanetClass
+	Atmosphere     Atmosphere
+	AtmosphereType AtmosphereType
 	// AtmosphereComposition AtmosphereComposition
-	Volcanism       Volcanism `json:"volcanism"`
-	MassEM          float64   `json:"mass"`
-	SurfaceGravity  float64   `json:"surface_gravity"`
-	SurfacePressure float64   `json:"surface_pressure"`
-	Landable        bool      `json:"landable"`
+	Volcanism       Volcanism
+	MassEM          float64
+	SurfaceGravity  float64
+	SurfacePressure float64
+	Landable        bool
 	// Materials             []NamePercentMap
 	// Composition           Composition
 }

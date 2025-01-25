@@ -7,13 +7,13 @@ import (
 )
 
 type System struct {
-	ID            uint    `gorm:"primaryKey" json:"-"`
-	Name          string  `gorm:"not null" json:"name"`
-	SystemAddress int64   `gorm:"uniqueIndex;not null" json:"system_address"`
-	StarPosX      float64 `json:"starpos_x"`
-	StarPosY      float64 `json:"starpos_y"`
-	StarPosZ      float64 `json:"starpos_z"`
-	Bodies        []*Body `gorm:"foreignKey:SystemID" json:"bodies"`
+	ID            uint   `gorm:"primaryKey"`
+	Name          string `gorm:"not null"`
+	SystemAddress int64  `gorm:"uniqueIndex;not null"`
+	StarPosX      float64
+	StarPosY      float64
+	StarPosZ      float64
+	Bodies        []*Body `gorm:"foreignKey:SystemID"`
 }
 
 func SaveSystem(system *System) error {

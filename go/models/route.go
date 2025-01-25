@@ -6,9 +6,9 @@ import (
 )
 
 type Route struct {
-	ID            uint  `gorm:"autoIncrement,primaryKey" json:"-"`
-	Position      int64 `gorm:"not null" json:"position"`
-	SystemAddress int64 `gorm:"not null" json:"-"`
+	ID            uint  `gorm:"autoIncrement,primaryKey"`
+	Position      int64 `gorm:"not null"`
+	SystemAddress int64 `gorm:"not null"`
 }
 
 type RouteWithSystems struct {

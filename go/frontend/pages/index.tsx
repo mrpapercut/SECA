@@ -29,41 +29,41 @@ interface CurrentRoute {
 }
 
 interface RouteSystem {
-    name: string
-    system_address: number
-    starpos_x: number
-    starpos_y: number
-    starpos_z: number
+    Name: string
+    SystemAddress: number
+    StarPosX: number
+    StarPosY: number
+    StarPosZ: number
     bodies: RouteBody[]
 }
 
 interface RouteBody {
-    name: string
-    body_system_id: number
-    body_type: string
-    star_type: string
-    was_discovered: boolean
-    was_mapped: boolean
-    discovered: boolean
-    mapped: boolean
+    Name: string
+    BodyID: number
+    BodyType: string
+    StarType: string
+    WasDiscovered: boolean
+    WasMapped: boolean
+    Discovered: boolean
+    Mapped: boolean
 }
 
 function findMainStarInBodies(bodies: RouteBody[]): RouteBody {
     if (bodies.length === 0) {
         return {
-            name: 'unknown',
-            body_system_id: 0,
-            body_type: 'star',
-            star_type: '',
-            was_discovered: true,
-            was_mapped: true,
-            discovered: false,
-            mapped: false
+            Name: 'unknown',
+            BodyID: 0,
+            BodyType: 'star',
+            StarType: '',
+            WasDiscovered: true,
+            WasMapped: true,
+            Discovered: false,
+            Mapped: false
         };
     }
 
     bodies.sort((a, b) => {
-        return b.body_system_id - a.body_system_id
+        return b.BodyID - a.BodyID
     });
 
     return bodies[0];
@@ -133,14 +133,14 @@ export default function Home() {
     let discoveredDestination = false;
     if (currentRoute.length > 0) {
         const currentMainStar = findMainStarInBodies(currentRoute[0].system.bodies);
-        discoveredCurrent = currentMainStar.was_discovered;
+        discoveredCurrent = currentMainStar.WasDiscovered;
 
         const destinationMainStar = findMainStarInBodies(currentRoute[currentRoute.length - 1].system.bodies);
-        discoveredDestination = destinationMainStar.was_discovered;
+        discoveredDestination = destinationMainStar.WasDiscovered;
 
         if (currentRoute.length > 1) {
             const nextMainStar = findMainStarInBodies(currentRoute[1].system.bodies);
-            discoveredNextStop = nextMainStar.was_discovered;
+            discoveredNextStop = nextMainStar.WasDiscovered;
         }
     }
 
@@ -174,10 +174,10 @@ export default function Home() {
                     <hr className={styles.divider} />
 
                     <div>Next stop:</div>
-                    <div className={!discoveredNextStop ? styles.newDiscovered : ''}>{currentRoute[1].system.name}</div>
+                    <div className={!discoveredNextStop ? styles.newDiscovered : ''}>{currentRoute[1].system.Name}</div>
 
                     <div>Destination:</div>
-                    <div className={!discoveredDestination ? styles.newDiscovered : ''}>{currentRoute[currentRoute.length - 1].system.name}</div>
+                    <div className={!discoveredDestination ? styles.newDiscovered : ''}>{currentRoute[currentRoute.length - 1].system.Name}</div>
 
                     <div>Route length:</div>
                     <div>{parseInt(currentRouteDistance.toFixed(2), 10).toLocaleString()} ly</div>

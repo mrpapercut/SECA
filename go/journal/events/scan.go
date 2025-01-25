@@ -73,6 +73,8 @@ func (eh *EventHandler) handleEventScan(rawEvent string) error {
 		DistanceFromArrivalLS: event.DistanceFromArrivalLS,
 		WasDiscovered:         event.WasDiscovered,
 		WasMapped:             event.WasMapped,
+		Discovered:            true,
+		Mapped:                false,
 		SurfaceTemperature:    event.SurfaceTemperature,
 		Radius:                event.Radius,
 		SemiMajorAxis:         event.SemiMajorAxis,
@@ -111,6 +113,16 @@ func (eh *EventHandler) handleEventScan(rawEvent string) error {
 	if err != nil {
 		return fmt.Errorf("error creating or updating body: %v", err)
 	}
+
+	scan := &models.ExplorationScan{
+		SystemID:  system.ID,
+		System:    *system,
+		BodyID:    body.ID,
+		Body:      *body,
+		Timestamp: event.Timestamp,
+	}
+
+	scan.EstimatedEarnings = models.GetExplorationScanValue(scan)
 
 	return nil
 }
