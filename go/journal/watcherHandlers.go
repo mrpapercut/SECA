@@ -54,6 +54,13 @@ func (jw *JournalWatcher) processJournalLines(lines []string) {
 		if ev.Event == "FSDJump" {
 			jw.sendRouteUpdate()
 		}
+
+		if ev.Event == "Scan" || ev.Event == "SAAScanComplete" || ev.Event == "ScanOrganic" {
+			err = models.UpdateStatusEarnings()
+			if err != nil {
+				slog.Warn(fmt.Sprintf("error updating status earnings: %v", err))
+			}
+		}
 	}
 
 	jw.sendStatusUpdate()

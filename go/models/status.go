@@ -122,3 +122,24 @@ func UpdateStatus(status *Status) error {
 
 	return db.Save(&retrievedStatus).Error
 }
+
+func UpdateStatusEarnings() error {
+	status, err := GetStatus()
+	if err != nil {
+		return fmt.Errorf("error getting status: %v", err)
+	}
+
+	explorationValue, err := GetTotalEstimatedExplorationScanValue()
+	if err != nil {
+		return fmt.Errorf("error getting exploration value: %v", err)
+	}
+	status.Exploration = explorationValue
+
+	biologicalValue, err := GetTotalEstimatedBiologicalScanValue()
+	if err != nil {
+		return fmt.Errorf("error getting biological value: %v", err)
+	}
+	status.Biological = biologicalValue
+
+	return db.Save(&status).Error
+}
