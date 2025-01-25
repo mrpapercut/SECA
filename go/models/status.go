@@ -108,5 +108,17 @@ func UpdateStatus(status *Status) error {
 	retrievedStatus.Docked = status.Docked
 	retrievedStatus.OnFoot = status.OnFoot
 
+	explorationValue, err := GetTotalEstimatedExplorationScanValue()
+	if err != nil {
+		return fmt.Errorf("error getting exploration value: %v", err)
+	}
+	status.Exploration = explorationValue
+
+	biologicalValue, err := GetTotalEstimatedBiologicalScanValue()
+	if err != nil {
+		return fmt.Errorf("error getting biological value: %v", err)
+	}
+	status.Biological = biologicalValue
+
 	return db.Save(&retrievedStatus).Error
 }
