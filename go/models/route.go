@@ -13,7 +13,7 @@ type Route struct {
 
 type RouteWithSystems struct {
 	Route
-	System *System `json:"system"`
+	System *System
 }
 
 func GetRoute() ([]*RouteWithSystems, error) {
