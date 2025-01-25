@@ -15,6 +15,7 @@ type Status struct {
 	Body           string  `json:"body"`
 	Landed         bool    `json:"is_landed"`
 	Docked         bool    `json:"is_docked"`
+	OnFoot         bool    `json:"is_on_foot"`
 	Exploration    int64   `json:"estimated_exploration_value"`
 	Biological     int64   `json:"estimated_biological_value"`
 	SystemsVisited int64   `json:"systems_visited"`
@@ -87,7 +88,7 @@ func UpdateStatus(status *Status) error {
 		retrievedStatus.System = status.System
 	}
 
-	if status.Body != "" && retrievedStatus.Body != status.Body {
+	if retrievedStatus.Body != status.Body {
 		retrievedStatus.Body = status.Body
 	}
 
@@ -105,6 +106,7 @@ func UpdateStatus(status *Status) error {
 
 	retrievedStatus.Landed = status.Landed
 	retrievedStatus.Docked = status.Docked
+	retrievedStatus.OnFoot = status.OnFoot
 
 	return db.Save(&retrievedStatus).Error
 }
