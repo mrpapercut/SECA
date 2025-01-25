@@ -162,7 +162,7 @@ export default function Home() {
                 <div>{currentState.ship_name} ({currentState.ship_type})</div>
 
                 <div>State:</div>
-                <div>{currentState.is_landed ? 'Landed' : currentState.is_docked ? 'Docked' : 'Flying'}</div>
+                <div>{currentState.is_on_foot ? 'On foot' : currentState.is_landed ? 'Landed' : currentState.is_docked ? 'Docked' : 'Flying'}</div>
 
                 <div>Current system:</div>
                 <div className={!discoveredCurrent ? styles.newDiscovered : ''}>{currentState.current_system}</div>
@@ -193,10 +193,10 @@ export default function Home() {
                 <hr className={styles.divider} />
 
                 <div>Est. exploration earnings:</div>
-                <div>{ currentState.estimated_exploration_value.toLocaleString() } cr</div>
+                <div>{ (currentState.estimated_exploration_value || 0).toLocaleString() } cr</div>
 
                 <div>Est. biological earnings:</div>
-                <div>{ currentState.estimated_biological_value.toLocaleString() } cr</div>
+                <div>{ (currentState.estimated_biological_value || 0).toLocaleString() } cr</div>
 
                 <hr className={styles.divider} />
 
