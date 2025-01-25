@@ -165,7 +165,7 @@ export default function Home() {
                 <div>Current system:</div>
                 <div className={!discoveredCurrent ? styles.newDiscovered : ''}>{currentState.current_system}</div>
 
-                {currentState.body !== '' && <>
+                {currentState.body !== '' && currentState.body !== currentState.current_system && <>
                     <div>Current body:</div>
                     <div>{currentState.body}</div>
                 </>}
