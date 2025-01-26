@@ -59,3 +59,14 @@ func GetSystemByName(name string) (*System, error) {
 
 	return &system, nil
 }
+
+func GetSystemWithBodies(system *System) (*System, error) {
+	var retrievedSystem System
+
+	err := db.Preload("Bodies.Signals").Preload("Bodies.ExplorationScans").Preload("Bodies.BiologicalScans").Where("id = ?", system.ID).Find(&retrievedSystem).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &retrievedSystem, nil
+}

@@ -80,11 +80,7 @@ func UpdateRoute(route []*Route) error {
 func GetRouteLength(route []*RouteWithSystems) (float64, error) {
 	totalDistance := float64(0)
 
-	if len(route) == 0 {
-		return totalDistance, fmt.Errorf("error: route has no stops")
-	}
-
-	if len(route) == 1 {
+	if len(route) < 2 {
 		return totalDistance, nil
 	}
 

@@ -25,10 +25,10 @@ func (jw *JournalWatcher) handleJournalUpdate(filecontents []byte) {
 		}
 	}
 
-	jw.processJournalLines(lines[lastSessionIdx:])
+	jw.processJournalLines(lines[lastSessionIdx:], false)
 }
 
-func (jw *JournalWatcher) processJournalLines(lines []string) {
+func (jw *JournalWatcher) processJournalLines(lines []string, isFirstRun bool) {
 	for _, line := range lines {
 		if len(line) == 0 {
 			continue
@@ -51,19 +51,23 @@ func (jw *JournalWatcher) processJournalLines(lines []string) {
 
 		jw.handleJournalEvent(&ev, line)
 
-		if ev.Event == "FSDJump" {
-			jw.sendRouteUpdate()
-		}
+		if !isFirstRun {
+			if ev.Event == "FSDJump" {
+				jw.sendRouteUpdate()
+			}
 
-		if ev.Event == "Scan" || ev.Event == "SAAScanComplete" || ev.Event == "ScanOrganic" {
-			err = models.UpdateStatusEarnings()
-			if err != nil {
-				slog.Warn(fmt.Sprintf("error updating status earnings: %v", err))
+			if ev.Event == "Scan" || ev.Event == "SAAScanComplete" || ev.Event == "ScanOrganic" {
+				err = models.UpdateStatusEarnings()
+				if err != nil {
+					slog.Warn(fmt.Sprintf("error updating status earnings: %v", err))
+				}
 			}
 		}
 	}
 
-	jw.sendStatusUpdate()
+	if !isFirstRun {
+		jw.sendStatusUpdate()
+	}
 }
 
 func (jw *JournalWatcher) sendStatusUpdate() {

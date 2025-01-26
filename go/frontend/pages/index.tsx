@@ -25,19 +25,19 @@ interface CurrentState {
 
 interface CurrentRoute {
     Position: number
-    System: RouteSystem
+    System: System
 }
 
-interface RouteSystem {
+interface System {
     Name: string
     SystemAddress: number
     StarPosX: number
     StarPosY: number
     StarPosZ: number
-    Bodies: RouteBody[]
+    Bodies: Body[]
 }
 
-interface RouteBody {
+interface Body {
     Name: string
     BodyID: number
     BodyType: string
@@ -46,9 +46,36 @@ interface RouteBody {
     WasMapped: boolean
     Discovered: boolean
     Mapped: boolean
+    signals?: Signal[]
+    exploration_scans?: ExplorationScan[]
+    biological_scans?: BiologicalScan[]
 }
 
-function findMainStarInBodies(bodies: RouteBody[]): RouteBody {
+interface Signal {
+    Type: string
+	SubType: string
+	Count: number
+}
+
+interface ExplorationScan {
+    Timestamp: string
+	EfficiencyTargetMet: boolean
+	DataSold: boolean
+	DataLost: boolean
+	EstimatedEarnings: number
+}
+
+interface BiologicalScan {
+    Timestamp: string
+	Genus: string
+	Species: string
+	Variant: string
+	DataSold: boolean
+	DataLost: boolean
+	EstimatedEarnings: number
+}
+
+function findMainStarInBodies(bodies: Body[]): Body {
     if (bodies.length === 0) {
         return {
             Name: 'unknown',
@@ -74,6 +101,7 @@ export default function Home() {
     const [currentState, setCurrentState] = useState({} as CurrentState);
     const [currentRoute, setCurrentRoute] = useState([] as CurrentRoute[]);
     const [currentRouteDistance, setCurrentRouteDistance] = useState(0 as number);
+    const [currentSystem, setCurrentSystem] = useState({} as System);
 
     useEffect(() => {
         let socket: WebSocket;
@@ -90,6 +118,7 @@ export default function Home() {
 
                 socket.send('getStatus');
                 socket.send('getRoute');
+                socket.send('getCurrentSystem');
             };
 
             socket.onmessage = (event) => {
@@ -102,21 +131,25 @@ export default function Home() {
 
                 switch(data.type) {
                     case 'getStatus':
+                        socket.send('getCurrentSystem');
                         return setCurrentState(data.status);
                     case 'getRoute':
                         setCurrentRoute(data.route);
                         setCurrentRouteDistance(data.total_distance);
                         return;
+                    case 'getCurrentSystem':
+                        setCurrentSystem(data.system);
+                        return;
                 }
             };
 
-            socket.onerror = (error) => {
-                console.log('WebSocket error:', error);
-            };
+            // socket.onerror = (error) => {
+            //     console.log('WebSocket error:', error);
+            // };
 
             socket.onclose = () => {
                 setIsConnected(false);
-                retryTimeout = setTimeout(() => connect(), 500); // Retry after 2 seconds
+                retryTimeout = setTimeout(() => connect(), 500);
             };
         };
 
@@ -127,6 +160,10 @@ export default function Home() {
             if (retryTimeout) clearTimeout(retryTimeout);
         };
     }, []);
+
+    if (currentSystem) {
+        console.log(currentSystem);
+    }
 
     let discoveredCurrent = false;
     let discoveredNextStop = false;

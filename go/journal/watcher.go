@@ -87,7 +87,7 @@ func (jw *JournalWatcher) ProcessExistingFiles() {
 
 			if isFirstRun {
 				jcontents := strings.Split(string(contents), "\n")
-				jw.processJournalLines(jcontents)
+				jw.processJournalLines(jcontents, isFirstRun)
 			}
 			continue
 		}
@@ -106,7 +106,7 @@ func (jw *JournalWatcher) ProcessExistingFiles() {
 		}
 
 		lastJournalContents := strings.Split(string(contents), "\n")
-		jw.processJournalLines(lastJournalContents)
+		jw.processJournalLines(lastJournalContents, isFirstRun)
 	}
 }
 

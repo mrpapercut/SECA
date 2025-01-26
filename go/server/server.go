@@ -1,7 +1,6 @@
 package server
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"log/slog"
@@ -9,7 +8,6 @@ import (
 	"sync"
 
 	"github.com/gorilla/websocket"
-	"github.com/mrpapercut/seca/models"
 )
 
 type Webserver struct {
@@ -74,69 +72,29 @@ func (s *Webserver) wsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-type ResponseStatus struct {
-	Type   string         `json:"type"`
-	Status *models.Status `json:"status"`
-}
-
-type ResponseRoute struct {
-	Type          string                     `json:"type"`
-	Route         []*models.RouteWithSystems `json:"route"`
-	TotalDistance float64                    `json:"total_distance"`
-}
-
 func (s *Webserver) handleIncoming() {
 	for {
 		message := <-s.broadcast
 
 		messageToSend := make([]byte, 0)
+		var err error
 
 		switch string(message) {
 		case "getStatus":
-			status, err := models.GetStatus()
+			messageToSend, err = handleGetStatusRequest()
 			if err != nil {
-				slog.Warn(fmt.Sprintf("error getting status: %v", err))
-				break
+				slog.Warn(fmt.Sprintf("%v", err))
 			}
-
-			statusResponse := &ResponseStatus{
-				Type:   "getStatus",
-				Status: status,
-			}
-
-			jsonStatus, err := json.Marshal(&statusResponse)
-			if err != nil {
-				slog.Warn(fmt.Sprintf("error parsing status to json: %v", err))
-				break
-			}
-
-			messageToSend = jsonStatus
 		case "getRoute":
-			route, err := models.GetRoute()
+			messageToSend, err = handleGetRouteRequest()
 			if err != nil {
-				slog.Warn(fmt.Sprintf("error getting route: %v", err))
-				break
+				slog.Warn(fmt.Sprintf("%v", err))
 			}
-
-			totalDistance, err := models.GetRouteLength(route)
+		case "getCurrentSystem":
+			messageToSend, err = handleGetCurrentSystemRequest()
 			if err != nil {
-				slog.Warn(fmt.Sprintf("error calculating route distance: %v", err))
-				totalDistance = float64(0)
+				slog.Warn(fmt.Sprintf("%v", err))
 			}
-
-			routeResponse := &ResponseRoute{
-				Type:          "getRoute",
-				Route:         route,
-				TotalDistance: totalDistance,
-			}
-
-			jsonRoute, err := json.Marshal(&routeResponse)
-			if err != nil {
-				slog.Warn(fmt.Sprintf("error parsing status to json: %v", err))
-				break
-			}
-
-			messageToSend = jsonRoute
 		}
 
 		if len(messageToSend) > 0 {
