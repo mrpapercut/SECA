@@ -49,6 +49,8 @@ interface Body {
     signals?: Signal[]
     exploration_scans?: ExplorationScan[]
     biological_scans?: BiologicalScan[]
+    PlanetClass?: string
+    TerraformState?: string
 }
 
 interface Signal {
@@ -90,7 +92,7 @@ function findMainStarInBodies(bodies: Body[]): Body {
     }
 
     bodies.sort((a, b) => {
-        return b.BodyID - a.BodyID
+        return a.BodyID - b.BodyID
     });
 
     return bodies[0];
@@ -161,8 +163,33 @@ export default function Home() {
         };
     }, []);
 
-    if (currentSystem) {
-        console.log(currentSystem);
+    const worthyBodies = ['Earthlike body', 'Water world', 'Ammonia world'];
+    const worthyTerraformable = ['High metal content world'];
+    const worthMapping: string[] = [];
+    const bodiesWithBioSignals: { name: string; bioSubtype: string[]; }[] = [];
+    if (currentSystem && Object.hasOwn(currentRoute, 'Bodies')) {
+        const unmappedBodies = currentSystem.Bodies.filter(b => b.BodyType === 'Planet' && !b.Mapped);
+
+        unmappedBodies.forEach(body => {
+            if (body.PlanetClass) {
+                if (worthyBodies.includes(body.PlanetClass) || (body.TerraformState !== '' && worthyTerraformable.includes(body.PlanetClass))) {
+                    worthMapping.push(body.Name.replace(currentSystem.Name, ''));
+                }
+            }
+        });
+
+        const bodiesWithSignals = currentSystem.Bodies.filter(b => Array.isArray(b.signals) && b.signals.length > 0);
+
+        bodiesWithSignals.forEach(body => {
+            const bioSignals = (body.signals || []).find(s => s.Type === 'Biological');
+
+            if (bioSignals) {
+                bodiesWithBioSignals.push({
+                    name: body.Name.replace(currentSystem.Name, ''),
+                    bioSubtype: bioSignals.SubType.split(',')
+                });
+            }
+        });
     }
 
     let discoveredCurrent = false;
@@ -205,6 +232,20 @@ export default function Home() {
                 {currentState.body !== '' && currentState.body !== currentState.current_system && <>
                     <div>Current body:</div>
                     <div>{currentState.body}</div>
+                </>}
+
+                {currentSystem && (worthMapping.length > 0 || bodiesWithBioSignals.length > 0) && <>
+                    <hr className={styles.divider} />
+
+                    {worthMapping.length > 0 && <>
+                        <div>Worth mapping:</div>
+                        <div>{worthMapping.join(', ')}</div>
+                    </>}
+
+                    {bodiesWithBioSignals.length > 0 && <>
+                        <div>Bodies with bio signals:</div>
+                        <div>{bodiesWithBioSignals.map(b => `${b.name} ${b.bioSubtype.length === 0 ? `(${b.bioSubtype.join(', ')})` : ''}<br />`)}</div>
+                    </>}
                 </>}
 
                 {currentRoute.length > 1 && <>
