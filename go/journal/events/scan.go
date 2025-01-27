@@ -97,6 +97,7 @@ func (eh *EventHandler) handleEventScan(rawEvent string) error {
 		body.Age_MY = event.Age_MY
 		body.Luminosity = event.Luminosity
 	} else if event.PlanetClass != "" {
+		body.BodyType = "Planet"
 		body.TidalLock = event.TidalLock
 		body.TerraformState = models.TerraformState(event.TerraformState)
 		body.PlanetClass = models.PlanetClass(event.PlanetClass)

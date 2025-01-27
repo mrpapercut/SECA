@@ -39,6 +39,7 @@ func (eh *EventHandler) handleEventFSSBodySignals(rawEvent string) error {
 				BodySystemID: event.BodySystemID,
 				SystemID:     system.ID,
 				System:       *system,
+				BodyType:     "Planet",
 			}
 
 			err = models.SaveBody(newbody)
