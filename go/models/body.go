@@ -21,7 +21,7 @@ type Body struct {
 	Mapped                bool
 	Footfall              bool
 
-	Signals          []Signal          `gorm:"foreignKey:ID" json:"signals"`
+	Signals          []Signal          `gorm:"foreignKey:BodyID" json:"signals"`
 	ExplorationScans []ExplorationScan `gorm:"foreignKey:BodyID" json:"exploration_scans"`
 	BiologicalScans  []BiologicalScan  `gorm:"foreignKey:BodyID" json:"biological_scans"`
 

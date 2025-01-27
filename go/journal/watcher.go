@@ -106,7 +106,7 @@ func (jw *JournalWatcher) ProcessExistingFiles() {
 		}
 
 		lastJournalContents := strings.Split(string(contents), "\n")
-		jw.processJournalLines(lastJournalContents, isFirstRun)
+		jw.processJournalLines(lastJournalContents, false)
 	}
 }
 
