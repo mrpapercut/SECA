@@ -74,34 +74,34 @@ func Shutdown() {
 func Cleanup(c *check.C) {
 	var err error
 
-	err = db.Where("id > 0").Delete(&Status{}).Error
+	err = db.Where("1 = 1").Delete(&Status{}).Error
 	if err != nil {
 		c.Fatalf("Failed to tear down test: %v", err)
 	}
 
 	InitializeStatus()
 
-	err = db.Where("id > 0").Delete(&System{}).Error
+	err = db.Where("1 = 1").Delete(&System{}).Error
 	if err != nil {
 		c.Fatalf("Failed to tear down test: %v", err)
 	}
 
-	err = db.Where("id > 0").Delete(&Body{}).Error
+	err = db.Where("1 = 1").Delete(&Body{}).Error
 	if err != nil {
 		c.Fatalf("Failed to tear down test: %v", err)
 	}
 
-	err = db.Where("id > 0").Delete(&ExplorationScan{}).Error
+	err = db.Where("1 = 1").Delete(&ExplorationScan{}).Error
 	if err != nil {
 		c.Fatalf("Failed to tear down test: %v", err)
 	}
 
-	err = db.Where("id > 0").Delete(&BiologicalScan{}).Error
+	err = db.Where("1 = 1").Delete(&BiologicalScan{}).Error
 	if err != nil {
 		c.Fatalf("Failed to tear down test: %v", err)
 	}
 
-	err = db.Where("id > 0").Delete(&Signal{}).Error
+	err = db.Where("1 = 1").Delete(&Signal{}).Error
 	if err != nil {
 		c.Fatalf("Failed to tear down test: %v", err)
 	}

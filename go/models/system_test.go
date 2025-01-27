@@ -115,7 +115,7 @@ func (s *ModelSuite) TestGetSystemWithBodies(c *check.C) {
 		BodySystemID: 1,
 		SystemID:     system.ID,
 		System:       *system,
-		BodyType:     "planet",
+		BodyType:     "Planet",
 	}
 
 	err = SaveBody(body)
