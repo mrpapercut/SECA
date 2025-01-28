@@ -13,7 +13,7 @@
     @include mixins.glass-effect;
 
     display: grid;
-    grid-template-columns: repeat(5, auto);
+    grid-template-columns: repeat(3, auto);
     gap: .5rem;
     margin-bottom: 1rem;
     text-shadow: 1px 1px 1px rgb(0, 0, 0, 60%);
@@ -45,10 +45,16 @@
     overflow: scroll;
 }
 
+.cmdrProfileWrapper {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
 .cmdrProfilePhoto {
     @include mixins.border-glow;
     border: 1px solid variables.$orange-text !important;
     border-radius: 50%;
+    margin: 0 auto;
 }
 
 .wallpaperWrapper {

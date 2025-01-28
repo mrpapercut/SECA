@@ -9,9 +9,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
     return (
         <div>
             <Head>
-                <title>SECA - SuperElite Companion App</title>
+                <title>SECA</title>
             </Head>
-            {/* <Wallpaper /> */}
             <div className={styles.wrapper}>
                 <NavHeader />
                 <main className={styles.mainContent}>{children}</main>

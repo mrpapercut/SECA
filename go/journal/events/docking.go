@@ -50,6 +50,7 @@ func (eh *EventHandler) handleEventDocked(rawEvent string) error {
 	status.Docked = true
 	status.Landed = false
 	status.OnFoot = false
+	status.InSRV = false
 
 	err = models.UpdateStatus(status)
 	if err != nil {
@@ -83,6 +84,7 @@ func (eh *EventHandler) handleEventUndocked(rawEvent string) error {
 	status.Docked = false
 	status.Landed = false
 	status.OnFoot = false
+	status.InSRV = false
 
 	err = models.UpdateStatus(status)
 	if err != nil {
@@ -123,6 +125,7 @@ func (eh *EventHandler) handleEventEmbark(rawEvent string) error {
 	status.Docked = event.OnStation
 	status.Landed = event.OnPlanet
 	status.OnFoot = false
+	status.InSRV = event.SRV
 
 	err = models.UpdateStatus(status)
 	if err != nil {
@@ -164,6 +167,7 @@ func (eh *EventHandler) handleEventDisembark(rawEvent string) error {
 	status.Docked = event.OnStation
 	status.Landed = event.OnPlanet
 	status.OnFoot = true
+	status.InSRV = event.SRV
 
 	err = models.UpdateStatus(status)
 	if err != nil {
@@ -202,6 +206,7 @@ func (eh *EventHandler) handleEventTouchdown(rawEvent string) error {
 	status.Docked = event.OnStation
 	status.Landed = event.OnPlanet
 	status.OnFoot = false
+	status.InSRV = false
 
 	err = models.UpdateStatus(status)
 	if err != nil {
@@ -240,6 +245,7 @@ func (eh *EventHandler) handleEventLiftoff(rawEvent string) error {
 	status.Docked = event.OnStation
 	status.Landed = event.OnPlanet
 	status.OnFoot = false
+	status.InSRV = false
 
 	err = models.UpdateStatus(status)
 	if err != nil {
@@ -272,6 +278,7 @@ func (eh *EventHandler) handleEventApproachBody(rawEvent string) error {
 	status.Docked = false
 	status.Landed = false
 	status.OnFoot = false
+	status.InSRV = false
 
 	err = models.UpdateStatus(status)
 	if err != nil {
@@ -304,6 +311,7 @@ func (eh *EventHandler) handleEventLeaveBody(rawEvent string) error {
 	status.Docked = false
 	status.Landed = false
 	status.OnFoot = false
+	status.InSRV = false
 
 	err = models.UpdateStatus(status)
 	if err != nil {

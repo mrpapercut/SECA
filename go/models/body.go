@@ -10,7 +10,7 @@ import (
 
 type Body struct {
 	ID                    uint   `gorm:"primaryKey"`
-	Name                  string `gorm:"uniqueIndex;not null" json:"BodyName"`
+	Name                  string `gorm:"uniqueIndex;not null" json:"Name"`
 	BodySystemID          int64  `gorm:"not null" json:"BodyID"`
 	SystemID              uint   `gorm:"not null"`
 	System                System `gorm:"foreignKey:SystemID"`

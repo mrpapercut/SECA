@@ -15,10 +15,10 @@ services:
 
   frontend:
     build:
-      context: ./go/frontend
+      context: ./frontend
     container_name: ${COMPOSE_PROJECT_NAME}_frontend
     # command: "/bin/sh -c 'npm run start'"
     volumes:
-      - ./go/frontend/dist:/app/dist
+      - ./frontend/dist:/app/dist
     ports:
       - "3000:3000"

@@ -4,91 +4,18 @@ import { useEffect, useState } from 'react';
 
 import styles from '../styles/layout.module.scss';
 
-interface CurrentState {
-    commander_name: string
-    balance: number
-    ship_type: string
-    ship_name: string
-    fuel_level: number
-    fuel_capacity: number
-    current_system: string
-    body: string
-    is_landed: boolean
-    is_docked: boolean
-    is_on_foot: boolean
-    estimated_exploration_value: number
-    estimated_biological_value: number
-    systems_visited: number
-    total_distance: number
-    total_jumps: number
-}
-
-interface CurrentRoute {
-    Position: number
-    System: System
-}
-
-interface System {
-    Name: string
-    SystemAddress: number
-    StarPosX: number
-    StarPosY: number
-    StarPosZ: number
-    Bodies: Body[]
-}
-
-interface Body {
-    Name: string
-    BodyID: number
-    BodyType: string
-    StarType: string
-    WasDiscovered: boolean
-    WasMapped: boolean
-    Discovered: boolean
-    Mapped: boolean
-    signals?: Signal[]
-    exploration_scans?: ExplorationScan[]
-    biological_scans?: BiologicalScan[]
-    PlanetClass?: string
-    TerraformState?: string
-}
-
-interface Signal {
-    Type: string
-	SubType: string
-	Count: number
-}
-
-interface ExplorationScan {
-    Timestamp: string
-	EfficiencyTargetMet: boolean
-	DataSold: boolean
-	DataLost: boolean
-	EstimatedEarnings: number
-}
-
-interface BiologicalScan {
-    Timestamp: string
-	Genus: string
-	Species: string
-	Variant: string
-	DataSold: boolean
-	DataLost: boolean
-	EstimatedEarnings: number
-}
-
 function findMainStarInBodies(bodies: Body[]): Body {
     if (bodies.length === 0) {
         return {
             Name: 'unknown',
             BodyID: 0,
-            BodyType: 'star',
+            BodyType: 'Star',
             StarType: '',
             WasDiscovered: true,
             WasMapped: true,
             Discovered: false,
             Mapped: false
-        };
+        } as Body;
     }
 
     bodies.sort((a, b) => {
@@ -96,6 +23,46 @@ function findMainStarInBodies(bodies: Body[]): Body {
     });
 
     return bodies[0];
+}
+
+function getUnmappedWorthyBodies(system: System): string[] {
+    const worthyBodies = ['Earthlike body', 'Water world', 'Ammonia world'];
+    const worthyTerraformable = ['High metal content body', 'Rocky body'];
+    const worthMapping: string[] = [];
+
+    const unmappedBodies = system.Bodies.filter(b => b.BodyType === 'Planet' && !b.Mapped);
+    unmappedBodies.forEach(body => {
+        if (body.PlanetClass) {
+            if (worthyBodies.includes(body.PlanetClass) || (body.TerraformState !== '' && worthyTerraformable.includes(body.PlanetClass))) {
+                worthMapping.push(body.Name.replace(system.Name, ''));
+            }
+        }
+    });
+
+    return worthMapping;
+}
+
+function getBodiesWithBioSignals(system: System): BodyWithBioSignals[] {
+    const bodiesWithBioSignals: BodyWithBioSignals[] = [];
+
+    const bodiesWithSignals = system.Bodies.filter(b => Array.isArray(b.signals) && b.signals.length > 0);
+    bodiesWithSignals.forEach(body => {
+        const bioSignals = (body.signals || []).find(s => s.Type === 'Biological');
+
+        if (bioSignals) {
+            bodiesWithBioSignals.push({
+                name: body.Name.replace(system.Name, ''),
+                bioSubtype: bioSignals.SubType.split(',').filter(t => t !== ''),
+                count: bioSignals.Count,
+                bodyID: body.BodyID
+            });
+        }
+    });
+
+    bodiesWithBioSignals.sort((a, b) => a.bodyID - b.bodyID)
+    bodiesWithBioSignals.sort((a, b) => b.count - a.count)
+
+    return bodiesWithBioSignals;
 }
 
 export default function Home() {
@@ -163,33 +130,11 @@ export default function Home() {
         };
     }, []);
 
-    const worthyBodies = ['Earthlike body', 'Water world', 'Ammonia world'];
-    const worthyTerraformable = ['High metal content world'];
-    const worthMapping: string[] = [];
-    const bodiesWithBioSignals: { name: string; bioSubtype: string[]; }[] = [];
-    if (currentSystem && Object.hasOwn(currentRoute, 'Bodies')) {
-        const unmappedBodies = currentSystem.Bodies.filter(b => b.BodyType === 'Planet' && !b.Mapped);
-
-        unmappedBodies.forEach(body => {
-            if (body.PlanetClass) {
-                if (worthyBodies.includes(body.PlanetClass) || (body.TerraformState !== '' && worthyTerraformable.includes(body.PlanetClass))) {
-                    worthMapping.push(body.Name.replace(currentSystem.Name, ''));
-                }
-            }
-        });
-
-        const bodiesWithSignals = currentSystem.Bodies.filter(b => Array.isArray(b.signals) && b.signals.length > 0);
-
-        bodiesWithSignals.forEach(body => {
-            const bioSignals = (body.signals || []).find(s => s.Type === 'Biological');
-
-            if (bioSignals) {
-                bodiesWithBioSignals.push({
-                    name: body.Name.replace(currentSystem.Name, ''),
-                    bioSubtype: bioSignals.SubType.split(',')
-                });
-            }
-        });
+    let worthMapping: string[] = [];
+    let bodiesWithBioSignals: BodyWithBioSignals[] = [];
+    if (currentSystem && Object.hasOwn(currentSystem, 'Bodies')) {
+        worthMapping = getUnmappedWorthyBodies(currentSystem);
+        bodiesWithBioSignals = getBodiesWithBioSignals(currentSystem);
     }
 
     let discoveredCurrent = false;
@@ -210,10 +155,10 @@ export default function Home() {
 
     return <>
         <div className={isConnected ? styles.isConnected : styles.isNotConnected}>
+            <div className={styles.cmdrProfileWrapper}>
+                <Image priority={true} src="https://www.edsm.net/img/users/1/8/7/9/1/3/187913.png" className={styles.cmdrProfilePhoto} width={100} height={100} alt={''} />
+            </div>
             <div className={styles.grid}>
-                <div><Image priority={true} src="https://www.edsm.net/img/users/1/8/7/9/1/3/187913.png" className={styles.cmdrProfilePhoto} width={100} height={100} alt={''} /></div>
-                <div></div>
-
                 <div>Commander:</div>
                 <div>{currentState.commander_name}</div>
 
@@ -224,7 +169,7 @@ export default function Home() {
                 <div>{currentState.ship_name} ({currentState.ship_type})</div>
 
                 <div>State:</div>
-                <div>{currentState.is_on_foot ? 'On foot' : currentState.is_landed ? 'Landed' : currentState.is_docked ? 'Docked' : 'Flying'}</div>
+                <div>{currentState.is_on_foot ? 'On foot' : currentState.is_in_srv ? 'In SRV' : currentState.is_landed ? 'Landed' : currentState.is_docked ? 'Docked' : 'Flying'}</div>
 
                 <div>Current system:</div>
                 <div className={!discoveredCurrent ? styles.newDiscovered : ''}>{currentState.current_system}</div>
@@ -244,7 +189,11 @@ export default function Home() {
 
                     {bodiesWithBioSignals.length > 0 && <>
                         <div>Bodies with bio signals:</div>
-                        <div>{bodiesWithBioSignals.map(b => `${b.name} ${b.bioSubtype.length === 0 ? `(${b.bioSubtype.join(', ')})` : ''}<br />`)}</div>
+                        <div>
+                            {bodiesWithBioSignals.map((b, i) =>
+                                <div key={`bodyBio_${i}`}>{b.name} {b.bioSubtype.length > 0 ? `(${b.bioSubtype.join(', ')})` : `(${b.count})`}</div>
+                            )}
+                        </div>
                     </>}
                 </>}
 

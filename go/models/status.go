@@ -16,6 +16,7 @@ type Status struct {
 	Landed         bool    `json:"is_landed"`
 	Docked         bool    `json:"is_docked"`
 	OnFoot         bool    `json:"is_on_foot"`
+	InSRV          bool    `json:"is_in_srv"`
 	Exploration    int64   `json:"estimated_exploration_value"`
 	Biological     int64   `json:"estimated_biological_value"`
 	SystemsVisited int64   `json:"systems_visited"`
