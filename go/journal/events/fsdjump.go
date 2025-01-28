@@ -14,6 +14,7 @@ type FSDJumpEvent struct {
 	Body          string
 	BodySystemID  int64 `json:"BodyID"`
 	BodyType      string
+	JumpDistance  float64 `json:"JumpDist"`
 }
 
 func (eh *EventHandler) handleEventFSDJump(rawEvent string) error {
@@ -59,6 +60,9 @@ func (eh *EventHandler) handleEventFSDJump(rawEvent string) error {
 	}
 	status.System = retrievedSystem.Name
 	status.Body = body.Name
+
+	status.TotalDistance += int64(event.JumpDistance)
+	status.TotalJumps++
 
 	err = models.UpdateStatus(status)
 	if err != nil {

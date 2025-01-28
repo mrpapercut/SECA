@@ -65,7 +65,7 @@ function getBodiesWithBioSignals(system: System): BodyWithBioSignals[] {
     return bodiesWithBioSignals;
 }
 
-export default function Home() {
+export default function Dashboard() {
     const [isConnected, setIsConnected] = useState(false);
     const [currentState, setCurrentState] = useState({} as CurrentState);
     const [currentRoute, setCurrentRoute] = useState([] as CurrentRoute[]);
