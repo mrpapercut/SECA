@@ -135,7 +135,6 @@ func (eh *EventHandler) handleEventEmbark(rawEvent string) error {
 	return nil
 }
 
-// { "timestamp":"2025-01-11T11:04:14Z", "event":"Disembark", "SRV":false, "Taxi":false, "Multicrew":false, "ID":5, "StarSystem":"California Sector BA-A e6", "SystemAddress":27072119940, "Body":"California Sector BA-A e6 4", "BodyID":8, "OnStation":false, "OnPlanet":true }
 type EventDisembark struct {
 	GenericEvent
 	SRV           bool
@@ -167,7 +166,7 @@ func (eh *EventHandler) handleEventDisembark(rawEvent string) error {
 	status.Docked = event.OnStation
 	status.Landed = event.OnPlanet
 	status.OnFoot = true
-	status.InSRV = event.SRV
+	status.InSRV = false
 
 	err = models.UpdateStatus(status)
 	if err != nil {
@@ -243,7 +242,7 @@ func (eh *EventHandler) handleEventLiftoff(rawEvent string) error {
 	}
 
 	status.Docked = event.OnStation
-	status.Landed = event.OnPlanet
+	status.Landed = false
 	status.OnFoot = false
 	status.InSRV = false
 

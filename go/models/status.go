@@ -108,6 +108,7 @@ func UpdateStatus(status *Status) error {
 	retrievedStatus.Landed = status.Landed
 	retrievedStatus.Docked = status.Docked
 	retrievedStatus.OnFoot = status.OnFoot
+	retrievedStatus.InSRV = status.InSRV
 
 	explorationValue, err := GetTotalEstimatedExplorationScanValue()
 	if err != nil {

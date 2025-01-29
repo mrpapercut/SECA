@@ -27,6 +27,7 @@ func (s *EventSuite) TestHandleEventDocked(c *check.C) {
 		c.Assert(status.Docked, check.Equals, true)
 		c.Assert(status.Landed, check.Equals, false)
 		c.Assert(status.OnFoot, check.Equals, false)
+		c.Assert(status.InSRV, check.Equals, false)
 	}
 }
 
@@ -49,6 +50,9 @@ func (s *EventSuite) TestHandleEventUndocked(c *check.C) {
 	updatedStatus, err := models.GetStatus()
 	c.Assert(err, check.IsNil)
 	c.Assert(updatedStatus.Docked, check.Equals, false)
+	c.Assert(updatedStatus.Landed, check.Equals, false)
+	c.Assert(updatedStatus.OnFoot, check.Equals, false)
+	c.Assert(updatedStatus.InSRV, check.Equals, false)
 }
 
 func (s *EventSuite) TestHandleEventEmbark(c *check.C) {
@@ -57,12 +61,15 @@ func (s *EventSuite) TestHandleEventEmbark(c *check.C) {
 
 	status.Docked = false
 	status.Landed = false
+	status.OnFoot = false
+	status.InSRV = false
 
 	err = models.UpdateStatus(status)
 	c.Assert(err, check.IsNil)
 
 	isOnStation := []bool{false, false, true}
 	isOnPlanet := []bool{true, true, false}
+	isInSRV := []bool{false, true, false}
 
 	rawEvents := []string{
 		`{ "timestamp":"2025-01-11T11:02:34Z", "event":"Embark", "SRV":false, "Taxi":false, "Multicrew":false, "ID":5, "StarSystem":"California Sector BA-A e6", "SystemAddress":27072119940, "Body":"California Sector BA-A e6 4", "BodyID":8, "OnStation":false, "OnPlanet":true }`,
@@ -79,6 +86,7 @@ func (s *EventSuite) TestHandleEventEmbark(c *check.C) {
 		c.Assert(updatedStatus.Docked, check.Equals, isOnStation[i])
 		c.Assert(updatedStatus.Landed, check.Equals, isOnPlanet[i])
 		c.Assert(updatedStatus.OnFoot, check.Equals, false)
+		c.Assert(updatedStatus.InSRV, check.Equals, isInSRV[i])
 	}
 }
 
@@ -87,6 +95,7 @@ func (s *EventSuite) TestHandleEventDisembark(c *check.C) {
 	c.Assert(err, check.IsNil)
 
 	status.OnFoot = false
+	status.InSRV = false
 
 	err = models.UpdateStatus(status)
 	c.Assert(err, check.IsNil)
@@ -109,6 +118,7 @@ func (s *EventSuite) TestHandleEventDisembark(c *check.C) {
 		c.Assert(updatedStatus.Docked, check.Equals, isOnStation[i])
 		c.Assert(updatedStatus.Landed, check.Equals, isOnPlanet[i])
 		c.Assert(updatedStatus.OnFoot, check.Equals, true)
+		c.Assert(updatedStatus.InSRV, check.Equals, false)
 	}
 }
 
@@ -131,6 +141,7 @@ func (s EventSuite) TestHandleEventTouchdown(c *check.C) {
 	c.Assert(updatedStatus.Docked, check.Equals, false)
 	c.Assert(updatedStatus.Landed, check.Equals, true)
 	c.Assert(updatedStatus.OnFoot, check.Equals, false)
+	c.Assert(updatedStatus.InSRV, check.Equals, false)
 }
 
 func (s EventSuite) TestHandleEventLiftoff(c *check.C) {
@@ -150,8 +161,9 @@ func (s EventSuite) TestHandleEventLiftoff(c *check.C) {
 	updatedStatus, err := models.GetStatus()
 	c.Assert(err, check.IsNil)
 	c.Assert(updatedStatus.Docked, check.Equals, false)
-	c.Assert(updatedStatus.Landed, check.Equals, true)
+	c.Assert(updatedStatus.Landed, check.Equals, false)
 	c.Assert(updatedStatus.OnFoot, check.Equals, false)
+	c.Assert(updatedStatus.InSRV, check.Equals, false)
 }
 
 func (s EventSuite) TestHandleEventApproachBody(c *check.C) {
@@ -177,6 +189,10 @@ func (s EventSuite) TestHandleEventApproachBody(c *check.C) {
 		updatedStatus, err := models.GetStatus()
 		c.Assert(err, check.IsNil)
 		c.Assert(updatedStatus.Body, check.Equals, bodies[i])
+		c.Assert(updatedStatus.Docked, check.Equals, false)
+		c.Assert(updatedStatus.Landed, check.Equals, false)
+		c.Assert(updatedStatus.OnFoot, check.Equals, false)
+		c.Assert(updatedStatus.InSRV, check.Equals, false)
 	}
 }
 
@@ -201,4 +217,8 @@ func (s EventSuite) TestHandleEventLeaveBody(c *check.C) {
 	c.Assert(err, check.IsNil)
 	c.Assert(updatedStatus.System, check.Equals, systemName)
 	c.Assert(updatedStatus.Body, check.Equals, "")
+	c.Assert(updatedStatus.Docked, check.Equals, false)
+	c.Assert(updatedStatus.Landed, check.Equals, false)
+	c.Assert(updatedStatus.OnFoot, check.Equals, false)
+	c.Assert(updatedStatus.InSRV, check.Equals, false)
 }
