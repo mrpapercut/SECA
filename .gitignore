@@ -19,3 +19,4 @@ package-lock.json
 
 # Keep folders with .gitkeep file
 !.gitkeep
+bodies/*.png

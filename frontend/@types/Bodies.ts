@@ -1,0 +1,76 @@
+export enum PlanetClass {
+    IcyBody = "Icy body",
+    RockyBody = "Rocky body",
+    RockyIceBody = "Rocky ice body",
+    MetalRichBody = "Metal rich body",
+    HighMetalContentBody = "High metal content body",
+    EarthLikeWorld = "Earthlike body",
+    WaterWorld = "Water world",
+    AmmoniaWorld = "Ammonia world",
+    HeliumGasGiant = "Helium rich gas giant",
+    GasGiantWaterBasedLife = "Gas giant with water based life",
+    GasGiantAmmoniaBasedLife = "Gas giant with ammonia based life",
+    WaterGiant = "Water giant",
+    ClassIGasGiant = "Sudarsky class I gas giant",
+    ClassIIGasGiant = "Sudarsky class II gas giant",
+    ClassIIIGasGiant = "Sudarsky class III gas giant",
+    ClassIVGasGiant = "Sudarsky class IV gas giant",
+    ClassVGasGiant = "Sudarsky class V gas giant",
+}
+
+export enum StarType {
+    ClassO = "O",
+    ClassB = "B",
+    ClassA = "A",
+    ClassF = "F",
+    ClassG = "G",
+    ClassK = "K",
+    ClassM = "M",
+    // Giants
+    ClassBBlueWhiteSupergiant = "B_BlueWhiteSupergiant",
+    ClassABlueWhiteSupergiant = "A_BlueWhiteSupergiant",
+    ClassFWhiteSupergiant = "F_WhiteSupergiant",
+    ClassGWhiteYellowSupergiant = "G_WhiteYellowSupergiant",
+    ClassKOrangeGiant = "K_OrangeGiant",
+    ClassMRedGiant = "M_RedGiant",
+    ClassMRedSupergiant = "M_RedSupergiant",
+    // Proto stars
+    ClassAeBe = "AeBe", // Herbig Ae/Be
+    ClassTTS = "TTS",  // T Tauri
+    // Carbon stars
+    ClassC = "C",
+    ClassCJ = "CJ",
+    ClassCN = "CN",
+    ClassMS = "MS",
+    ClassS = "S",
+    // Wolf-Rayet
+    ClassW = "W",
+    ClassWC = "WC",
+    ClassWN = "WN",
+    ClassWNC = "WNC",
+    ClassWO = "WO",
+    // White dwarfs
+    ClassD = "D",
+    ClassDA = "DA",
+    ClassDAB = "DAB",
+    ClassDAO = "DAO",
+    ClassDAZ = "DAZ",
+    ClassDAV = "DAV",
+    ClassDB = "DB",
+    ClassDBZ = "DBZ",
+    ClassDBV = "DBV",
+    ClassDO = "DO",
+    ClassDOV = "DOV",
+    ClassDQ = "DQ",
+    ClassDC = "DC",
+    ClassDCV = "DCV",
+    ClassDX = "DX",
+    // Brown dwarfs
+    ClassL = "L",
+    ClassT = "T",
+    ClassY = "Y",
+    // Non-sequence
+    ClassN = "N",
+    ClassH = "H",
+    ClassSMBH = "SuperMassiveBlackHole",
+}

@@ -108,6 +108,11 @@
     grid-template-columns: repeat(2, 1fr);
 }
 
+.grid3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
 .highlight {
     color: variables.$white-text;
 }
@@ -128,4 +133,8 @@
     border: none;
     background: variables.$orange-text;
     transition: width 1s linear;
+}
+
+.grid3 .divider {
+    grid-column: span 3;
 }

@@ -4,131 +4,41 @@ import { useEffect, useState } from 'react';
 
 import styles from '../styles/layout.module.scss';
 
-function findMainStarInBodies(bodies: Body[]): Body {
-    if (bodies.length === 0) {
-        return {
-            Name: 'unknown',
-            BodyID: 0,
-            BodyType: 'Star',
-            StarType: '',
-            WasDiscovered: true,
-            WasMapped: true,
-            Discovered: false,
-            Mapped: false
-        } as Body;
-    }
+import { useSocket } from '@/contexts/SocketContext';
 
-    bodies.sort((a, b) => {
-        return a.BodyID - b.BodyID
-    });
-
-    return bodies[0];
-}
-
-function getUnmappedWorthyBodies(system: System): string[] {
-    const worthyBodies = ['Earthlike body', 'Water world', 'Ammonia world'];
-    const worthyTerraformable = ['High metal content body', 'Rocky body'];
-    const worthMapping: string[] = [];
-
-    const unmappedBodies = system.Bodies.filter(b => b.BodyType === 'Planet' && !b.Mapped);
-    unmappedBodies.forEach(body => {
-        if (body.PlanetClass) {
-            if (worthyBodies.includes(body.PlanetClass) || (body.TerraformState !== '' && worthyTerraformable.includes(body.PlanetClass))) {
-                worthMapping.push(body.Name.replace(system.Name, ''));
-            }
-        }
-    });
-
-    return worthMapping;
-}
-
-function getBodiesWithBioSignals(system: System): BodyWithBioSignals[] {
-    const bodiesWithBioSignals: BodyWithBioSignals[] = [];
-
-    const bodiesWithSignals = system.Bodies.filter(b => Array.isArray(b.signals) && b.signals.length > 0);
-    bodiesWithSignals.forEach(body => {
-        const bioSignals = (body.signals || []).find(s => s.Type === 'Biological');
-
-        if (bioSignals) {
-            bodiesWithBioSignals.push({
-                name: body.Name.replace(system.Name, ''),
-                bioSubtype: bioSignals.SubType.split(',').filter(t => t !== ''),
-                count: bioSignals.Count,
-                bodyID: body.BodyID
-            });
-        }
-    });
-
-    bodiesWithBioSignals.sort((a, b) => a.bodyID - b.bodyID)
-    bodiesWithBioSignals.sort((a, b) => b.count - a.count)
-
-    return bodiesWithBioSignals;
-}
+import getUnmappedWorthyBodies from '@/util/getUnmappedWorthyBodies';
+import getBodiesWithBioSignals from '@/util/getBodiesWithBioSignals';
+import findMainStarInBodies from '@/util/findMainStarInBodies';
 
 export default function Dashboard() {
-    const [isConnected, setIsConnected] = useState(false);
-    const [currentState, setCurrentState] = useState({} as CurrentState);
+    const {socket, isConnected} = useSocket();
+    const [currentStatus, setCurrentStatus] = useState({} as CurrentStatus);
     const [currentRoute, setCurrentRoute] = useState([] as CurrentRoute[]);
     const [currentRouteDistance, setCurrentRouteDistance] = useState(0 as number);
     const [currentSystem, setCurrentSystem] = useState({} as System);
 
     useEffect(() => {
-        let socket: WebSocket;
-        let retryTimeout: NodeJS.Timeout;
+        if (!socket) return;
 
-        const connect = () => {
-            console.log('Connecting to WebSocket server...');
-            socket = new WebSocket(`ws://${window.location.hostname}:8080/`);
+        socket.addListener('getStatus', response => setCurrentStatus(response.status as CurrentStatus))
+        socket.addListener('getRoute', response => {
+            setCurrentRoute(response.route as CurrentRoute[]);
+            setCurrentRouteDistance(response.total_distance as number);
+        });
+        socket.addListener('getCurrentSystem', response => setCurrentSystem(response.system as System));
 
-            socket.onopen = () => {
-                if (retryTimeout) clearTimeout(retryTimeout);
-
-                setIsConnected(true);
-
-                socket.send('getStatus');
-                socket.send('getRoute');
-                socket.send('getCurrentSystem');
-            };
-
-            socket.onmessage = (event) => {
-                const data = JSON.parse(event.data);
-
-                if (!Object.hasOwn(data, 'type')) {
-                    console.log('Received message has invalid structure:', data);
-                    return
-                }
-
-                switch(data.type) {
-                    case 'getStatus':
-                        socket.send('getCurrentSystem');
-                        return setCurrentState(data.status);
-                    case 'getRoute':
-                        setCurrentRoute(data.route);
-                        setCurrentRouteDistance(data.total_distance);
-                        return;
-                    case 'getCurrentSystem':
-                        setCurrentSystem(data.system);
-                        return;
-                }
-            };
-
-            // socket.onerror = (error) => {
-            //     console.log('WebSocket error:', error);
-            // };
-
-            socket.onclose = () => {
-                setIsConnected(false);
-                retryTimeout = setTimeout(() => connect(), 500);
-            };
-        };
-
-        connect();
+        if (isConnected) {
+            socket.sendMessage('getStatus');
+            socket.sendMessage('getRoute');
+            socket.sendMessage('getCurrentSystem');
+        }
 
         return () => {
-            if (socket) socket.close();
-            if (retryTimeout) clearTimeout(retryTimeout);
-        };
-    }, []);
+            socket.removeListener('getStatus');
+            socket.removeListener('getRoute');
+            socket.removeListener('getCurrentSystem');
+        }
+    }, [socket, isConnected]);
 
     let worthMapping: string[] = [];
     let bodiesWithBioSignals: BodyWithBioSignals[] = [];
@@ -156,27 +66,27 @@ export default function Dashboard() {
     return <>
         <div className={isConnected ? styles.isConnected : styles.isNotConnected}>
             <div className={styles.cmdrProfileWrapper}>
-                <Image priority={true} src="https://www.edsm.net/img/users/1/8/7/9/1/3/187913.png" className={styles.cmdrProfilePhoto} width={100} height={100} alt={''} />
+                <Image priority={true} src="https://www.edsm.net/img/users/1/8/7/9/1/3/187913.png?v=1738138512" className={styles.cmdrProfilePhoto} width={100} height={100} alt={''} />
             </div>
             <div className={styles.grid}>
                 <div>Commander:</div>
-                <div>{currentState.commander_name}</div>
+                <div>{currentStatus.commander_name}</div>
 
                 <div>Credits:</div>
-                <div>{(currentState.balance || 0).toLocaleString()} cr</div>
+                <div>{(currentStatus.balance || 0).toLocaleString()} cr</div>
 
                 <div>Ship:</div>
-                <div>{currentState.ship_name} ({currentState.ship_type})</div>
+                <div>{currentStatus.ship_name} ({currentStatus.ship_type})</div>
 
                 <div>State:</div>
-                <div>{currentState.is_on_foot ? 'On foot' : currentState.is_in_srv ? 'In SRV' : currentState.is_landed ? 'Landed' : currentState.is_docked ? 'Docked' : 'Flying'}</div>
+                <div>{currentStatus.is_on_foot ? 'On foot' : currentStatus.is_in_srv ? 'In SRV' : currentStatus.is_landed ? 'Landed' : currentStatus.is_docked ? 'Docked' : 'Flying'}</div>
 
                 <div>Current system:</div>
-                <div className={!discoveredCurrent ? styles.newDiscovered : ''}>{currentState.current_system}</div>
+                <div className={!discoveredCurrent ? styles.newDiscovered : ''}>{currentStatus.current_system}</div>
 
-                {currentState.body !== '' && currentState.body !== currentState.current_system && <>
+                {currentStatus.body !== '' && currentStatus.body !== currentStatus.current_system && <>
                     <div>Current body:</div>
-                    <div>{currentState.body}</div>
+                    <div>{currentStatus.body}</div>
                 </>}
 
                 {currentSystem && (worthMapping.length > 0 || bodiesWithBioSignals.length > 0) && <>
@@ -216,21 +126,21 @@ export default function Dashboard() {
                 <hr className={styles.divider} />
 
                 <div>Est. exploration earnings:</div>
-                <div>{ (currentState.estimated_exploration_value || 0).toLocaleString() } cr</div>
+                <div>{ (currentStatus.estimated_exploration_value || 0).toLocaleString() } cr</div>
 
                 <div>Est. biological earnings:</div>
-                <div>{ (currentState.estimated_biological_value || 0).toLocaleString() } cr</div>
+                <div>{ (currentStatus.estimated_biological_value || 0).toLocaleString() } cr</div>
 
                 <hr className={styles.divider} />
 
                 <div>Systems visited:</div>
-                <div>{(currentState.systems_visited || 0).toLocaleString()}</div>
+                <div>{(currentStatus.systems_visited || 0).toLocaleString()}</div>
 
                 <div>Total jumps:</div>
-                <div>{(currentState.total_jumps || 0).toLocaleString()}</div>
+                <div>{(currentStatus.total_jumps || 0).toLocaleString()}</div>
 
                 <div>Total distance:</div>
-                <div>{(currentState.total_distance || 0).toLocaleString()} ly</div>
+                <div>{(currentStatus.total_distance || 0).toLocaleString()} ly</div>
             </div>
         </div>
     </>

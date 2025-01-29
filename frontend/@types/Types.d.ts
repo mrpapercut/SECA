@@ -1,4 +1,4 @@
-interface CurrentState {
+interface CurrentStatus {
     commander_name: string
     balance: number
     ship_type: string
@@ -35,17 +35,48 @@ interface System {
 interface Body {
     Name: string
     BodyID: number
-    BodyType: string
-    StarType: string
     WasDiscovered: boolean
     WasMapped: boolean
     Discovered: boolean
     Mapped: boolean
+    Footfall: boolean
+    DistanceFromArrivalLS: number
     signals?: Signal[]
     exploration_scans?: ExplorationScan[]
     biological_scans?: BiologicalScan[]
-    PlanetClass?: string
-    TerraformState?: string
+    BodyType: string
+    SurfaceTemperature: number
+    Radius: number
+    SemiMajorAxis: number
+    Eccentricity: number
+    OrbitalInclination: number
+    Periapsis: number
+    OrbitalPeriod: number
+    AscendingNode: number
+    MeanAnomaly: number
+    RotationPeriod: number
+    AxialTilt: number
+
+    // Star-specific
+    StarType: StarType
+    Subclass: number
+    StellarMass: number
+    AbsoluteMagnitude: number
+    Age_MY: number
+    Luminosity: string
+
+    // Planet-specific
+    TidalLock: boolean
+    TerraformState: string
+    PlanetClass: PlanetClass
+    Atmosphere: string
+    AtmosphereType: string
+    // AtmosphereComposition AtmosphereComposition
+    Volcanism: string
+    MassEM: number
+    SurfaceGravity: number
+    SurfacePressure: number
+    Landable: boolean
 }
 
 interface Signal {
