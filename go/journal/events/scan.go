@@ -115,11 +115,16 @@ func (eh *EventHandler) handleEventScan(rawEvent string) error {
 		return fmt.Errorf("error creating or updating body: %v", err)
 	}
 
+	retrievedBody, err := models.GetBodyByName(body.Name)
+	if err != nil {
+		return fmt.Errorf("error getting created body: %v", err)
+	}
+
 	scan := &models.ExplorationScan{
 		SystemID:  system.ID,
 		System:    *system,
-		BodyID:    body.ID,
-		Body:      *body,
+		BodyID:    retrievedBody.ID,
+		Body:      *retrievedBody,
 		Timestamp: event.Timestamp,
 	}
 

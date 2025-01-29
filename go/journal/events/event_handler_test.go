@@ -8,11 +8,18 @@ import (
 )
 
 func (s *EventSuite) TestHandleEvent(c *check.C) {
+	explorationEarningsBeforeEverything, err := models.GetTotalEstimatedExplorationScanValue()
+	c.Assert(err, check.IsNil)
+	c.Assert(explorationEarningsBeforeEverything, check.Equals, int64(0))
+
+	bioEarningsBeforeEverything, err := models.GetTotalEstimatedBiologicalScanValue()
+	c.Assert(err, check.IsNil)
+	c.Assert(bioEarningsBeforeEverything, check.Equals, int64(0))
+
 	/* Systems
 	"StarSystem":"Oochost VC-Z b5-0", "SystemAddress":658605548081
 	"Name":"Outorst MA-H b52-0", "SystemAddress":646527394753
 	"StarSystem":"Outorst VK-D c26-0", "SystemAddress":80899871202
-
 	*/
 
 	systems := map[string]int64{
@@ -307,7 +314,7 @@ func (s *EventSuite) TestHandleEvent(c *check.C) {
 	}
 
 	nextRawEvents := []string{
-		`{ "timestamp":"2025-01-11T15:42:26Z", "event":"MultiSellExplorationData", "Discovered":[ { "SystemName":"Outorst VK-D c26-0", "NumBodies":19 } ], "BaseValue":2876654, "Bonus":0, "TotalEarnings":2876654 }`,
+		`{ "timestamp":"2025-01-11T15:42:26Z", "event":"MultiSellExplorationData", "Discovered":[ { "SystemName":"Outorst VK-D c26-0", "NumBodies":20 } ], "BaseValue":2876654, "Bonus":0, "TotalEarnings":2876654 }`,
 		`{ "timestamp":"2025-01-11T15:42:41Z", "event":"Music", "MusicTrack":"NoTrack" }`,
 		`{ "timestamp":"2025-01-11T15:43:01Z", "event":"Disembark", "SRV":false, "Taxi":false, "Multicrew":false, "ID":5, "StarSystem":"S171 7", "SystemAddress":44400783, "Body":"S171 7 A", "BodyID":1, "OnStation":false, "OnPlanet":false }`,
 		`{ "timestamp":"2025-01-11T15:43:04Z", "event":"SuitLoadout", "SuitID":1819681719079601, "SuitName":"explorationsuit_class1", "SuitName_Localised":"Artemis Suit", "SuitMods":[  ], "LoadoutID":4293000001, "LoadoutName":"Loadout 1", "Modules":[ { "SlotName":"PrimaryWeapon1", "SuitModuleID":1820175716565614, "ModuleName":"wpn_m_assaultrifle_plasma_fauto", "ModuleName_Localised":"Manticore Oppressor", "Class":1, "WeaponMods":[  ] }, { "SlotName":"SecondaryWeapon", "SuitModuleID":1820175474341794, "ModuleName":"wpn_s_pistol_kinetic_sauto", "ModuleName_Localised":"Karma P-15", "Class":3, "WeaponMods":[  ] } ] }`,
@@ -357,7 +364,7 @@ func (s *EventSuite) TestHandleEvent(c *check.C) {
 
 	explorationEarningsBeforeSale, err := models.GetTotalEstimatedExplorationScanValue()
 	c.Assert(err, check.IsNil)
-	c.Assert(explorationEarningsBeforeSale, check.Equals, int64(169626))
+	c.Assert(explorationEarningsBeforeSale, check.Equals, int64(233416))
 
 	bioEarningsBeforeSale, err := models.GetTotalEstimatedBiologicalScanValue()
 	c.Assert(err, check.IsNil)

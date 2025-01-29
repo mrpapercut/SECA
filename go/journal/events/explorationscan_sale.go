@@ -36,14 +36,7 @@ func (eh *EventHandler) handleEventMultiSellExplorationData(rawEvent string) err
 			return fmt.Errorf("error getting bodies for system %s: %v", system.Name, err)
 		}
 
-		mappedBodies := make([]*models.Body, 0)
 		for _, body := range bodies {
-			if body.Mapped {
-				mappedBodies = append(mappedBodies, body)
-			}
-		}
-
-		for _, body := range mappedBodies {
 			scan, err := models.GetExplorationScan(system.SystemAddress, body.BodySystemID)
 			if err != nil {
 				return fmt.Errorf("error getting scans for body %s: %v", body.Name, err)
