@@ -56,11 +56,9 @@ func (jw *JournalWatcher) processJournalLines(lines []string, isFirstRun bool) {
 				jw.sendRouteUpdate()
 			}
 
-			if ev.Event == "Scan" || ev.Event == "SAAScanComplete" || ev.Event == "ScanOrganic" {
-				err = models.UpdateStatusEarnings()
-				if err != nil {
-					slog.Warn(fmt.Sprintf("error updating status earnings: %v", err))
-				}
+			err = models.UpdateStatusEarnings()
+			if err != nil {
+				slog.Warn(fmt.Sprintf("error updating status earnings: %v", err))
 			}
 		}
 	}
