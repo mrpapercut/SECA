@@ -65,6 +65,7 @@ func (jw *JournalWatcher) processJournalLines(lines []string, isFirstRun bool) {
 
 	if !isFirstRun {
 		jw.sendStatusUpdate()
+		jw.sendSystemUpdate()
 	}
 }
 
@@ -138,4 +139,42 @@ func (jw *JournalWatcher) sendRouteUpdate() {
 	}
 
 	server.SendMessage(jsonRoute)
+}
+
+func (jw *JournalWatcher) sendSystemUpdate() {
+	status, err := models.GetStatus()
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error getting status: %v", err))
+		return
+	}
+
+	if status.System == "" {
+		slog.Warn(fmt.Sprintf("error: current system not in status"))
+		return
+	}
+
+	system, err := models.GetSystemByName(status.System)
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error getting system by name: %v", err))
+		return
+	}
+
+	systemWithBodies, err := models.GetSystemWithBodies(system)
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error getting system with bodies: %v", err))
+		return
+	}
+
+	systemResponse := &server.ResponseSystem{
+		Type:   "getCurrentSystem",
+		System: systemWithBodies,
+	}
+
+	jsonSystem, err := json.Marshal(&systemResponse)
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error marshalling route json: %v", err))
+		return
+	}
+
+	server.SendMessage(jsonSystem)
 }
