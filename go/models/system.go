@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -14,6 +15,7 @@ type System struct {
 	StarPosY      float64
 	StarPosZ      float64
 	Bodies        []*Body `gorm:"foreignKey:SystemID"`
+	LastVisited   time.Time
 }
 
 func SaveSystem(system *System) error {
@@ -24,15 +26,23 @@ func SaveSystem(system *System) error {
 	}
 
 	if existingSystem.ID != 0 {
-		if ((existingSystem.StarPosX == 0 && system.StarPosX != 0) ||
-			(existingSystem.StarPosY == 0 && system.StarPosY != 0) ||
-			(existingSystem.StarPosZ == 0 && system.StarPosZ != 0)) &&
-			existingSystem.Name != "Sol" {
-			system.ID = existingSystem.ID
-			return db.Save(&system).Error
+		if existingSystem.StarPosX == 0 && system.StarPosX != 0 {
+			existingSystem.StarPosX = system.StarPosX
 		}
 
-		return nil
+		if existingSystem.StarPosY == 0 && system.StarPosY != 0 {
+			existingSystem.StarPosY = system.StarPosY
+		}
+
+		if existingSystem.StarPosZ == 0 && system.StarPosZ != 0 {
+			existingSystem.StarPosZ = system.StarPosZ
+		}
+
+		if existingSystem.LastVisited.Before(system.LastVisited) {
+			existingSystem.LastVisited = system.LastVisited
+		}
+
+		return db.Save(&existingSystem).Error
 	}
 
 	return db.Save(&system).Error
@@ -69,4 +79,19 @@ func GetSystemWithBodies(system *System) (*System, error) {
 	}
 
 	return &retrievedSystem, nil
+}
+
+func GetLastVisitedSystems(amount int) ([]*System, error) {
+	var systems []*System
+
+	if amount < 20 {
+		amount = 20
+	}
+
+	err := db.Model(&System{}).Order("last_visited DESC").Limit(amount).Find(&systems).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return systems, nil
 }

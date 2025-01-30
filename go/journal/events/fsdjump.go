@@ -29,6 +29,7 @@ func (eh *EventHandler) handleEventFSDJump(rawEvent string) error {
 		StarPosX:      event.StarPos[0],
 		StarPosY:      event.StarPos[1],
 		StarPosZ:      event.StarPos[2],
+		LastVisited:   event.Timestamp,
 	}
 
 	err = models.SaveSystem(system)
@@ -43,9 +44,9 @@ func (eh *EventHandler) handleEventFSDJump(rawEvent string) error {
 
 	body := &models.Body{
 		Name:         event.Body,
+		BodySystemID: event.BodySystemID,
 		SystemID:     retrievedSystem.ID,
 		System:       *retrievedSystem,
-		BodySystemID: event.BodySystemID,
 		BodyType:     event.BodyType,
 	}
 

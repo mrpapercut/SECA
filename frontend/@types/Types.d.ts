@@ -30,6 +30,7 @@ interface System {
     StarPosY: number
     StarPosZ: number
     Bodies: Body[]
+    LastVisited: Date
 }
 
 interface Body {

@@ -99,3 +99,27 @@ func handleGetCurrentSystemRequest() ([]byte, error) {
 
 	return jsonSystem, nil
 }
+
+type ResponseFlightlog struct {
+	Type      string           `json:"type"`
+	Flightlog []*models.System `json:"flightlog"`
+}
+
+func handleGetFlightlogRequest() ([]byte, error) {
+	systems, err := models.GetLastVisitedSystems(20)
+	if err != nil {
+		return nil, fmt.Errorf("error getting last visited systems: %v", err)
+	}
+
+	flightlogResponse := &ResponseFlightlog{
+		Type:      "getFlightlog",
+		Flightlog: systems,
+	}
+
+	jsonFlightlog, err := json.Marshal(flightlogResponse)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing flightlog to json: %v", err)
+	}
+
+	return jsonFlightlog, nil
+}

@@ -36,10 +36,10 @@ func (eh *EventHandler) handleEventFSSBodySignals(rawEvent string) error {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			newbody := &models.Body{
 				Name:         event.BodyName,
+				BodyType:     "Planet",
 				BodySystemID: event.BodySystemID,
 				SystemID:     system.ID,
 				System:       *system,
-				BodyType:     "Planet",
 			}
 
 			err = models.SaveBody(newbody)

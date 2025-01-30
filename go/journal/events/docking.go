@@ -168,6 +168,21 @@ func (eh *EventHandler) handleEventDisembark(rawEvent string) error {
 	status.OnFoot = true
 	status.InSRV = false
 
+	if event.OnPlanet {
+		body, err := models.GetBody(int64(event.SystemAddress), int64(event.BodySystemID))
+		if err != nil {
+			return fmt.Errorf("error getting body: %v", err)
+		}
+
+		if !body.Footfall {
+			body.Footfall = true
+			err = models.SaveBody(body)
+			if err != nil {
+				return fmt.Errorf("error updating body: %v", err)
+			}
+		}
+	}
+
 	err = models.UpdateStatus(status)
 	if err != nil {
 		return fmt.Errorf("error updating status: %v", err)

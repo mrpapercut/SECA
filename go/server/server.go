@@ -95,6 +95,12 @@ func (s *Webserver) handleIncoming() {
 			if err != nil {
 				slog.Warn(fmt.Sprintf("%v", err))
 			}
+
+		case "getFlightlog":
+			messageToSend, err = handleGetFlightlogRequest()
+			if err != nil {
+				slog.Warn(fmt.Sprintf("%v", err))
+			}
 		}
 
 		if len(messageToSend) > 0 {

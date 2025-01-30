@@ -7,6 +7,38 @@ import getBodyIcon from '@/util/getBodyIcon';
 
 import styles from '../styles/layout.module.scss';
 
+function getBodyImageSize(body: Body): number {
+    let imgWidth = 100;
+
+    if (body.BodyType === 'Star') {
+        if (body.StellarMass <= 1.5) imgWidth = 250 * body.StellarMass;
+        else imgWidth = 100 * body.StellarMass;
+    } else {
+        if (body.MassEM < 0.01) imgWidth = 10000 * body.MassEM;
+        else if (body.MassEM < 0.1) imgWidth = 1000 * body.MassEM;
+        else imgWidth = 100 * body.MassEM;
+    }
+
+    // Clamp between 50 and 200px
+    imgWidth = Math.min(200, Math.max(50, imgWidth));
+
+    return imgWidth;
+}
+
+function getBodyStateIcons(body: Body): React.ReactNode {
+    const icons = [];
+
+    icons.push(body.Discovered && !body.WasDiscovered ? 'discovered-first' : body.Discovered ? 'discovered-self' : body.WasDiscovered ? 'discovered-active' : 'discovered-inactive');
+    if (body.BodyType === 'Planet') {
+        icons.push(body.Mapped && !body.WasMapped ? 'mapped-first' : body.Mapped ? 'mapped-self' : body.WasMapped ? 'mapped-active' : 'mapped-inactive');
+        icons.push(body.Footfall ? 'footfall-self' : 'footfall-inactive');
+    }
+
+    return <>
+        {icons.map(icon => <Image key={`icon_${icon}`} src={`/images/icons/${icon}.png`} width={48} height={48} alt={icon} />)}
+    </>
+}
+
 export default function System() {
     const {socket, isConnected} = useSocket();
     const [currentSystem, setCurrentSystem] = useState({} as System);
@@ -28,7 +60,7 @@ export default function System() {
         return <></>;
     }
 
-    currentSystem.Bodies.sort((a, b) => a.BodyID - b.BodyID);
+    currentSystem.Bodies.sort((a, b) => a.DistanceFromArrivalLS - b.DistanceFromArrivalLS);
 
     return <>
         <div>
@@ -36,32 +68,14 @@ export default function System() {
             <div className={styles.grid3}>
                 {currentSystem.Bodies.map(body => {
                     const isStar = body.BodyType === 'Star';
-
-                    let imgWidth = 100;
-                    if (isStar) {
-                        if (body.StellarMass <= 1.5) imgWidth = 250 * body.StellarMass;
-                        else imgWidth = 100 * body.StellarMass;
-                    } else {
-                        if (body.MassEM < 0.01) imgWidth = 10000 * body.MassEM;
-                        else if (body.MassEM < 0.1) imgWidth = 1000 * body.MassEM;
-                        else imgWidth = 100 * body.MassEM;
-                    }
-                    imgWidth = Math.min(400, Math.max(20, imgWidth));
+                    const imgWidth = getBodyImageSize(body);
+                    const bodyStatIcons = getBodyStateIcons(body);
 
                     return <>
                         <hr className={styles.divider} />
                         <div key={`img_${body.BodyID}`} style={{textAlign: 'center'}}>
                             <Image src={getBodyIcon(body)} alt={body.Name} width={imgWidth} height={imgWidth} style={{margin: '0 auto'}}/>
-                            <div key={`stats_${body.BodyID}`}>
-                                {(isStar ? [
-                                    body.WasDiscovered ? 'Previously discovered' : 'Not yet discovered'
-                                ] : [
-                                    body.WasDiscovered ? 'Previously discovered' : 'Not yet discovered',
-                                    body.WasMapped ? 'Previously mapped' : 'Not yet mapped',
-                                    body.Mapped ? 'Mapped!' : 'Not mapped',
-                                    body.Footfall ? 'Footfall!' : 'No footfall',
-                                ]).join(', ')}
-                            </div>
+                            <div key={`stats_${body.BodyID}`}>{bodyStatIcons}</div>
                         </div>
                         <div className={styles.grid3} style={{gridColumn: 'span 2'}}>
                             <div>Name:</div>
