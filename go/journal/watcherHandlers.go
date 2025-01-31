@@ -149,7 +149,7 @@ func (jw *JournalWatcher) sendSystemUpdate() {
 	}
 
 	if status.System == "" {
-		slog.Warn(fmt.Sprintf("error: current system not in status"))
+		slog.Warn("error: current system not in status")
 		return
 	}
 
