@@ -146,7 +146,7 @@ export default function Dashboard() {
                 <div>{(currentStatus.total_jumps || 0).toLocaleString()}</div>
 
                 <div>Total distance:</div>
-                <div>{(currentStatus.total_distance || 0).toLocaleString()} ly</div>
+                <div>{parseFloat((currentStatus.total_distance || 0).toFixed(2)).toLocaleString()} ly</div>
             </div>
         </div>
     </>
