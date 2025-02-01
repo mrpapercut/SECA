@@ -27,7 +27,7 @@ func (ev *EventHandler) handleEventStatistics(rawEvent string) error {
 	}
 
 	status.SystemsVisited = int64(event.Exploration.SystemsVisited)
-	status.TotalDistance = int64(event.Exploration.TotalDistance)
+	status.TotalDistance = event.Exploration.TotalDistance
 	status.TotalJumps = int64(event.Exploration.TotalJumps)
 
 	err = models.UpdateStatus(status)
