@@ -48,18 +48,24 @@ export default function Dashboard() {
     }
 
     let discoveredCurrent = false;
+    let primaryStarTypeCurrent = '';
     let discoveredNextStop = false;
+    let primaryStarTypeNextStop = '';
     let discoveredDestination = false;
+    let primaryStarTypeDestination = '';
     if (currentRoute.length > 0) {
         const currentMainStar = findMainStarInBodies(currentRoute[0].System.Bodies);
         discoveredCurrent = currentMainStar.WasDiscovered;
+        primaryStarTypeCurrent = currentRoute[0].System.PrimaryStarType;
 
         const destinationMainStar = findMainStarInBodies(currentRoute[currentRoute.length - 1].System.Bodies);
         discoveredDestination = destinationMainStar.WasDiscovered;
+        primaryStarTypeDestination = currentRoute[currentRoute.length - 1].System.PrimaryStarType;
 
         if (currentRoute.length > 1) {
             const nextMainStar = findMainStarInBodies(currentRoute[1].System.Bodies);
             discoveredNextStop = nextMainStar.WasDiscovered;
+            primaryStarTypeNextStop = currentRoute[1].System.PrimaryStarType;
         }
     }
 
@@ -82,7 +88,7 @@ export default function Dashboard() {
                 <div>{currentStatus.is_on_foot ? 'On foot' : currentStatus.is_in_srv ? 'In SRV' : currentStatus.is_landed ? 'Landed' : currentStatus.is_docked ? 'Docked' : 'Flying'}</div>
 
                 <div>Current system:</div>
-                <div className={!discoveredCurrent ? styles.newDiscovered : ''}>{currentStatus.current_system}</div>
+                <div className={!discoveredCurrent ? styles.newDiscovered : ''}>{currentStatus.current_system} {primaryStarTypeCurrent !== '' ? `(type ${primaryStarTypeCurrent})` : ''}</div>
 
                 {currentStatus.body !== '' && currentStatus.body !== currentStatus.current_system && <>
                     <div>Current body:</div>
@@ -111,10 +117,10 @@ export default function Dashboard() {
                     <hr className={styles.divider} />
 
                     <div>Next stop:</div>
-                    <div className={!discoveredNextStop ? styles.newDiscovered : ''}>{currentRoute[1].System.Name}</div>
+                    <div className={!discoveredNextStop ? styles.newDiscovered : ''}>{currentRoute[1].System.Name} {primaryStarTypeNextStop !== '' ? `(type ${primaryStarTypeNextStop})` : ''}</div>
 
                     <div>Destination:</div>
-                    <div className={!discoveredDestination ? styles.newDiscovered : ''}>{currentRoute[currentRoute.length - 1].System.Name}</div>
+                    <div className={!discoveredDestination ? styles.newDiscovered : ''}>{currentRoute[currentRoute.length - 1].System.Name}  {primaryStarTypeDestination !== '' ? `(type ${primaryStarTypeDestination})` : ''}</div>
 
                     <div>Route length:</div>
                     <div>{parseInt(currentRouteDistance.toFixed(2), 10).toLocaleString()} ly</div>

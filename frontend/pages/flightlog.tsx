@@ -23,7 +23,7 @@ export default function FlightLog() {
         <h1>Flightlog</h1>
         <div className={styles.grid}>
             {flightlog.map(s => <>
-                <div>{s.Name}</div>
+                <div>{s.Name} (type {s.PrimaryStarType})</div>
                 <div>{s.LastVisited.toString()}</div>
             </>)}
         </div>

@@ -32,11 +32,12 @@ func (eh *EventHandler) handleEventNavRoute(rawEvent string) error {
 
 	for i, routeStop := range event.Route {
 		system := &models.System{
-			Name:          routeStop.Name,
-			SystemAddress: routeStop.SystemAddress,
-			StarPosX:      routeStop.StarPos[0],
-			StarPosY:      routeStop.StarPos[1],
-			StarPosZ:      routeStop.StarPos[2],
+			Name:            routeStop.Name,
+			SystemAddress:   routeStop.SystemAddress,
+			StarPosX:        routeStop.StarPos[0],
+			StarPosY:        routeStop.StarPos[1],
+			StarPosZ:        routeStop.StarPos[2],
+			PrimaryStarType: routeStop.StarClass,
 		}
 
 		err := models.SaveSystem(system)

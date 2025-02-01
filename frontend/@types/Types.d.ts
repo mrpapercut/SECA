@@ -31,6 +31,7 @@ interface System {
     StarPosZ: number
     Bodies: Body[]
     LastVisited: Date
+    PrimaryStarType: string
 }
 
 interface Body {

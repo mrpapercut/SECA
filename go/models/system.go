@@ -8,14 +8,15 @@ import (
 )
 
 type System struct {
-	ID            uint   `gorm:"primaryKey"`
-	Name          string `gorm:"not null"`
-	SystemAddress int64  `gorm:"uniqueIndex;not null"`
-	StarPosX      float64
-	StarPosY      float64
-	StarPosZ      float64
-	Bodies        []*Body `gorm:"foreignKey:SystemID"`
-	LastVisited   time.Time
+	ID              uint   `gorm:"primaryKey"`
+	Name            string `gorm:"not null"`
+	SystemAddress   int64  `gorm:"uniqueIndex;not null"`
+	StarPosX        float64
+	StarPosY        float64
+	StarPosZ        float64
+	Bodies          []*Body `gorm:"foreignKey:SystemID"`
+	LastVisited     time.Time
+	PrimaryStarType string
 }
 
 func SaveSystem(system *System) error {
@@ -40,6 +41,10 @@ func SaveSystem(system *System) error {
 
 		if existingSystem.LastVisited.Before(system.LastVisited) {
 			existingSystem.LastVisited = system.LastVisited
+		}
+
+		if existingSystem.PrimaryStarType == "" && system.PrimaryStarType != "" {
+			existingSystem.PrimaryStarType = system.PrimaryStarType
 		}
 
 		return db.Save(&existingSystem).Error

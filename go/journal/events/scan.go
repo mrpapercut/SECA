@@ -2,6 +2,7 @@ package events
 
 import (
 	"fmt"
+	"log/slog"
 
 	"github.com/mrpapercut/seca/models"
 )
@@ -63,6 +64,14 @@ func (eh *EventHandler) handleEventScan(rawEvent string) error {
 	system, err := models.GetSystemByAddress(event.SystemAddress)
 	if err != nil {
 		return fmt.Errorf("error retrieving system: %v", err)
+	}
+
+	if system.PrimaryStarType == "" && (event.BodyName == system.Name || event.BodyName == fmt.Sprintf("%s A", system.Name)) {
+		system.PrimaryStarType = event.StarType
+		err = models.SaveSystem(system)
+		if err != nil {
+			slog.Warn(fmt.Sprintf("error updating system's primary star: %v", err))
+		}
 	}
 
 	body := &models.Body{
