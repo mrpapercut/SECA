@@ -7,7 +7,7 @@ import (
 
 func (s *EventSuite) TestHandleEventStatistics(c *check.C) {
 	systemsVisited := []int64{1457, 1471, 1489}
-	totalDistance := []int64{82901, 83906, 85204}
+	totalDistance := []float64{82901, 83906, 85204}
 	totalJumps := []int64{1628, 1642, 1660}
 
 	rawEvents := []string{
