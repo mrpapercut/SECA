@@ -2,6 +2,7 @@ package events
 
 import (
 	"fmt"
+	"log/slog"
 
 	"github.com/mrpapercut/seca/models"
 )
@@ -171,14 +172,14 @@ func (eh *EventHandler) handleEventDisembark(rawEvent string) error {
 	if event.OnPlanet {
 		body, err := models.GetBody(int64(event.SystemAddress), int64(event.BodySystemID))
 		if err != nil {
-			return fmt.Errorf("error getting body: %v", err)
-		}
-
-		if !body.Footfall {
-			body.Footfall = true
-			err = models.SaveBody(body)
-			if err != nil {
-				return fmt.Errorf("error updating body: %v", err)
+			slog.Warn(fmt.Sprintf("error getting body to check footfall: %v", err))
+		} else {
+			if !body.Footfall {
+				body.Footfall = true
+				err = models.SaveBody(body)
+				if err != nil {
+					return fmt.Errorf("error updating body: %v", err)
+				}
 			}
 		}
 	}
