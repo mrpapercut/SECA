@@ -29,7 +29,7 @@ func (jw *JournalWatcher) handleJournalUpdate(filecontents []byte) {
 }
 
 func (jw *JournalWatcher) processJournalLines(lines []string, isFirstRun bool) {
-	for _, line := range lines {
+	for lineIdx, line := range lines {
 		if len(line) == 0 {
 			continue
 		}
@@ -41,7 +41,7 @@ func (jw *JournalWatcher) processJournalLines(lines []string, isFirstRun bool) {
 			continue
 		}
 
-		key := fmt.Sprintf("%s|%s", ev.Timestamp.Format(time.RFC3339), ev.Event)
+		key := fmt.Sprintf("%d|%s|%s", lineIdx, ev.Timestamp.Format(time.RFC3339), ev.Event)
 		_, exists := eventCache[key]
 		if exists {
 			continue
