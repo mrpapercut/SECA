@@ -62,8 +62,8 @@ func (eh *EventHandler) handleEventFSDJump(rawEvent string) error {
 	status.System = retrievedSystem.Name
 	status.Body = body.Name
 
-	status.TotalDistance += int64(event.JumpDistance)
-	status.TotalJumps++
+	status.TotalDistance += event.JumpDistance
+	status.TotalJumps += 1
 
 	err = models.UpdateStatus(status)
 	if err != nil {

@@ -21,7 +21,7 @@ type Status struct {
 	Biological     int64   `json:"estimated_biological_value"`
 	SystemsVisited int64   `json:"systems_visited"`
 	TotalJumps     int64   `json:"total_jumps"`
-	TotalDistance  int64   `json:"total_distance"`
+	TotalDistance  float64 `json:"total_distance"`
 }
 
 const statusIdentifier = "CURRENT_STATUS"
