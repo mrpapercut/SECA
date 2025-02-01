@@ -2,6 +2,7 @@ package events
 
 import (
 	"fmt"
+	"log/slog"
 
 	"github.com/mrpapercut/seca/models"
 )
@@ -39,7 +40,8 @@ func (eh *EventHandler) handleEventMultiSellExplorationData(rawEvent string) err
 		for _, body := range bodies {
 			scan, err := models.GetExplorationScan(system.SystemAddress, body.BodySystemID)
 			if err != nil {
-				return fmt.Errorf("error getting scans for body %s: %v", body.Name, err)
+				slog.Warn(fmt.Sprintf("error getting scans for body %s: %v", body.Name, err))
+				continue
 			}
 
 			err = models.SetExplorationScanSold(scan)
