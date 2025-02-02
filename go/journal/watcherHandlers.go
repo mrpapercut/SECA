@@ -51,19 +51,17 @@ func (jw *JournalWatcher) processJournalLines(lines []string, isFirstRun bool) {
 
 		jw.handleJournalEvent(&ev, line)
 
-		if !isFirstRun {
-			if ev.Event == "FSDJump" {
-				jw.sendRouteUpdate()
-			}
-
-			err = models.UpdateStatusEarnings()
-			if err != nil {
-				slog.Warn(fmt.Sprintf("error updating status earnings: %v", err))
-			}
+		if !isFirstRun && ev.Event == "FSDJump" {
+			jw.sendRouteUpdate()
 		}
 	}
 
 	if !isFirstRun {
+		err := models.UpdateStatusEarnings()
+		if err != nil {
+			slog.Warn(fmt.Sprintf("error updating status earnings: %v", err))
+		}
+
 		jw.sendStatusUpdate()
 		jw.sendSystemUpdate()
 	}

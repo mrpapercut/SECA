@@ -47,6 +47,8 @@ export default function Dashboard() {
         bodiesWithBioSignals = getBodiesWithBioSignals(currentSystem);
     }
 
+    console.log(currentStatus);
+
     let discoveredCurrent = false;
     let primaryStarTypeCurrent = '';
     let discoveredNextStop = false;
@@ -95,6 +97,19 @@ export default function Dashboard() {
                     <div>{currentStatus.body}</div>
                 </>}
 
+                {currentStatus.current_sample !== '' && <>
+                    <hr className={styles.divider} />
+
+                    <div>Current sample:</div>
+                    <div>{currentStatus.current_sample}</div>
+
+                    <div>Sampling progress:</div>
+                    <div>{currentStatus.sample_progress} / 3</div>
+
+                    <div>Sample base value:</div>
+                    <div>{currentStatus.sample_base_value}</div>
+                </>}
+
                 {currentSystem && (worthMapping.length > 0 || bodiesWithBioSignals.length > 0) && <>
                     <hr className={styles.divider} />
 
@@ -107,7 +122,7 @@ export default function Dashboard() {
                         <div>Bodies with bio signals:</div>
                         <div>
                             {bodiesWithBioSignals.map((b, i) =>
-                                <div key={`bodyBio_${i}`}>{b.name} {b.bioSubtype.length > 0 ? `(${b.bioSubtype.join(', ')})` : `(${b.count})`}</div>
+                                <div key={`bodyBio_${i}`}>{b.name} {b.bioSubtype.length > 0 ? `(${b.bioSubtype.join(', ')})` : `(${b.count} signals, ${b.planetClass}, ${b.distance.toFixed(0)} ls)`}</div>
                             )}
                         </div>
                     </>}

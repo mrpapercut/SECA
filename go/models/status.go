@@ -3,25 +3,28 @@ package models
 import "fmt"
 
 type Status struct {
-	ID             uint    `gorm:"autoIncrement,primaryKey" json:"-"`
-	Identifier     string  `json:"-"`
-	CommanderName  string  `json:"commander_name"`
-	Balance        int64   `json:"balance"`
-	ShipName       string  `json:"ship_name"`
-	ShipType       string  `json:"ship_type"`
-	FuelLevel      float64 `json:"fuel_level"`
-	FuelCapacity   float64 `json:"fuel_capacity"`
-	System         string  `json:"current_system"`
-	Body           string  `json:"body"`
-	Landed         bool    `json:"is_landed"`
-	Docked         bool    `json:"is_docked"`
-	OnFoot         bool    `json:"is_on_foot"`
-	InSRV          bool    `json:"is_in_srv"`
-	Exploration    int64   `json:"estimated_exploration_value"`
-	Biological     int64   `json:"estimated_biological_value"`
-	SystemsVisited int64   `json:"systems_visited"`
-	TotalJumps     int64   `json:"total_jumps"`
-	TotalDistance  float64 `json:"total_distance"`
+	ID              uint    `gorm:"autoIncrement,primaryKey" json:"-"`
+	Identifier      string  `json:"-"`
+	CommanderName   string  `json:"commander_name"`
+	Balance         int64   `json:"balance"`
+	ShipName        string  `json:"ship_name"`
+	ShipType        string  `json:"ship_type"`
+	FuelLevel       float64 `json:"fuel_level"`
+	FuelCapacity    float64 `json:"fuel_capacity"`
+	System          string  `json:"current_system"`
+	Body            string  `json:"body"`
+	Landed          bool    `json:"is_landed"`
+	Docked          bool    `json:"is_docked"`
+	OnFoot          bool    `json:"is_on_foot"`
+	InSRV           bool    `json:"is_in_srv"`
+	Exploration     int64   `json:"estimated_exploration_value"`
+	Biological      int64   `json:"estimated_biological_value"`
+	SystemsVisited  int64   `json:"systems_visited"`
+	TotalJumps      int64   `json:"total_jumps"`
+	TotalDistance   float64 `json:"total_distance"`
+	CurrentSample   string  `json:"current_sample"`
+	SampleProgress  int64   `json:"sample_progress"`
+	SampleBaseValue int64   `json:"sample_base_value"`
 }
 
 const statusIdentifier = "CURRENT_STATUS"
@@ -142,6 +145,36 @@ func UpdateStatusEarnings() error {
 		return fmt.Errorf("error getting biological value: %v", err)
 	}
 	status.Biological = biologicalValue
+
+	return db.Save(&status).Error
+}
+
+func SetCurrentSample(sampleSpecies BiologicalSpecies, sampleVariant string) error {
+	status, err := GetStatus()
+	if err != nil {
+		return fmt.Errorf("error getting status: %v", err)
+	}
+
+	if status.CurrentSample != sampleVariant {
+		status.CurrentSample = sampleVariant
+		status.SampleProgress = 1
+		status.SampleBaseValue = GetBiologicalScanValue(sampleSpecies, false)
+	} else {
+		status.SampleProgress += 1
+	}
+
+	return db.Save(&status).Error
+}
+
+func ClearCurrentSample() error {
+	status, err := GetStatus()
+	if err != nil {
+		return fmt.Errorf("error getting status: %v", err)
+	}
+
+	status.CurrentSample = ""
+	status.SampleProgress = 0
+	status.SampleBaseValue = 0
 
 	return db.Save(&status).Error
 }

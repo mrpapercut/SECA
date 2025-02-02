@@ -30,11 +30,37 @@ func (eh *EventHandler) handleEventScanOrganic(rawEvent string) error {
 		return err
 	}
 
-	// Only register fully analysed scans
-	if event.ScanType != ScanTypeAnalyse {
-		return nil
+	switch event.ScanType {
+	case ScanTypeLog:
+		return eh.handleScanTypeLog(event)
+	case ScanTypeSample:
+		return eh.handleScanTypeSample(event)
+	case ScanTypeAnalyse:
+		return eh.handleScanTypeAnalyse(event)
 	}
 
+	return nil
+}
+
+func (eh *EventHandler) handleScanTypeLog(event ScanOrganicEvent) error {
+	err := models.SetCurrentSample(event.Species, event.Variant)
+	if err != nil {
+		return fmt.Errorf("error setting current sample: %v", err)
+	}
+
+	return nil
+}
+
+func (eh *EventHandler) handleScanTypeSample(event ScanOrganicEvent) error {
+	err := models.SetCurrentSample(event.Species, event.Variant)
+	if err != nil {
+		return fmt.Errorf("error setting current sample: %v", err)
+	}
+
+	return nil
+}
+
+func (eh *EventHandler) handleScanTypeAnalyse(event ScanOrganicEvent) error {
 	system, err := models.GetSystemByAddress(event.SystemAddress)
 	if err != nil {
 		return fmt.Errorf("error getting system: %v", err)
@@ -61,6 +87,11 @@ func (eh *EventHandler) handleEventScanOrganic(rawEvent string) error {
 	err = models.SaveBiologicalScan(scan)
 	if err != nil {
 		return fmt.Errorf("error creating organic scan: %v", err)
+	}
+
+	err = models.ClearCurrentSample()
+	if err != nil {
+		return fmt.Errorf("error clearing current sample: %v", err)
 	}
 
 	return nil

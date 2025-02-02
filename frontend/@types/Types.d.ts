@@ -16,6 +16,9 @@ interface CurrentStatus {
     systems_visited: number
     total_distance: number
     total_jumps: number
+    current_sample: string
+    sample_progress: number
+    sample_base_value: number
 }
 
 interface CurrentRoute {
@@ -107,7 +110,9 @@ interface BiologicalScan {
 
 interface BodyWithBioSignals {
     name: string
+    bodyID: number
+    planetClass: PlanetClass
+    distance: number
     bioSubtype: string[]
     count: number
-    bodyID: number
 }

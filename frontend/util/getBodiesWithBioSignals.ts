@@ -7,10 +7,12 @@ export default function getBodiesWithBioSignals(system: System): BodyWithBioSign
 
         if (bioSignals) {
             bodiesWithBioSignals.push({
-                name: body.Name.replace(system.Name, ''),
+                name: body.Name.replace(system.Name, '').trim(),
+                bodyID: body.BodyID,
+                planetClass: body.PlanetClass,
+                distance: body.DistanceFromArrivalLS,
                 bioSubtype: bioSignals.SubType.split(',').filter(t => t !== ''),
                 count: bioSignals.Count,
-                bodyID: body.BodyID
             });
         }
     });
