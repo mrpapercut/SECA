@@ -102,10 +102,10 @@ export default function Dashboard() {
                     <div>{currentStatus.current_sample}</div>
 
                     <div>Sampling progress:</div>
-                    <div>{currentStatus.sample_progress} / 3</div>
+                    <div>{currentStatus.sample_progress}/3</div>
 
                     <div>Sample base value:</div>
-                    <div>{currentStatus.sample_base_value}</div>
+                    <div>{currentStatus.sample_base_value.toLocaleString()}</div>
                 </>}
 
                 {currentSystem && (worthMapping.length > 0 || bodiesWithBioSignals.length > 0) && <>
