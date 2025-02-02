@@ -120,7 +120,7 @@ export default function Dashboard() {
                         <div>Bodies with bio signals:</div>
                         <div>
                             {bodiesWithBioSignals.map((b, i) =>
-                                <div key={`bodyBio_${i}`}>{b.name} {b.bioSubtype.length > 0 ? `(${b.bioSubtype.join(', ')})` : `(${b.count} signals, ${b.planetClass}, ${b.distance.toFixed(0)} ls)`}</div>
+                                <div key={`bodyBio_${i}`}>{b.name} {b.bioSubtype.length > 0 ? `(${b.bioSubtype.join(', ')})` : `(${b.count > 1 ? `${b.count} signals` : `${b.count} signal`}, ${b.planetClass}, ${b.distance.toFixed(0)} ls)`}</div>
                             )}
                         </div>
                     </>}
