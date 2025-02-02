@@ -47,8 +47,6 @@ export default function Dashboard() {
         bodiesWithBioSignals = getBodiesWithBioSignals(currentSystem);
     }
 
-    console.log(currentStatus);
-
     let discoveredCurrent = false;
     let primaryStarTypeCurrent = '';
     let discoveredNextStop = false;
