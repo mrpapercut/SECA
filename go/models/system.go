@@ -15,6 +15,7 @@ type System struct {
 	StarPosY        float64
 	StarPosZ        float64
 	Bodies          []*Body `gorm:"foreignKey:SystemID"`
+	FSSSignals      []*FSSSignal
 	LastVisited     time.Time
 	PrimaryStarType string
 }

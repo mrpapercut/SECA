@@ -11,6 +11,7 @@ import (
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/mrpapercut/seca/config"
+	"github.com/mrpapercut/seca/journal/events"
 	"github.com/mrpapercut/seca/models"
 )
 
@@ -89,6 +90,9 @@ func (jw *JournalWatcher) ProcessExistingFiles() {
 				jcontents := strings.Split(string(contents), "\n")
 				jw.processJournalLines(jcontents, isFirstRun)
 			}
+
+			slog.Info("statistics:", "events handled", events.EHL)
+
 			continue
 		}
 

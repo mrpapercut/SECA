@@ -121,7 +121,7 @@ func (s *ModelSuite) TestGetSystemWithBodies(c *check.C) {
 	err = SaveBody(body)
 	c.Assert(err, check.IsNil)
 
-	signal := &Signal{
+	signal := &BodySignal{
 		SystemID: system.ID,
 		System:   *system,
 		BodyID:   body.ID,
@@ -131,7 +131,7 @@ func (s *ModelSuite) TestGetSystemWithBodies(c *check.C) {
 		Count:    2,
 	}
 
-	err = SaveSignal(signal)
+	err = SaveBodySignal(signal)
 	c.Assert(err, check.IsNil)
 
 	explScan := &ExplorationScan{

@@ -3,7 +3,6 @@ package models
 import (
 	"errors"
 	"fmt"
-	"reflect"
 
 	"gorm.io/gorm"
 )
@@ -21,7 +20,7 @@ type Body struct {
 	Mapped                bool
 	Footfall              bool
 
-	Signals          []Signal          `gorm:"foreignKey:BodyID" json:"signals"`
+	Signals          []BodySignal      `gorm:"foreignKey:BodyID" json:"signals"`
 	ExplorationScans []ExplorationScan `gorm:"foreignKey:BodyID" json:"exploration_scans"`
 	BiologicalScans  []BiologicalScan  `gorm:"foreignKey:BodyID" json:"biological_scans"`
 
@@ -63,6 +62,7 @@ type Body struct {
 	// Composition           Composition
 }
 
+/*
 func UpdateBodyStruct(existing, incoming Body) Body {
 	existingValue := reflect.ValueOf(existing)
 	incomingValue := reflect.ValueOf(incoming)
@@ -96,6 +96,7 @@ func UpdateBodyStruct(existing, incoming Body) Body {
 
 	return returnBody
 }
+*/
 
 func SaveBody(body *Body) error {
 	existingBody, err := GetBodyByName(body.Name)
@@ -103,12 +104,36 @@ func SaveBody(body *Body) error {
 		return err
 	}
 
-	if existingBody != nil && existingBody.ID != 0 {
-		updatedBody := UpdateBodyStruct(*existingBody, *body)
-		body = &updatedBody
+	if existingBody == nil {
+		return db.Save(&body).Error
 	}
 
-	return db.Save(&body).Error
+	// Because bodies contain either very little or all the information,
+	// it should be sufficient to only check a few properties. If any of these
+	// have different info from the original, update the whole thing
+	changed := false
+	if existingBody.DistanceFromArrivalLS == float64(0) && existingBody.DistanceFromArrivalLS != body.DistanceFromArrivalLS {
+		changed = true
+	}
+
+	if existingBody.SurfaceTemperature == float64(0) && existingBody.SurfaceTemperature != body.SurfaceTemperature {
+		changed = true
+	}
+
+	if existingBody.StellarMass == float64(0) && existingBody.StellarMass != body.StellarMass {
+		changed = true
+	}
+
+	if existingBody.MassEM == float64(0) && existingBody.MassEM != body.MassEM {
+		changed = true
+	}
+
+	if changed {
+		body.ID = existingBody.ID
+		return db.Save(&body).Error
+	}
+
+	return nil
 }
 
 func GetBodies(systemAddress int64) ([]*Body, error) {
@@ -155,48 +180,66 @@ func GetBodyByName(name string) (*Body, error) {
 }
 
 func SetBodyDiscovered(body *Body) error {
-	retrievedBody, err := GetBodyByName(body.Name)
-	if err != nil {
-		return fmt.Errorf("error getting body: %v", err)
-	}
+	/*
+		retrievedBody, err := GetBodyByName(body.Name)
+		if err != nil {
+			return fmt.Errorf("error getting body: %v", err)
+		}
 
-	retrievedBody.Discovered = true
+		retrievedBody.Discovered = true
 
-	err = db.Save(retrievedBody).Error
+		err = db.Save(retrievedBody).Error
+		if err != nil {
+			return fmt.Errorf("error saving body updated with Discovered: %v", err)
+		}
+	*/
+	err := db.Model(&Body{}).Where("name = ?", body.Name).Update("discovered", true).Error
 	if err != nil {
-		return fmt.Errorf("error saving body updated with Discovered: %v", err)
+		return fmt.Errorf("error updating 'discovered' for body: %v", err)
 	}
 
 	return nil
 }
 
 func SetBodyMapped(body *Body) error {
-	retrievedBody, err := GetBodyByName(body.Name)
-	if err != nil {
-		return fmt.Errorf("error getting body: %v", err)
-	}
+	/*
+		retrievedBody, err := GetBodyByName(body.Name)
+		if err != nil {
+			return fmt.Errorf("error getting body: %v", err)
+		}
 
-	retrievedBody.Mapped = true
+		retrievedBody.Mapped = true
 
-	err = db.Save(retrievedBody).Error
+		err = db.Save(retrievedBody).Error
+		if err != nil {
+			return fmt.Errorf("error saving body updated with Mapped: %v", err)
+		}
+	*/
+	err := db.Model(&Body{}).Where("name = ?", body.Name).Update("mapped", true).Error
 	if err != nil {
-		return fmt.Errorf("error saving body updated with Mapped: %v", err)
+		return fmt.Errorf("error updating 'mapped' for body: %v", err)
 	}
 
 	return nil
 }
 
 func SetBodyFootfall(body *Body) error {
-	retrievedBody, err := GetBodyByName(body.Name)
-	if err != nil {
-		return fmt.Errorf("error getting body: %v", err)
-	}
+	/*
+		retrievedBody, err := GetBodyByName(body.Name)
+		if err != nil {
+			return fmt.Errorf("error getting body: %v", err)
+		}
 
-	retrievedBody.Footfall = true
+		retrievedBody.Footfall = true
 
-	err = db.Save(retrievedBody).Error
+		err = db.Save(retrievedBody).Error
+		if err != nil {
+			return fmt.Errorf("error saving body updated with Footfall: %v", err)
+		}
+	*/
+	err := db.Model(&Body{}).Where("name = ?", body.Name).Update("footfall", true).Error
 	if err != nil {
-		return fmt.Errorf("error saving body updated with Footfall: %v", err)
+		return fmt.Errorf("error updating 'footfall' for body: %v", err)
 	}
 
 	return nil

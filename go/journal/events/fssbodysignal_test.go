@@ -40,7 +40,7 @@ func (s *EventSuite) TestHandleEventFSSBodySignals(c *check.C) {
 		c.Assert(err, check.IsNil)
 	}
 
-	testSignals := [][]*models.Signal{{
+	testSignals := [][]*models.BodySignal{{
 		{Type: models.SignalBiological, Count: 1},
 		{Type: models.SignalGeological, Count: 3},
 	}, {

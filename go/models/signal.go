@@ -17,7 +17,7 @@ const (
 	SignalOther      SignalType = "Other"
 )
 
-type Signal struct {
+type BodySignal struct {
 	ID       uint       `gorm:"primaryKey"`
 	SystemID uint       `gorm:"not null"`
 	System   System     `gorm:"foreignKey:SystemID"`
@@ -28,8 +28,8 @@ type Signal struct {
 	Count    int64
 }
 
-func SaveSignal(signal *Signal) error {
-	var existingSignal Signal
+func SaveBodySignal(signal *BodySignal) error {
+	var existingSignal BodySignal
 
 	err := db.Where("system_id = ? AND body_id = ? AND type = ?", signal.SystemID, signal.BodyID, signal.Type).First(&existingSignal).Error
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
@@ -43,8 +43,8 @@ func SaveSignal(signal *Signal) error {
 	return db.Save(&signal).Error
 }
 
-func GetBodySignals(body *Body) ([]*Signal, error) {
-	var signals []*Signal
+func GetBodySignals(body *Body) ([]*BodySignal, error) {
+	var signals []*BodySignal
 	err := db.Where("system_id = ? AND body_id = ?", body.SystemID, body.ID).Find(&signals).Error
 	if err != nil {
 		return nil, err

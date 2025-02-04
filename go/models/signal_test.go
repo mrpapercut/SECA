@@ -13,7 +13,7 @@ func (s *ModelSuite) TestCreateGeologicalSignal(c *check.C) {
 	err = SaveBody(body)
 	c.Assert(err, check.IsNil)
 
-	signal := &Signal{
+	signal := &BodySignal{
 		SystemID: system.ID,
 		System:   *system,
 		BodyID:   body.ID,
@@ -22,7 +22,7 @@ func (s *ModelSuite) TestCreateGeologicalSignal(c *check.C) {
 		Count:    1,
 	}
 
-	err = SaveSignal(signal)
+	err = SaveBodySignal(signal)
 	c.Assert(err, check.IsNil)
 
 	retrievedSignals, err := GetBodySignals(body)
@@ -44,7 +44,7 @@ func (s *ModelSuite) TestCreateBiologicalSignals(c *check.C) {
 	c.Assert(err, check.IsNil)
 	c.Assert(noRetrievedSignals, check.HasLen, 0)
 
-	signal := &Signal{
+	signal := &BodySignal{
 		SystemID: system.ID,
 		System:   *system,
 		BodyID:   body.ID,
@@ -53,7 +53,7 @@ func (s *ModelSuite) TestCreateBiologicalSignals(c *check.C) {
 		Count:    2,
 	}
 
-	err = SaveSignal(signal)
+	err = SaveBodySignal(signal)
 	c.Assert(err, check.IsNil)
 
 	retrievedSignals, err := GetBodySignals(body)
@@ -61,7 +61,7 @@ func (s *ModelSuite) TestCreateBiologicalSignals(c *check.C) {
 	c.Assert(retrievedSignals, check.HasLen, 1)
 	c.Assert(retrievedSignals[0].Count, check.Equals, signal.Count)
 
-	updatedSignal := &Signal{
+	updatedSignal := &BodySignal{
 		SystemID: system.ID,
 		System:   *system,
 		BodyID:   body.ID,
@@ -71,7 +71,7 @@ func (s *ModelSuite) TestCreateBiologicalSignals(c *check.C) {
 		Count:    2,
 	}
 
-	err = SaveSignal(updatedSignal)
+	err = SaveBodySignal(updatedSignal)
 	c.Assert(err, check.IsNil)
 
 	retriedUpdatedSignals, err := GetBodySignals(body)

@@ -87,6 +87,13 @@ func handleGetCurrentSystemRequest() ([]byte, error) {
 		return nil, fmt.Errorf("error getting system with bodies: %v", err)
 	}
 
+	fssSignals, err := models.GetFSSSignalsBySystem(systemWithBodies)
+	if err != nil {
+		return nil, fmt.Errorf("error getting fss signals for system: %v", err)
+	}
+
+	systemWithBodies.FSSSignals = fssSignals
+
 	systemResponse := &ResponseSystem{
 		Type:   "getCurrentSystem",
 		System: systemWithBodies,

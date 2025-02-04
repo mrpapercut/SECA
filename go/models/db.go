@@ -101,7 +101,12 @@ func Cleanup(c *check.C) {
 		c.Fatalf("Failed to tear down test: %v", err)
 	}
 
-	err = db.Where("1 = 1").Delete(&Signal{}).Error
+	err = db.Where("1 = 1").Delete(&BodySignal{}).Error
+	if err != nil {
+		c.Fatalf("Failed to tear down test: %v", err)
+	}
+
+	err = db.Where("1 = 1").Delete(&FSSSignal{}).Error
 	if err != nil {
 		c.Fatalf("Failed to tear down test: %v", err)
 	}
@@ -115,7 +120,8 @@ func migrateModels() error {
 		&Body{},
 		&ExplorationScan{},
 		&BiologicalScan{},
-		&Signal{},
+		&BodySignal{},
+		&FSSSignal{},
 	)
 }
 

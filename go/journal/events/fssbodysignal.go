@@ -65,7 +65,7 @@ func (eh *EventHandler) handleEventFSSBodySignals(rawEvent string) error {
 			}
 		}
 
-		signal := &models.Signal{
+		signal := &models.BodySignal{
 			SystemID: system.ID,
 			System:   *system,
 			BodyID:   body.ID,
@@ -75,7 +75,7 @@ func (eh *EventHandler) handleEventFSSBodySignals(rawEvent string) error {
 			Count:    int64(s.Count),
 		}
 
-		err = models.SaveSignal(signal)
+		err = models.SaveBodySignal(signal)
 		if err != nil {
 			return fmt.Errorf("error creating signal: %v", err)
 		}
