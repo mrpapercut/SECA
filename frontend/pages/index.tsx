@@ -9,6 +9,7 @@ import { useSocket } from '@/contexts/SocketContext';
 import getUnmappedWorthyBodies from '@/util/getUnmappedWorthyBodies';
 import getBodiesWithBioSignals from '@/util/getBodiesWithBioSignals';
 import findMainStarInBodies from '@/util/findMainStarInBodies';
+import getSystemSignals from '@/util/getSystemSignals';
 
 export default function Dashboard() {
     const {socket, isConnected} = useSocket();
@@ -45,6 +46,11 @@ export default function Dashboard() {
     if (currentSystem && Object.hasOwn(currentSystem, 'Bodies')) {
         worthMapping = getUnmappedWorthyBodies(currentSystem);
         bodiesWithBioSignals = getBodiesWithBioSignals(currentSystem);
+    }
+
+    let systemSignals: SystemSignalCount = {};
+    if (currentSystem && Object.hasOwn(currentSystem, 'FSSSignals')) {
+        systemSignals = getSystemSignals(currentSystem);
     }
 
     let discoveredCurrent = false;
@@ -124,6 +130,16 @@ export default function Dashboard() {
                             )}
                         </div>
                     </>}
+                </>}
+
+                {currentSystem && Object.keys(systemSignals).length > 0 && <>
+                    <hr className={styles.divider} />
+
+                    <div>System signals:</div><div></div>
+                    {Object.keys(systemSignals).map(signalName => <>
+                        <div>{signalName}</div>
+                        <div>{systemSignals[signalName]}</div>
+                    </>)}
                 </>}
 
                 {currentRoute.length > 1 && <>

@@ -33,6 +33,7 @@ interface System {
     StarPosY: number
     StarPosZ: number
     Bodies: Body[]
+    FSSSignals: FSSSignal[]
     LastVisited: Date
     PrimaryStarType: string
 }
@@ -82,6 +83,17 @@ interface Body {
     SurfaceGravity: number
     SurfacePressure: number
     Landable: boolean
+}
+
+interface FSSSignal {
+    System: System
+    SignalName: string
+    SignalType: string
+    IsStation: boolean
+}
+
+interface SystemSignalCount {
+    [key: string]: number
 }
 
 interface Signal {
