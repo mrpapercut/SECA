@@ -1,24 +1,22 @@
 interface CurrentStatus {
     commander_name: string
-    balance: number
-    ship_type: string
     ship_name: string
-    fuel_level: number
-    fuel_capacity: number
+    ship_type: string
+    credits: number
+    state: string
     current_system: string
-    body: string
-    is_landed: boolean
-    is_docked: boolean
-    is_on_foot: boolean
-    is_in_srv: boolean
-    estimated_exploration_value: number
-    estimated_biological_value: number
-    systems_visited: number
-    total_distance: number
-    total_jumps: number
+    current_body: string
     current_sample: string
     sample_progress: number
     sample_base_value: number
+    sample_ccr: number
+    estimated_exploration_value: number
+    estimated_biological_value: number
+    systems_visited: number
+    total_jumps: number
+    total_distance: number
+    fuel_level: number
+    fuel_capacity: number
 }
 
 interface CurrentRoute {
