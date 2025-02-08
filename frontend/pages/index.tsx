@@ -8,41 +8,33 @@ import { useSocket } from '@/contexts/SocketContext';
 
 import getUnmappedWorthyBodies from '@/util/getUnmappedWorthyBodies';
 import getBodiesWithBioSignals from '@/util/getBodiesWithBioSignals';
-import findMainStarInBodies from '@/util/findMainStarInBodies';
 import getSystemSignals from '@/util/getSystemSignals';
 import translateState from '@/util/translateState';
+import CurrentRoute from '@/components/CurrentRoute';
 
 export default function Dashboard() {
     const { socket, isConnected } = useSocket();
     const [currentStatus, setCurrentStatus] = useState({} as CurrentStatus);
-    const [currentRoute, setCurrentRoute] = useState([] as CurrentRoute[]);
-    const [currentRouteDistance, setCurrentRouteDistance] = useState(0 as number);
     const [currentSystem, setCurrentSystem] = useState({} as System);
 
     useEffect(() => {
         if (!socket) return;
 
         socket.addListener('getStatus', response => setCurrentStatus(response.status as CurrentStatus))
-        socket.addListener('getRoute', response => {
-            setCurrentRoute(response.route as CurrentRoute[]);
-            setCurrentRouteDistance(response.total_distance as number);
-        });
         socket.addListener('getCurrentSystem', response => setCurrentSystem(response.system as System));
 
         if (isConnected) {
             socket.sendMessage('getStatus');
-            socket.sendMessage('getRoute');
             socket.sendMessage('getCurrentSystem');
         }
 
         return () => {
             socket.removeListener('getStatus');
-            socket.removeListener('getRoute');
             socket.removeListener('getCurrentSystem');
         }
     }, [socket, isConnected]);
 
-    console.log({currentStatus, currentSystem, currentRoute});
+    console.log({currentStatus, currentSystem});
 
     let worthMapping: string[] = [];
     let bodiesWithBioSignals: BodyWithBioSignals[] = [];
@@ -56,27 +48,7 @@ export default function Dashboard() {
         systemSignals = getSystemSignals(currentSystem);
     }
 
-    let discoveredCurrent = false;
-    let primaryStarTypeCurrent = '';
-    let discoveredNextStop = false;
-    let primaryStarTypeNextStop = '';
-    let discoveredDestination = false;
-    let primaryStarTypeDestination = '';
-    if (currentRoute.length > 0) {
-        const currentMainStar = findMainStarInBodies(currentRoute[0].System.Bodies);
-        discoveredCurrent = currentMainStar.WasDiscovered;
-        primaryStarTypeCurrent = currentRoute[0].System.PrimaryStarType;
 
-        const destinationMainStar = findMainStarInBodies(currentRoute[currentRoute.length - 1].System.Bodies);
-        discoveredDestination = destinationMainStar.WasDiscovered;
-        primaryStarTypeDestination = currentRoute[currentRoute.length - 1].System.PrimaryStarType;
-
-        if (currentRoute.length > 1) {
-            const nextMainStar = findMainStarInBodies(currentRoute[1].System.Bodies);
-            discoveredNextStop = nextMainStar.WasDiscovered;
-            primaryStarTypeNextStop = currentRoute[1].System.PrimaryStarType;
-        }
-    }
 
     return <>
         <div className={isConnected ? styles.isConnected : styles.isNotConnected}>
@@ -97,7 +69,7 @@ export default function Dashboard() {
                 <div>{translateState(currentStatus.state)}</div>
 
                 <div>Current system:</div>
-                <div className={!discoveredCurrent ? styles.newDiscovered : ''}>{currentStatus.current_system} {primaryStarTypeCurrent !== '' ? `(type ${primaryStarTypeCurrent})` : ''}</div>
+                <div>{currentStatus.current_system}</div>
 
                 {currentStatus.current_body !== '' && currentStatus.current_body !== currentStatus.current_system && <>
                     <div>Current body:</div>
@@ -145,21 +117,7 @@ export default function Dashboard() {
                     </>)}
                 </>}
 
-                {currentRoute.length > 1 && <>
-                    <hr className={styles.divider} />
-
-                    <div>Next stop:</div>
-                    <div className={!discoveredNextStop ? styles.newDiscovered : ''}>{currentRoute[1].System.Name} {primaryStarTypeNextStop !== '' ? `(type ${primaryStarTypeNextStop})` : ''}</div>
-
-                    <div>Destination:</div>
-                    <div className={!discoveredDestination ? styles.newDiscovered : ''}>{currentRoute[currentRoute.length - 1].System.Name}  {primaryStarTypeDestination !== '' ? `(type ${primaryStarTypeDestination})` : ''}</div>
-
-                    <div>Route length:</div>
-                    <div>{parseInt(currentRouteDistance.toFixed(2), 10).toLocaleString()} ly</div>
-
-                    <div>Total stops:</div>
-                    <div>{currentRoute.length - 1}</div>
-                </>}
+                <CurrentRoute />
 
                 <hr className={styles.divider} />
 
