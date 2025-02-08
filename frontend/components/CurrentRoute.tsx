@@ -45,8 +45,10 @@ export default function CurrentRoute({}): ReactNode {
     return <>
         <hr className={styles.divider} />
 
-        <div>Next stop:</div>
-        <div className={!discoveredNextStop ? styles.newDiscovered : ''}>{currentRoute[1].System.Name} {primaryStarTypeNextStop !== '' ? `(type ${primaryStarTypeNextStop})` : ''}</div>
+        {currentRoute.length > 1 && <>
+            <div>Next stop:</div>
+            <div className={!discoveredNextStop ? styles.newDiscovered : ''}>{currentRoute[1].System.Name} {primaryStarTypeNextStop !== '' ? `(type ${primaryStarTypeNextStop})` : ''}</div>
+        </>}
 
         <div>Destination:</div>
         <div className={!discoveredDestination ? styles.newDiscovered : ''}>{currentRoute[currentRoute.length - 1].System.Name}  {primaryStarTypeDestination !== '' ? `(type ${primaryStarTypeDestination})` : ''}</div>

@@ -4,7 +4,7 @@ const translateState = (state: string): string => {
         supercruise: 'In supercruise',
         supercruise_charging: 'Charging supercruise',
         jumping: 'Jumping',
-        hyperdrive_charging: 'Charging hyperdrive',
+        hyperdrive_charging: 'Charging friendship drive',
         docked: 'Docked',
         landed: 'Landed',
         in_srv: 'In SRV',
