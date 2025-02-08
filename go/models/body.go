@@ -180,19 +180,6 @@ func GetBodyByName(name string) (*Body, error) {
 }
 
 func SetBodyDiscovered(body *Body) error {
-	/*
-		retrievedBody, err := GetBodyByName(body.Name)
-		if err != nil {
-			return fmt.Errorf("error getting body: %v", err)
-		}
-
-		retrievedBody.Discovered = true
-
-		err = db.Save(retrievedBody).Error
-		if err != nil {
-			return fmt.Errorf("error saving body updated with Discovered: %v", err)
-		}
-	*/
 	err := db.Model(&Body{}).Where("name = ?", body.Name).Update("discovered", true).Error
 	if err != nil {
 		return fmt.Errorf("error updating 'discovered' for body: %v", err)
@@ -202,19 +189,6 @@ func SetBodyDiscovered(body *Body) error {
 }
 
 func SetBodyMapped(body *Body) error {
-	/*
-		retrievedBody, err := GetBodyByName(body.Name)
-		if err != nil {
-			return fmt.Errorf("error getting body: %v", err)
-		}
-
-		retrievedBody.Mapped = true
-
-		err = db.Save(retrievedBody).Error
-		if err != nil {
-			return fmt.Errorf("error saving body updated with Mapped: %v", err)
-		}
-	*/
 	err := db.Model(&Body{}).Where("name = ?", body.Name).Update("mapped", true).Error
 	if err != nil {
 		return fmt.Errorf("error updating 'mapped' for body: %v", err)
@@ -224,19 +198,6 @@ func SetBodyMapped(body *Body) error {
 }
 
 func SetBodyFootfall(body *Body) error {
-	/*
-		retrievedBody, err := GetBodyByName(body.Name)
-		if err != nil {
-			return fmt.Errorf("error getting body: %v", err)
-		}
-
-		retrievedBody.Footfall = true
-
-		err = db.Save(retrievedBody).Error
-		if err != nil {
-			return fmt.Errorf("error saving body updated with Footfall: %v", err)
-		}
-	*/
 	err := db.Model(&Body{}).Where("name = ?", body.Name).Update("footfall", true).Error
 	if err != nil {
 		return fmt.Errorf("error updating 'footfall' for body: %v", err)

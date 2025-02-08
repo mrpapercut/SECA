@@ -37,19 +37,20 @@ func (ev *EventHandler) handleEventLocation(rawEvent string) error {
 		return fmt.Errorf("error creating or updating system: %v", err)
 	}
 
-	status, err := models.GetStatus()
-	if err != nil {
-		return fmt.Errorf("error getting status: %v", err)
+	status := models.GetStatus()
+
+	status.SetCurrentSystem(event.StarSystem)
+
+	if event.Body != "" {
+		status.SetCurrentBody(event.Body)
 	}
 
-	status.System = event.StarSystem
-	status.Body = event.Body
-	status.Docked = event.Docked
-	status.Landed = event.OnFoot
+	if event.Docked {
+		status.SetState(models.StateDocked)
+	}
 
-	err = models.UpdateStatus(status)
-	if err != nil {
-		return fmt.Errorf("error updating status: %v", err)
+	if event.OnFoot {
+		status.SetState(models.StateOnFootPlanet)
 	}
 
 	return nil

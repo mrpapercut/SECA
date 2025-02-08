@@ -20,8 +20,7 @@ func (s *EventSuite) TestHandleEventStatistics(c *check.C) {
 		err := s.eventHandler.handleEventStatistics(rawEvent)
 		c.Assert(err, check.IsNil)
 
-		status, err := models.GetStatus()
-		c.Assert(err, check.IsNil)
+		status := models.GetStatus()
 		c.Assert(status.SystemsVisited, check.Equals, systemsVisited[i])
 		c.Assert(status.TotalDistance, check.Equals, totalDistance[i])
 		c.Assert(status.TotalJumps, check.Equals, totalJumps[i])

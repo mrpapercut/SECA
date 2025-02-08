@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"log/slog"
 
 	"github.com/mrpapercut/seca/models"
 )
@@ -12,11 +13,20 @@ type ResponseStatus struct {
 	Status *models.Status `json:"status"`
 }
 
-func handleGetStatusRequest() ([]byte, error) {
-	status, err := models.GetStatus()
+func SendStatusUpdate() {
+	message, err := handleGetStatusRequest()
 	if err != nil {
-		return nil, fmt.Errorf("error getting status: %v", err)
+		slog.Warn(fmt.Sprintf("error sending status update: %v", err))
+		return
 	}
+
+	SendMessage(message)
+}
+
+func handleGetStatusRequest() ([]byte, error) {
+	status := models.GetStatus()
+	status.UpdateEstimatedExplorationEarnings()
+	status.UpdateEstimatedBiologicalEarnings()
 
 	statusResponse := &ResponseStatus{
 		Type:   "getStatus",
@@ -35,6 +45,16 @@ type ResponseRoute struct {
 	Type          string                     `json:"type"`
 	Route         []*models.RouteWithSystems `json:"route"`
 	TotalDistance float64                    `json:"total_distance"`
+}
+
+func SendRouteUpdate() {
+	message, err := handleGetRouteRequest()
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error sending route update: %v", err))
+		return
+	}
+
+	SendMessage(message)
 }
 
 func handleGetRouteRequest() ([]byte, error) {
@@ -67,17 +87,24 @@ type ResponseSystem struct {
 	System *models.System `json:"system"`
 }
 
-func handleGetCurrentSystemRequest() ([]byte, error) {
-	status, err := models.GetStatus()
+func SendCurrentSystemUpdate() {
+	message, err := handleGetCurrentSystemRequest()
 	if err != nil {
-		return nil, fmt.Errorf("error getting status: %v", err)
+		slog.Warn(fmt.Sprintf("error sending current system update: %v", err))
+		return
 	}
 
-	if status.System == "" {
+	SendMessage(message)
+}
+
+func handleGetCurrentSystemRequest() ([]byte, error) {
+	status := models.GetStatus()
+
+	if status.CurrentSystem == "" {
 		return nil, fmt.Errorf("error: current system not in status")
 	}
 
-	system, err := models.GetSystemByName(status.System)
+	system, err := models.GetSystemByName(status.CurrentSystem)
 	if err != nil {
 		return nil, fmt.Errorf("error getting system by name: %v", err)
 	}
@@ -110,6 +137,16 @@ func handleGetCurrentSystemRequest() ([]byte, error) {
 type ResponseFlightlog struct {
 	Type      string           `json:"type"`
 	Flightlog []*models.System `json:"flightlog"`
+}
+
+func SendFlightlogUpdate() {
+	message, err := handleGetFlightlogRequest()
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error sending flightlog update: %v", err))
+		return
+	}
+
+	SendMessage(message)
 }
 
 func handleGetFlightlogRequest() ([]byte, error) {

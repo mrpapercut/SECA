@@ -1,8 +1,6 @@
 package events
 
 import (
-	"fmt"
-
 	"github.com/mrpapercut/seca/models"
 )
 
@@ -22,24 +20,14 @@ func (eh *EventHandler) handleEventLoadGame(rawEvent string) error {
 		return err
 	}
 
-	status, err := models.GetStatus()
-	if err != nil {
-		return fmt.Errorf("error getting status: %v", err)
-	}
+	status := models.GetStatus()
 
-	status.Balance = int64(event.Credits)
-	status.FuelLevel = event.FuelLevel
-	status.FuelCapacity = event.FuelCapacity
-	status.Landed = event.StartLanded
+	status.SetCredits(int64(event.Credits))
+	status.SetFuelCapacity(event.FuelCapacity)
+	status.SetFuelLevel(event.FuelLevel)
 
 	if event.ShipName != "" {
-		status.ShipType = event.Ship
-		status.ShipName = event.ShipName
-	}
-
-	err = models.UpdateStatus(status)
-	if err != nil {
-		return fmt.Errorf("error updating status: %v", err)
+		status.SetShip(event.ShipName, event.Ship)
 	}
 
 	return nil

@@ -16,6 +16,7 @@ const (
 	Commander                EventType = "Commander"
 	Location                 EventType = "Location"
 	LoadGame                 EventType = "LoadGame"
+	Loadout                  EventType = "Loadout"
 	Scan                     EventType = "Scan"
 	FSSBodySignals           EventType = "FSSBodySignals"
 	SAAScanComplete          EventType = "SAAScanComplete"
@@ -177,6 +178,10 @@ func (eh *EventHandler) HandleEvent(eventType string, rawEvent string) error {
 	case "FSSSignalDiscovered":
 		EHL.FSSSignalDiscovered++
 		return eh.handleEventFSSSignalDiscovered(rawEvent)
+	case "Loadout":
+		// return eh.handleEventLoadout(rawEvent)
+	case "Status":
+		return eh.handleEventStatus(rawEvent)
 	}
 
 	return nil

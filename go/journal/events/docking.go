@@ -41,22 +41,9 @@ func (eh *EventHandler) handleEventDocked(rawEvent string) error {
 		return err
 	}
 
-	status, err := models.GetStatus()
-	if err != nil {
-		return fmt.Errorf("error getting status: %v", err)
-	}
-
-	status.System = string(event.StarSystem)
-	status.Body = string(event.StationName)
-	status.Docked = true
-	status.Landed = false
-	status.OnFoot = false
-	status.InSRV = false
-
-	err = models.UpdateStatus(status)
-	if err != nil {
-		return fmt.Errorf("error updating status: %v", err)
-	}
+	status := models.GetStatus()
+	status.SetCurrentSystem(string(event.StarSystem))
+	status.SetCurrentBody(string(event.StationName))
 
 	return nil
 }
@@ -76,21 +63,8 @@ func (eh *EventHandler) handleEventUndocked(rawEvent string) error {
 		return err
 	}
 
-	status, err := models.GetStatus()
-	if err != nil {
-		return fmt.Errorf("error getting status: %v", err)
-	}
-
-	status.Body = ""
-	status.Docked = false
-	status.Landed = false
-	status.OnFoot = false
-	status.InSRV = false
-
-	err = models.UpdateStatus(status)
-	if err != nil {
-		return fmt.Errorf("error updating status: %v", err)
-	}
+	status := models.GetStatus()
+	status.SetCurrentBody("")
 
 	return nil
 }
@@ -113,25 +87,27 @@ type EventEmbark struct {
 }
 
 func (eh *EventHandler) handleEventEmbark(rawEvent string) error {
-	event, err := ParseEvent[EventEmbark](rawEvent)
-	if err != nil {
-		return err
-	}
+	/*
+		event, err := ParseEvent[EventEmbark](rawEvent)
+		if err != nil {
+			return err
+		}
 
-	status, err := models.GetStatus()
-	if err != nil {
-		return fmt.Errorf("error getting status: %v", err)
-	}
+		status := models.GetStatus()
+		if err != nil {
+			return fmt.Errorf("error getting status: %v", err)
+		}
 
-	status.Docked = event.OnStation
-	status.Landed = event.OnPlanet
-	status.OnFoot = false
-	status.InSRV = event.SRV
+		status.Docked = event.OnStation
+		status.Landed = event.OnPlanet
+		status.OnFoot = false
+		status.InSRV = event.SRV
 
-	err = models.UpdateStatus(status)
-	if err != nil {
-		return fmt.Errorf("error updating status: %v", err)
-	}
+		err = models.UpdateStatus(status)
+		if err != nil {
+			return fmt.Errorf("error updating status: %v", err)
+		}
+	*/
 
 	return nil
 }
@@ -159,15 +135,17 @@ func (eh *EventHandler) handleEventDisembark(rawEvent string) error {
 		return err
 	}
 
-	status, err := models.GetStatus()
-	if err != nil {
-		return fmt.Errorf("error getting status: %v", err)
-	}
+	/*
+		status, err := models.GetStatus()
+		if err != nil {
+			return fmt.Errorf("error getting status: %v", err)
+		}
 
-	status.Docked = event.OnStation
-	status.Landed = event.OnPlanet
-	status.OnFoot = true
-	status.InSRV = false
+		status.Docked = event.OnStation
+		status.Landed = event.OnPlanet
+		status.OnFoot = true
+		status.InSRV = false
+	*/
 
 	if event.OnPlanet {
 		body, err := models.GetBody(int64(event.SystemAddress), int64(event.BodySystemID))
@@ -184,10 +162,12 @@ func (eh *EventHandler) handleEventDisembark(rawEvent string) error {
 		}
 	}
 
-	err = models.UpdateStatus(status)
-	if err != nil {
-		return fmt.Errorf("error updating status: %v", err)
-	}
+	/*
+		err = models.UpdateStatus(status)
+		if err != nil {
+			return fmt.Errorf("error updating status: %v", err)
+		}
+	*/
 
 	return nil
 }
@@ -208,25 +188,27 @@ type EventTouchdown struct {
 }
 
 func (eh *EventHandler) handleEventTouchdown(rawEvent string) error {
-	event, err := ParseEvent[EventTouchdown](rawEvent)
-	if err != nil {
-		return err
-	}
+	/*
+		event, err := ParseEvent[EventTouchdown](rawEvent)
+		if err != nil {
+			return err
+		}
 
-	status, err := models.GetStatus()
-	if err != nil {
-		return fmt.Errorf("error getting status: %v", err)
-	}
+		status, err := models.GetStatus()
+		if err != nil {
+			return fmt.Errorf("error getting status: %v", err)
+		}
 
-	status.Docked = event.OnStation
-	status.Landed = event.OnPlanet
-	status.OnFoot = false
-	status.InSRV = false
+		status.Docked = event.OnStation
+		status.Landed = event.OnPlanet
+		status.OnFoot = false
+		status.InSRV = false
 
-	err = models.UpdateStatus(status)
-	if err != nil {
-		return fmt.Errorf("error updating status: %v", err)
-	}
+		err = models.UpdateStatus(status)
+		if err != nil {
+			return fmt.Errorf("error updating status: %v", err)
+		}
+	*/
 
 	return nil
 }
@@ -247,25 +229,27 @@ type EventLiftoff struct {
 }
 
 func (eh *EventHandler) handleEventLiftoff(rawEvent string) error {
-	event, err := ParseEvent[EventLiftoff](rawEvent)
-	if err != nil {
-		return err
-	}
+	/*
+		event, err := ParseEvent[EventLiftoff](rawEvent)
+		if err != nil {
+			return err
+		}
 
-	status, err := models.GetStatus()
-	if err != nil {
-		return fmt.Errorf("error getting status: %v", err)
-	}
+		status, err := models.GetStatus()
+		if err != nil {
+			return fmt.Errorf("error getting status: %v", err)
+		}
 
-	status.Docked = event.OnStation
-	status.Landed = false
-	status.OnFoot = false
-	status.InSRV = false
+		status.Docked = event.OnStation
+		status.Landed = false
+		status.OnFoot = false
+		status.InSRV = false
 
-	err = models.UpdateStatus(status)
-	if err != nil {
-		return fmt.Errorf("error updating status: %v", err)
-	}
+		err = models.UpdateStatus(status)
+		if err != nil {
+			return fmt.Errorf("error updating status: %v", err)
+		}
+	*/
 
 	return nil
 }
@@ -284,21 +268,8 @@ func (eh *EventHandler) handleEventApproachBody(rawEvent string) error {
 		return err
 	}
 
-	status, err := models.GetStatus()
-	if err != nil {
-		return fmt.Errorf("error getting status: %v", err)
-	}
-
-	status.Body = string(event.Body)
-	status.Docked = false
-	status.Landed = false
-	status.OnFoot = false
-	status.InSRV = false
-
-	err = models.UpdateStatus(status)
-	if err != nil {
-		return fmt.Errorf("error updating status: %v", err)
-	}
+	status := models.GetStatus()
+	status.SetCurrentBody(string(event.Body))
 
 	return nil
 }
@@ -317,21 +288,8 @@ func (eh *EventHandler) handleEventLeaveBody(rawEvent string) error {
 		return err
 	}
 
-	status, err := models.GetStatus()
-	if err != nil {
-		return fmt.Errorf("error getting status: %v", err)
-	}
-
-	status.Body = ""
-	status.Docked = false
-	status.Landed = false
-	status.OnFoot = false
-	status.InSRV = false
-
-	err = models.UpdateStatus(status)
-	if err != nil {
-		return fmt.Errorf("error updating status: %v", err)
-	}
+	status := models.GetStatus()
+	status.SetCurrentBody("")
 
 	return nil
 }

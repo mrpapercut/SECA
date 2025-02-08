@@ -99,6 +99,9 @@ func (jw *JournalWatcher) ProcessExistingFiles() {
 		if strings.HasSuffix(filepath, "NavRoute.json") {
 			jw.handleNavRouteUpdate(contents)
 			continue
+		} else if strings.HasSuffix(filepath, "Status.json") {
+			jw.handleStatusUpdate(contents)
+			continue
 		}
 	}
 
@@ -165,6 +168,8 @@ func (jw *JournalWatcher) handleCreateEvent(path string) {
 }
 
 func (jw *JournalWatcher) handleWriteEvent(path string) {
+	fmt.Printf("handling write event for %s\n", path)
+
 	file, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Printf("error reading file: %v", err)
@@ -175,7 +180,7 @@ func (jw *JournalWatcher) handleWriteEvent(path string) {
 		jw.handleJournalUpdate(file)
 	} else if strings.HasSuffix(path, "NavRoute.json") {
 		jw.handleNavRouteUpdate(file)
-	} /*else if strings.HasSuffix(path, "Status.json") {
+	} else if strings.HasSuffix(path, "Status.json") {
 		jw.handleStatusUpdate(file)
-	}*/
+	}
 }

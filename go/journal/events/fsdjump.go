@@ -55,20 +55,10 @@ func (eh *EventHandler) handleEventFSDJump(rawEvent string) error {
 		return fmt.Errorf("error creating or updating body: %v", err)
 	}
 
-	status, err := models.GetStatus()
-	if err != nil {
-		return fmt.Errorf("error getting status: %v", err)
-	}
-	status.System = retrievedSystem.Name
-	status.Body = body.Name
-
-	status.TotalDistance += event.JumpDistance
-	status.TotalJumps += 1
-
-	err = models.UpdateStatus(status)
-	if err != nil {
-		return fmt.Errorf("error updating status: %v", err)
-	}
+	status := models.GetStatus()
+	status.SetCurrentSystem(retrievedSystem.Name)
+	status.SetCurrentBody(body.Name)
+	status.UpdateTravelStatistics(event.JumpDistance)
 
 	return nil
 }

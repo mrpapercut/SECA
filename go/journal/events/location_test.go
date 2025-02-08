@@ -9,8 +9,6 @@ func (s *EventSuite) TestHandleEventLocation(c *check.C) {
 	systemAddresses := []int64{658605548081, 27072119940, 27072119940, 654311629785, 44400783}
 	systemNames := []string{"Oochost VC-Z b5-0", "California Sector BA-A e6", "California Sector BA-A e6", "Outopps BO-A b55-0", "S171 7"}
 	bodies := []string{"Oochost VC-Z b5-0 A 3 d", "California Sector BA-A e6 4", "California Sector BA-A e6 4", "Outopps BO-A b55-0 4 a", "S171 7 A"}
-	dockedStates := []bool{false, false, false, false, true}
-	landedStates := []bool{false, true, true, false, false}
 
 	rawEvents := []string{
 		`{ "timestamp":"2025-01-11T09:05:43Z", "event":"Location", "Latitude":-43.006790, "Longitude":-52.472473, "DistFromStarLS":1716.184526, "Docked":false, "Taxi":false, "Multicrew":false, "StarSystem":"Oochost VC-Z b5-0", "SystemAddress":658605548081, "StarPos":[-906.18750,-275.81250,-2205.34375], "SystemAllegiance":"", "SystemEconomy":"$economy_None;", "SystemEconomy_Localised":"None", "SystemSecondEconomy":"$economy_None;", "SystemSecondEconomy_Localised":"None", "SystemGovernment":"$government_None;", "SystemGovernment_Localised":"None", "SystemSecurity":"$GAlAXY_MAP_INFO_state_anarchy;", "SystemSecurity_Localised":"Anarchy", "Population":0, "Body":"Oochost VC-Z b5-0 A 3 d", "BodyID":25, "BodyType":"Planet" }`,
@@ -28,11 +26,8 @@ func (s *EventSuite) TestHandleEventLocation(c *check.C) {
 		c.Assert(err, check.IsNil)
 		c.Assert(system.Name, check.Equals, systemNames[i])
 
-		status, err := models.GetStatus()
-		c.Assert(err, check.IsNil)
-		c.Assert(status.System, check.Equals, systemNames[i])
-		c.Assert(status.Body, check.Equals, bodies[i])
-		c.Assert(status.Docked, check.DeepEquals, dockedStates[i])
-		c.Assert(status.Landed, check.Equals, landedStates[i])
+		status := models.GetStatus()
+		c.Assert(status.CurrentSystem, check.Equals, systemNames[i])
+		c.Assert(status.CurrentBody, check.Equals, bodies[i])
 	}
 }

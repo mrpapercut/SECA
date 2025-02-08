@@ -49,12 +49,8 @@ func (s *ModelSuite) TestGetRoute(c *check.C) {
 		StarPosZ:      -1582.12500,
 	}}
 
-	status, err := GetStatus()
-	c.Assert(err, check.IsNil)
-	status.System = systems[0].Name
-
-	err = UpdateStatus(status)
-	c.Assert(err, check.IsNil)
+	status := GetStatus()
+	status.SetCurrentSystem(systems[0].Name)
 
 	newRoute := make([]*Route, 0)
 

@@ -54,11 +54,6 @@ func Setup() error {
 		return err
 	}
 
-	err = InitializeStatus()
-	if err != nil {
-		slog.Error(fmt.Sprintf("error initializing status: %v", err))
-	}
-
 	return nil
 }
 
@@ -74,12 +69,7 @@ func Shutdown() {
 func Cleanup(c *check.C) {
 	var err error
 
-	err = db.Where("1 = 1").Delete(&Status{}).Error
-	if err != nil {
-		c.Fatalf("Failed to tear down test: %v", err)
-	}
-
-	InitializeStatus()
+	ClearStatus()
 
 	err = db.Where("1 = 1").Delete(&System{}).Error
 	if err != nil {
@@ -114,7 +104,7 @@ func Cleanup(c *check.C) {
 
 func migrateModels() error {
 	return db.AutoMigrate(
-		&Status{},
+		// &Status{},
 		&Route{},
 		&System{},
 		&Body{},

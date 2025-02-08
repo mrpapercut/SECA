@@ -61,16 +61,8 @@ func (eh *EventHandler) handleEventSellOrganicData(rawEvent string) error {
 		}
 	}
 
-	status, err := models.GetStatus()
-	if err != nil {
-		return fmt.Errorf("error getting status: %v", err)
-	}
-	status.Balance += totalEarnings
-
-	err = models.UpdateStatus(status)
-	if err != nil {
-		return fmt.Errorf("error updating status: %v", err)
-	}
+	status := models.GetStatus()
+	status.SetCredits(status.Credits + totalEarnings)
 
 	return nil
 }

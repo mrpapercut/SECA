@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/mrpapercut/seca/journal/events"
-	"github.com/mrpapercut/seca/models"
 	"github.com/mrpapercut/seca/server"
 )
 
@@ -52,40 +51,14 @@ func (jw *JournalWatcher) processJournalLines(lines []string, isFirstRun bool) {
 		jw.handleJournalEvent(&ev, line)
 
 		if !isFirstRun && ev.Event == "FSDJump" {
-			jw.sendRouteUpdate()
+			server.SendRouteUpdate()
 		}
 	}
 
 	if !isFirstRun {
-		err := models.UpdateStatusEarnings()
-		if err != nil {
-			slog.Warn(fmt.Sprintf("error updating status earnings: %v", err))
-		}
-
-		jw.sendStatusUpdate()
-		jw.sendSystemUpdate()
+		server.SendStatusUpdate()
+		server.SendCurrentSystemUpdate()
 	}
-}
-
-func (jw *JournalWatcher) sendStatusUpdate() {
-	status, err := models.GetStatus()
-	if err != nil {
-		slog.Warn(fmt.Sprintf("error getting status: %v", err))
-		return
-	}
-
-	statusResponse := &server.ResponseStatus{
-		Type:   "getStatus",
-		Status: status,
-	}
-
-	jsonStatus, err := json.Marshal(&statusResponse)
-	if err != nil {
-		slog.Warn(fmt.Sprintf("error marshalling status json: %v", err))
-		return
-	}
-
-	server.SendMessage(jsonStatus)
 }
 
 func (jw *JournalWatcher) handleJournalEvent(event *events.GenericEvent, rawEvent string) {
@@ -108,71 +81,21 @@ func (jw *JournalWatcher) handleNavRouteUpdate(filecontents []byte) {
 		slog.Warn(fmt.Sprintf("error processing navRoute event: %v", err))
 	}
 
-	jw.sendRouteUpdate()
+	server.SendRouteUpdate()
 }
 
-func (jw *JournalWatcher) sendRouteUpdate() {
-	route, err := models.GetRoute()
+func (jw *JournalWatcher) handleStatusUpdate(filecontents []byte) {
+	var ev events.GenericEvent
+	err := json.Unmarshal([]byte(filecontents), &ev)
 	if err != nil {
-		slog.Warn(fmt.Sprintf("error getting route: %v", err))
+		slog.Warn(fmt.Sprintf("error unmarshalling event status json: %v", err))
 		return
 	}
 
-	routeLength, err := models.GetRouteLength(route)
+	err = eventHandler.HandleEvent(ev.Event, string(filecontents))
 	if err != nil {
-		slog.Warn(fmt.Sprintf("error getting route length: %v", err))
-		return
+		slog.Warn(fmt.Sprintf("error processing status event: %v", err))
 	}
 
-	routeResponse := &server.ResponseRoute{
-		Type:          "getRoute",
-		Route:         route,
-		TotalDistance: routeLength,
-	}
-
-	jsonRoute, err := json.Marshal(&routeResponse)
-	if err != nil {
-		slog.Warn(fmt.Sprintf("error marshalling route json: %v", err))
-		return
-	}
-
-	server.SendMessage(jsonRoute)
-}
-
-func (jw *JournalWatcher) sendSystemUpdate() {
-	status, err := models.GetStatus()
-	if err != nil {
-		slog.Warn(fmt.Sprintf("error getting status: %v", err))
-		return
-	}
-
-	if status.System == "" {
-		slog.Warn("error: current system not in status")
-		return
-	}
-
-	system, err := models.GetSystemByName(status.System)
-	if err != nil {
-		slog.Warn(fmt.Sprintf("error getting system by name: %v", err))
-		return
-	}
-
-	systemWithBodies, err := models.GetSystemWithBodies(system)
-	if err != nil {
-		slog.Warn(fmt.Sprintf("error getting system with bodies: %v", err))
-		return
-	}
-
-	systemResponse := &server.ResponseSystem{
-		Type:   "getCurrentSystem",
-		System: systemWithBodies,
-	}
-
-	jsonSystem, err := json.Marshal(&systemResponse)
-	if err != nil {
-		slog.Warn(fmt.Sprintf("error marshalling route json: %v", err))
-		return
-	}
-
-	server.SendMessage(jsonSystem)
+	server.SendStatusUpdate()
 }

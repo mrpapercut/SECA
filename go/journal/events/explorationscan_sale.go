@@ -51,16 +51,8 @@ func (eh *EventHandler) handleEventMultiSellExplorationData(rawEvent string) err
 		}
 	}
 
-	status, err := models.GetStatus()
-	if err != nil {
-		return fmt.Errorf("error getting status: %v", err)
-	}
-	status.Balance += event.TotalEarnings
-
-	err = models.UpdateStatus(status)
-	if err != nil {
-		return fmt.Errorf("error updating status: %v", err)
-	}
+	status := models.GetStatus()
+	status.SetCredits(status.Credits + event.TotalEarnings)
 
 	return nil
 }

@@ -23,10 +23,7 @@ func GetRoute() ([]*RouteWithSystems, error) {
 		return nil, err
 	}
 
-	status, err := GetStatus()
-	if err != nil {
-		return nil, fmt.Errorf("error getting status: %v", err)
-	}
+	status := GetStatus()
 
 	foundCurrentPosition := false
 
@@ -37,7 +34,7 @@ func GetRoute() ([]*RouteWithSystems, error) {
 			return nil, fmt.Errorf("error getting system for route-stop: %v", err)
 		}
 
-		if system.Name == status.System {
+		if system.Name == status.CurrentSystem {
 			foundCurrentPosition = true
 		}
 

@@ -43,19 +43,15 @@ func (eh *EventHandler) handleEventScanOrganic(rawEvent string) error {
 }
 
 func (eh *EventHandler) handleScanTypeLog(event ScanOrganicEvent) error {
-	err := models.SetCurrentSample(event.Species, event.Variant)
-	if err != nil {
-		return fmt.Errorf("error setting current sample: %v", err)
-	}
+	status := models.GetStatus()
+	status.SetCurrentSample(event.Species, event.Genus, event.Variant)
 
 	return nil
 }
 
 func (eh *EventHandler) handleScanTypeSample(event ScanOrganicEvent) error {
-	err := models.SetCurrentSample(event.Species, event.Variant)
-	if err != nil {
-		return fmt.Errorf("error setting current sample: %v", err)
-	}
+	status := models.GetStatus()
+	status.SetCurrentSample(event.Species, event.Genus, event.Variant)
 
 	return nil
 }
@@ -89,10 +85,8 @@ func (eh *EventHandler) handleScanTypeAnalyse(event ScanOrganicEvent) error {
 		return fmt.Errorf("error creating organic scan: %v", err)
 	}
 
-	err = models.ClearCurrentSample()
-	if err != nil {
-		return fmt.Errorf("error clearing current sample: %v", err)
-	}
+	status := models.GetStatus()
+	status.ClearCurrentSample()
 
 	return nil
 }
