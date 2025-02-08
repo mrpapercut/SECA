@@ -13,7 +13,7 @@ import getSystemSignals from '@/util/getSystemSignals';
 import translateState from '@/util/translateState';
 
 export default function Dashboard() {
-    const {socket, isConnected} = useSocket();
+    const { socket, isConnected } = useSocket();
     const [currentStatus, setCurrentStatus] = useState({} as CurrentStatus);
     const [currentRoute, setCurrentRoute] = useState([] as CurrentRoute[]);
     const [currentRouteDistance, setCurrentRouteDistance] = useState(0 as number);
@@ -52,7 +52,7 @@ export default function Dashboard() {
     }
 
     let systemSignals: SystemSignalCount = {};
-    if (currentSystem && Object.hasOwn(currentSystem, 'FSSSignals')) {
+    if (currentSystem && Object.hasOwn(currentSystem, 'FSSSignals') && Array.isArray(currentSystem.FSSSignals)) {
         systemSignals = getSystemSignals(currentSystem);
     }
 
@@ -164,10 +164,10 @@ export default function Dashboard() {
                 <hr className={styles.divider} />
 
                 <div>Est. exploration earnings:</div>
-                <div>{ (currentStatus.estimated_exploration_value || 0).toLocaleString() } cr</div>
+                <div>{(currentStatus.estimated_exploration_value || 0).toLocaleString()} cr</div>
 
                 <div>Est. biological earnings:</div>
-                <div>{ (currentStatus.estimated_biological_value || 0).toLocaleString() } cr</div>
+                <div>{(currentStatus.estimated_biological_value || 0).toLocaleString()} cr</div>
 
                 <hr className={styles.divider} />
 
