@@ -10,6 +10,7 @@ import getUnmappedWorthyBodies from '@/util/getUnmappedWorthyBodies';
 import getBodiesWithBioSignals from '@/util/getBodiesWithBioSignals';
 import findMainStarInBodies from '@/util/findMainStarInBodies';
 import getSystemSignals from '@/util/getSystemSignals';
+import translateState from '@/util/translateState';
 
 export default function Dashboard() {
     const {socket, isConnected} = useSocket();
@@ -40,6 +41,8 @@ export default function Dashboard() {
             socket.removeListener('getCurrentSystem');
         }
     }, [socket, isConnected]);
+
+    console.log({currentStatus, currentSystem, currentRoute});
 
     let worthMapping: string[] = [];
     let bodiesWithBioSignals: BodyWithBioSignals[] = [];
@@ -85,20 +88,20 @@ export default function Dashboard() {
                 <div>{currentStatus.commander_name}</div>
 
                 <div>Credits:</div>
-                <div>{(currentStatus.balance || 0).toLocaleString()} cr</div>
+                <div>{(currentStatus.credits || 0).toLocaleString()} cr</div>
 
                 <div>Ship:</div>
                 <div>{currentStatus.ship_name} ({currentStatus.ship_type})</div>
 
                 <div>State:</div>
-                <div>{currentStatus.is_on_foot ? 'On foot' : currentStatus.is_in_srv ? 'In SRV' : currentStatus.is_landed ? 'Landed' : currentStatus.is_docked ? 'Docked' : 'Flying'}</div>
+                <div>{translateState(currentStatus.state)}</div>
 
                 <div>Current system:</div>
                 <div className={!discoveredCurrent ? styles.newDiscovered : ''}>{currentStatus.current_system} {primaryStarTypeCurrent !== '' ? `(type ${primaryStarTypeCurrent})` : ''}</div>
 
-                {currentStatus.body !== '' && currentStatus.body !== currentStatus.current_system && <>
+                {currentStatus.current_body !== '' && currentStatus.current_body !== currentStatus.current_system && <>
                     <div>Current body:</div>
-                    <div>{currentStatus.body}</div>
+                    <div>{currentStatus.current_body}</div>
                 </>}
 
                 {currentStatus.current_sample !== '' && <>
