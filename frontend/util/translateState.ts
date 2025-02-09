@@ -1,4 +1,4 @@
-const translateState = (state: string): string => {
+export default function translateState(state: string): string {
     const states: Record<string, string> = {
         flying: 'Flying',
         supercruise: 'In supercruise',
@@ -21,5 +21,3 @@ const translateState = (state: string): string => {
 
     return states[state] || '';
 }
-
-export default translateState
