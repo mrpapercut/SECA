@@ -179,7 +179,7 @@ func (eh *EventHandler) HandleEvent(eventType string, rawEvent string) error {
 		EHL.FSSSignalDiscovered++
 		return eh.handleEventFSSSignalDiscovered(rawEvent)
 	case "Loadout":
-		// return eh.handleEventLoadout(rawEvent)
+		return eh.handleEventLoadout(rawEvent)
 	case "Status":
 		return eh.handleEventStatus(rawEvent)
 	}
