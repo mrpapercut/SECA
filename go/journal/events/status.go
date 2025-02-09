@@ -71,6 +71,10 @@ func (eh *EventHandler) handleEventStatus(rawEvent string) error {
 		return err
 	}
 
+	if event.Flags == 0 {
+		return nil
+	}
+
 	status := models.GetStatus()
 
 	status.SetFuelLevel(event.Fuel.FuelMain)
