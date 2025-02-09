@@ -126,3 +126,9 @@ interface BodyWithBioSignals {
     bioSubtype: string[]
     count: number
 }
+
+interface CommanderInfo {
+    commander_name: string
+    ship_name: string
+    ship_type: string
+}

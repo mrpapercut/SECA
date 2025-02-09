@@ -50,8 +50,14 @@ func (jw *JournalWatcher) processJournalLines(lines []string, isFirstRun bool) {
 
 		jw.handleJournalEvent(&ev, line)
 
-		if !isFirstRun && ev.Event == "FSDJump" {
-			server.SendRouteUpdate()
+		if !isFirstRun {
+			if ev.Event == "FSDJump" {
+				server.SendRouteUpdate()
+			}
+
+			if ev.Event == "LoadGame" || ev.Event == "Loadout" {
+				server.SendStatusCommanderInfoUpdate()
+			}
 		}
 	}
 
@@ -98,4 +104,5 @@ func (jw *JournalWatcher) handleStatusUpdate(filecontents []byte) {
 	}
 
 	server.SendStatusUpdate()
+	server.SendStatusCreditsUpdate()
 }

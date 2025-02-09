@@ -82,25 +82,22 @@ func (s *Webserver) handleIncoming() {
 		switch string(message) {
 		case "getStatus":
 			messageToSend, err = handleGetStatusRequest()
-			if err != nil {
-				slog.Warn(fmt.Sprintf("%v", err))
-			}
 		case "getRoute":
 			messageToSend, err = handleGetRouteRequest()
-			if err != nil {
-				slog.Warn(fmt.Sprintf("%v", err))
-			}
 		case "getCurrentSystem":
 			messageToSend, err = handleGetCurrentSystemRequest()
-			if err != nil {
-				slog.Warn(fmt.Sprintf("%v", err))
-			}
 
 		case "getFlightlog":
 			messageToSend, err = handleGetFlightlogRequest()
-			if err != nil {
-				slog.Warn(fmt.Sprintf("%v", err))
-			}
+
+		case "getStatusCommanderInfo":
+			messageToSend, err = handleGetStatusCommanderInfoRequest()
+		case "getStatusCredits":
+			messageToSend, err = handleGetStatusCreditsRequest()
+		}
+
+		if err != nil {
+			slog.Warn(fmt.Sprintf("%v", err))
 		}
 
 		if len(messageToSend) > 0 {

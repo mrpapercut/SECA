@@ -11,10 +11,6 @@ export default class SocketConnection {
 
     onConnectionChange: ((status: boolean) => void) | undefined;
 
-    constructor() {
-
-    }
-
     connect() {
         console.log('Connecting to WebSocket server...');
         this.socket = new WebSocket(`ws://${window.location.hostname}:8080/`);
@@ -49,6 +45,7 @@ export default class SocketConnection {
             if (!Object.keys(this.listeners).includes(data.type)) {
                 console.log(`No listener for type '${data.type}'`);
             } else {
+                console.log(`handling incoming message ${data.type}`);
                 this.listeners[data.type]?.forEach(listener => listener.callback(data));
             }
         }
@@ -85,6 +82,7 @@ export default class SocketConnection {
     }
 
     sendMessage(message: string): void {
+        console.log(`sending message ${message}`);
         if (this.isConnected && this.socket) {
             this.socket.send(message);
         } else {
@@ -92,49 +90,3 @@ export default class SocketConnection {
         }
     }
 }
-
-/*
-console.log('Connecting to WebSocket server...');
-socket = new WebSocket(`ws://${window.location.hostname}:8080/`);
-
-socket.onopen = () => {
-    if (retryTimeout) clearTimeout(retryTimeout);
-
-    setIsConnected(true);
-
-    socket.send('getStatus');
-    socket.send('getRoute');
-    socket.send('getCurrentSystem');
-};
-
-socket.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-
-    if (!Object.hasOwn(data, 'type')) {
-        console.log('Received message has invalid structure:', data);
-        return
-    }
-
-    switch(data.type) {
-        case 'getStatus':
-            socket.send('getCurrentSystem');
-            return setCurrentState(data.status);
-        case 'getRoute':
-            setCurrentRoute(data.route);
-            setCurrentRouteDistance(data.total_distance);
-            return;
-        case 'getCurrentSystem':
-            setCurrentSystem(data.system);
-            return;
-    }
-};
-
-// socket.onerror = (error) => {
-//     console.log('WebSocket error:', error);
-// };
-
-socket.onclose = () => {
-    setIsConnected(false);
-    retryTimeout = setTimeout(() => connect(), 500);
-};
-*/

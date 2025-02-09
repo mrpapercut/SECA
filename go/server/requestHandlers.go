@@ -167,3 +167,65 @@ func handleGetFlightlogRequest() ([]byte, error) {
 
 	return jsonFlightlog, nil
 }
+
+type ResponseStatusCommanderInfo struct {
+	Type          string                      `json:"type"`
+	CommanderInfo *models.StatusCommanderInfo `json:"commander_info"`
+}
+
+func SendStatusCommanderInfoUpdate() {
+	message, err := handleGetStatusCommanderInfoRequest()
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error sending commander info update: %v", err))
+		return
+	}
+
+	SendMessage(message)
+}
+
+func handleGetStatusCommanderInfoRequest() ([]byte, error) {
+	message := models.GetStatusCommanderInfo()
+
+	response := &ResponseStatusCommanderInfo{
+		Type:          "getStatusCommanderInfo",
+		CommanderInfo: message,
+	}
+
+	jsonResponse, err := json.Marshal(response)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing commander info to json: %v", err)
+	}
+
+	return jsonResponse, nil
+}
+
+type ResponseStatusCredits struct {
+	Type    string `json:"type"`
+	Credits int64  `json:"credits"`
+}
+
+func SendStatusCreditsUpdate() {
+	message, err := handleGetStatusCreditsRequest()
+	if err != nil {
+		slog.Warn(fmt.Sprintf("error sending commander info update: %v", err))
+		return
+	}
+
+	SendMessage(message)
+}
+
+func handleGetStatusCreditsRequest() ([]byte, error) {
+	message := models.GetStatusCredits()
+
+	response := &ResponseStatusCredits{
+		Type:    "getStatusCredits",
+		Credits: message.Credits,
+	}
+
+	jsonResponse, err := json.Marshal(response)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing credits to json: %v", err)
+	}
+
+	return jsonResponse, nil
+}

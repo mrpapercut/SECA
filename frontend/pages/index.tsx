@@ -7,12 +7,12 @@ import styles from '../styles/layout.module.scss';
 import { useSocket } from '@/contexts/SocketContext';
 
 import CurrentRoute from '@/components/CurrentRoute';
+import CommanderInfo from '@/components/CommanderInfo';
 
 import getUnmappedWorthyBodies from '@/util/getUnmappedWorthyBodies';
 import getBodiesWithBioSignals from '@/util/getBodiesWithBioSignals';
 import getSystemSignals from '@/util/getSystemSignals';
 import translateState from '@/util/translateState';
-import translateShipType from '@/util/translateShipType';
 
 export default function Dashboard() {
     const { socket, isConnected } = useSocket();
@@ -58,14 +58,7 @@ export default function Dashboard() {
                 <Image priority={true} src="https://www.edsm.net/img/users/1/8/7/9/1/3/187913.png?v=1738138512" className={styles.cmdrProfilePhoto} width={100} height={100} alt={''} />
             </div>
             <div className={styles.grid}>
-                <div>Commander:</div>
-                <div>{currentStatus.commander_name}</div>
-
-                <div>Credits:</div>
-                <div>{(currentStatus.credits || 0).toLocaleString()} cr</div>
-
-                <div>Ship:</div>
-                <div>{currentStatus.ship_name} ({translateShipType(currentStatus.ship_type)})</div>
+                <CommanderInfo />
 
                 <div>State:</div>
                 <div>{translateState(currentStatus.state)}</div>
