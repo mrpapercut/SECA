@@ -6,11 +6,13 @@ import styles from '../styles/layout.module.scss';
 
 import { useSocket } from '@/contexts/SocketContext';
 
+import CurrentRoute from '@/components/CurrentRoute';
+
 import getUnmappedWorthyBodies from '@/util/getUnmappedWorthyBodies';
 import getBodiesWithBioSignals from '@/util/getBodiesWithBioSignals';
 import getSystemSignals from '@/util/getSystemSignals';
 import translateState from '@/util/translateState';
-import CurrentRoute from '@/components/CurrentRoute';
+import translateShipType from '@/util/translateShipType';
 
 export default function Dashboard() {
     const { socket, isConnected } = useSocket();
@@ -20,8 +22,8 @@ export default function Dashboard() {
     useEffect(() => {
         if (!socket) return;
 
-        socket.addListener('getStatus', response => setCurrentStatus(response.status as CurrentStatus))
-        socket.addListener('getCurrentSystem', response => setCurrentSystem(response.system as System));
+        const statusListenerId = socket.addListener('getStatus', response => setCurrentStatus(response.status as CurrentStatus))
+        const currentSystemListenerId = socket.addListener('getCurrentSystem', response => setCurrentSystem(response.system as System));
 
         if (isConnected) {
             socket.sendMessage('getStatus');
@@ -29,8 +31,8 @@ export default function Dashboard() {
         }
 
         return () => {
-            socket.removeListener('getStatus');
-            socket.removeListener('getCurrentSystem');
+            socket.removeListener('getStatus', statusListenerId);
+            socket.removeListener('getCurrentSystem', currentSystemListenerId);
         }
     }, [socket, isConnected]);
 
@@ -63,7 +65,7 @@ export default function Dashboard() {
                 <div>{(currentStatus.credits || 0).toLocaleString()} cr</div>
 
                 <div>Ship:</div>
-                <div>{currentStatus.ship_name} ({currentStatus.ship_type})</div>
+                <div>{currentStatus.ship_name} ({translateShipType(currentStatus.ship_type)})</div>
 
                 <div>State:</div>
                 <div>{translateState(currentStatus.state)}</div>

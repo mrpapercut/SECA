@@ -4,7 +4,8 @@ export default class SocketConnection {
 
     isConnected: boolean = false;
 
-    listeners: Record<string, (data: Record<string, unknown>) => void> = {}
+    listeners: Record<string, { id: number, callback: (data: Record<string, unknown>) => void }[]> = {}
+    nextListenerId = 0;
 
     messageQueue: string[] = [];
 
@@ -48,7 +49,7 @@ export default class SocketConnection {
             if (!Object.keys(this.listeners).includes(data.type)) {
                 console.log(`No listener for type '${data.type}'`);
             } else {
-                this.listeners[data.type](data);
+                this.listeners[data.type]?.forEach(listener => listener.callback(data));
             }
         }
     }
@@ -58,12 +59,23 @@ export default class SocketConnection {
         if (this.retryTimeout) clearTimeout(this.retryTimeout);
     }
 
-    addListener(type: string, callback: (responseData: Record<string, unknown>) => void) {
-        this.listeners[type] = callback;
+    addListener(type: string, callback: (responseData: Record<string, unknown>) => void): number {
+        if (!this.listeners[type]) {
+            this.listeners[type] = [];
+        }
+
+        const id = this.nextListenerId++;
+        this.listeners[type].push({ id, callback });
+
+        return id;
     }
 
-    removeListener(type: string) {
-        if (Object.hasOwn(this.listeners, type)) {
+    removeListener(type: string, id: number) {
+        if (!Object.hasOwn(this.listeners, type)) return;
+
+        this.listeners[type] = this.listeners[type].filter(listener => listener.id !== id);
+
+        if (this.listeners[type].length === 0) {
             delete this.listeners[type];
         }
     }

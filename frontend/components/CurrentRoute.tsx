@@ -13,7 +13,7 @@ export default function CurrentRoute({}): ReactNode {
     useEffect(() => {
         if (!socket) return;
 
-        socket.addListener('getRoute', response => {
+        const routeListenerId = socket.addListener('getRoute', response => {
             setCurrentRoute(response.route as CurrentRoute[]);
             setCurrentRouteDistance(response.total_distance as number);
         });
@@ -21,7 +21,7 @@ export default function CurrentRoute({}): ReactNode {
         socket.sendMessage('getRoute');
 
         return () => {
-            socket.removeListener('getRoute');
+            socket.removeListener('getRoute', routeListenerId);
         }
 
     }, [socket, isConnected]);
