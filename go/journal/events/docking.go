@@ -153,8 +153,7 @@ func (eh *EventHandler) handleEventDisembark(rawEvent string) error {
 			slog.Warn(fmt.Sprintf("error getting body to check footfall: %v", err))
 		} else {
 			if !body.Footfall {
-				body.Footfall = true
-				err = models.SaveBody(body)
+				err = models.SetBodyFootfall(body)
 				if err != nil {
 					return fmt.Errorf("error updating body: %v", err)
 				}
