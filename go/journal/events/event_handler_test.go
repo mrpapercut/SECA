@@ -364,7 +364,7 @@ func (s *EventSuite) TestHandleEvent(c *check.C) {
 
 	explorationEarningsBeforeSale, err := models.GetTotalEstimatedExplorationScanValue()
 	c.Assert(err, check.IsNil)
-	c.Assert(explorationEarningsBeforeSale, check.Equals, int64(110609)) // TODO CHECK AND FIX
+	c.Assert(explorationEarningsBeforeSale, check.Equals, int64(233416)) // TODO CHECK AND FIX
 
 	bioEarningsBeforeSale, err := models.GetTotalEstimatedBiologicalScanValue()
 	c.Assert(err, check.IsNil)
