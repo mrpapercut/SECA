@@ -31,12 +31,14 @@ func (eh *EventHandler) handleEventSAAScanComplete(rawEvent string) error {
 		return fmt.Errorf("error getting body %s: %v", event.BodyName, err)
 	}
 
-	body.Mapped = true
-
-	err = models.SaveBody(body)
+	err = models.SetBodyMapped(body)
 	if err != nil {
 		return fmt.Errorf("error setting body.Mapped to true")
 	}
+
+	// Manually set Mapped to true so we don't have to retrieve
+	// the body in order to calculate the correct scan value
+	body.Mapped = true
 
 	scan := &models.ExplorationScan{
 		SystemID:            system.ID,
