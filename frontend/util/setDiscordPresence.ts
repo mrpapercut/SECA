@@ -5,7 +5,7 @@ export async function setActivity(state: string, systemName: string, bodyName?: 
 
     const discordState = translateDiscordState(state, systemName, bodyName);
 
-    await fetch('http://localhost:3001/update', {
+    await fetch(`http://${window.location.hostname}:3001/update`, {
         headers: new Headers({
             'Content-Type': 'application/json'
         }),

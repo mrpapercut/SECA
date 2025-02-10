@@ -2,9 +2,11 @@ const express = require('express');
 const cors = require('cors');
 const RPC = require('discord-rpc');
 
+const constants = require('./constants');
+
 const app = express();
 
-const clientId = '';
+const clientId = constants.discordClientId;
 
 RPC.register(clientId);
 
@@ -19,6 +21,8 @@ rpc.login({ clientId }).catch(console.error);
 app.use(express.json());
 app.use(cors());
 
+const startTimestamp = Date.now();
+
 app.post('/update', (req, res) => {
     const { state } = req.body;
 
@@ -28,7 +32,7 @@ app.post('/update', (req, res) => {
 
     rpc.setActivity({
         state,
-        startTimestamp: Date.now(),
+        startTimestamp: startTimestamp,
         instance: false,
     });
 
