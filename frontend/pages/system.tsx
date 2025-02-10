@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useSocket } from '@/contexts/SocketContext';
 
 import getBodyIcon from '@/util/getBodyIcon';
+import calculateDistance from '@/util/calculateDistance';
 
 import styles from '../styles/layout.module.scss';
 
@@ -39,6 +40,25 @@ function getBodyStateIcons(body: Body): React.ReactNode {
     </>
 }
 
+function getSystemDistances(currentSystem: System): Record<string, number> {
+    const systems: Record<string, Coordinates> = {
+        Sol: {x: 0, y: 0, z: 0},
+        Ruwachis: {x: 83.96875, y: -22.3125, z: 83.125},
+        Colonia: {x: -9530.5, y: -910.28125, z: 19808.125},
+        'Sagittarius A*': {x: 25.21875, y: -20.90625, z: 25899.96875},
+        'Beagle Point': {x: -1111.5625, y: -134.21875, z: 65269.75}
+    }
+
+    const distances: Record<string, number> = {}
+    const currentCoordinates: Coordinates = {x: currentSystem.StarPosX, y: currentSystem.StarPosY, z: currentSystem.StarPosZ}
+
+    for (const s in systems) {
+        distances[s] = calculateDistance(currentCoordinates, systems[s])
+    }
+
+    return distances
+}
+
 export default function System() {
     const {socket, isConnected} = useSocket();
     const [currentSystem, setCurrentSystem] = useState({} as System);
@@ -62,9 +82,18 @@ export default function System() {
 
     currentSystem.Bodies.sort((a, b) => a.DistanceFromArrivalLS - b.DistanceFromArrivalLS);
 
+    const calculatedDistances = getSystemDistances(currentSystem);
+
     return <>
         <div>
-            <h1>{currentSystem.Name} ({currentSystem.Bodies.length} bodies)</h1>
+            <h3>{currentSystem.Name} ({currentSystem.Bodies.length} bodies)</h3>
+            <hr className={styles.divider} />
+            <div className={styles.grid}>
+                {Object.keys(calculatedDistances).map(key => <>
+                    <div key={`dist_${key}_label`}>{key}</div>
+                    <div key={`dist_${key}_value`}>{calculatedDistances[key].toFixed(2)} ly</div>
+                </>)}
+            </div>
             <div className={styles.grid3}>
                 {currentSystem.Bodies.map(body => {
                     const isStar = body.BodyType === 'Star';

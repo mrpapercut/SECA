@@ -12,7 +12,8 @@ import CommanderInfo from '@/components/CommanderInfo';
 import getUnmappedWorthyBodies from '@/util/getUnmappedWorthyBodies';
 import getBodiesWithBioSignals from '@/util/getBodiesWithBioSignals';
 import getSystemSignals from '@/util/getSystemSignals';
-import translateState from '@/util/translateState';
+import {translateState} from '@/util/translateState';
+import { setActivity } from '@/util/setDiscordPresence';
 
 export default function Dashboard() {
     const { socket, isConnected } = useSocket();
@@ -37,6 +38,10 @@ export default function Dashboard() {
     }, [socket, isConnected]);
 
     console.log({currentStatus, currentSystem});
+
+    if (currentStatus.state !== '' && currentStatus.current_system !== '') {
+        setActivity(currentStatus.state, currentStatus.current_system, currentStatus.current_body);
+    }
 
     let worthMapping: string[] = [];
     let bodiesWithBioSignals: BodyWithBioSignals[] = [];

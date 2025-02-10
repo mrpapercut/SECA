@@ -1,3 +1,9 @@
+interface Coordinates {
+    x: number
+    y: number
+    z: number
+}
+
 interface CurrentStatus {
     commander_name: string
     ship_name: string
