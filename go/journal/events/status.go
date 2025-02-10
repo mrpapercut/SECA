@@ -124,7 +124,11 @@ func getNewState(event *StatusEvent) models.State {
 	}
 
 	if parsedFlags.FSDJump {
-		newState = models.StateJumping
+		if parsedFlags.Supercruise {
+			newState = models.StateJumpingToSystem
+		} else {
+			newState = models.StateJumpingToSupercruise
+		}
 	}
 
 	if parsedFlags.OnFoot {
