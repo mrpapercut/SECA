@@ -5,10 +5,13 @@ go 1.23
 require (
 	github.com/fsnotify/fsnotify v1.8.0
 	github.com/gorilla/websocket v1.5.3
+	github.com/hugolgst/rich-go v0.0.0-20240715122152-74618cc1ace2
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c
 	gorm.io/driver/sqlite v1.5.7
 	gorm.io/gorm v1.25.12
 )
+
+require gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
 
 require (
 	github.com/hashicorp/hcl v1.0.0 // indirect

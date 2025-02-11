@@ -7,6 +7,7 @@ RUN go mod download && go mod verify
 
 COPY main.go ./
 COPY ./config ./config
+COPY ./discord ./discord
 COPY ./journal ./journal
 COPY ./models ./models
 COPY ./server ./server
