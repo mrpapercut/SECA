@@ -7,8 +7,9 @@ import (
 )
 
 type Config struct {
-	JournalFolder string `mapstructure:"journal_folder"`
-	DBName        string `mapstructure:"db_name"`
+	JournalFolder   string `mapstructure:"journal_folder"`
+	DBName          string `mapstructure:"db_name"`
+	DiscordClientID string `mapstructure:"discord_client_id"`
 }
 
 var configLock = &sync.Mutex{}

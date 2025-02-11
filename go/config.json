@@ -1,4 +1,5 @@
 {
     "journal_folder": "/app/gamelogs",
-    "db_name": "seca.db"
+    "db_name": "seca.db",
+    "discord_client_id": ""
 }
