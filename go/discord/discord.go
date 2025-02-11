@@ -62,7 +62,10 @@ func (d *DiscordPresence) setActivity(activity *client.Activity) {
 	if d.TimeNow.IsZero() {
 		d.TimeNow = time.Now()
 	}
-	activity.Timestamps.Start = &d.TimeNow
+
+	activity.Timestamps = &client.Timestamps{
+		Start: &d.TimeNow,
+	}
 
 	err := client.SetActivity(*activity)
 	if err != nil {
