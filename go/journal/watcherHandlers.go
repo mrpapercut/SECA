@@ -105,4 +105,6 @@ func (jw *JournalWatcher) handleStatusUpdate(filecontents []byte) {
 
 	server.SendStatusUpdate()
 	server.SendStatusCreditsUpdate()
+
+	events.UpdateDiscordPresence()
 }
