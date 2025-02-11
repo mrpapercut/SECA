@@ -1,6 +1,10 @@
 package events
 
 import (
+	"fmt"
+	"log/slog"
+
+	"github.com/mrpapercut/seca/discord"
 	"github.com/mrpapercut/seca/models"
 )
 
@@ -28,6 +32,14 @@ func (eh *EventHandler) handleEventLoadGame(rawEvent string) error {
 
 	if event.ShipName != "" {
 		status.SetShip(event.ShipName, event.Ship)
+	}
+
+	dc := discord.GetDiscordInstance()
+	if !dc.Connected {
+		err = dc.Start()
+		if err != nil {
+			slog.Warn(fmt.Sprintf("error logging into discord: %v", err))
+		}
 	}
 
 	return nil

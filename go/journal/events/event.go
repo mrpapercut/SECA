@@ -129,6 +129,8 @@ func (eh *EventHandler) HandleEvent(eventType string, rawEvent string) error {
 		return eh.handleEventLoadout(rawEvent)
 	case "Status":
 		return eh.handleEventStatus(rawEvent)
+	case "Shutdown":
+		return eh.handleEventShutdown(rawEvent)
 	}
 
 	return nil

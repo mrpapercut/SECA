@@ -1,8 +1,6 @@
 package events
 
 import (
-	"github.com/hugolgst/rich-go/client"
-	"github.com/mrpapercut/seca/discord"
 	"github.com/mrpapercut/seca/models"
 )
 
@@ -166,18 +164,4 @@ func getNewState(event *StatusEvent) models.State {
 	}
 
 	return newState
-}
-
-func UpdateDiscordPresence() {
-	status := models.GetStatus()
-
-	dcState := status.CurrentSystem
-	dcDetails := discord.TranslateStateForDiscord(status.State, status.CurrentBody)
-
-	dc := discord.GetDiscordInstance()
-
-	dc.Message <- &client.Activity{
-		State:   dcState,
-		Details: dcDetails,
-	}
 }

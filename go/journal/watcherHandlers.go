@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/mrpapercut/seca/discord"
 	"github.com/mrpapercut/seca/journal/events"
 	"github.com/mrpapercut/seca/server"
 )
@@ -106,5 +107,5 @@ func (jw *JournalWatcher) handleStatusUpdate(filecontents []byte) {
 	server.SendStatusUpdate()
 	server.SendStatusCreditsUpdate()
 
-	events.UpdateDiscordPresence()
+	discord.UpdateDiscordPresence()
 }

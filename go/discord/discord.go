@@ -11,8 +11,9 @@ import (
 )
 
 type DiscordPresence struct {
-	Message chan *client.Activity
-	TimeNow time.Time
+	Message   chan *client.Activity
+	TimeNow   time.Time
+	Connected bool
 }
 
 var discordInstance *DiscordPresence
@@ -45,7 +46,16 @@ func (d *DiscordPresence) Start() error {
 
 	go d.startListening()
 
+	d.Connected = true
+
 	return nil
+}
+
+func (d *DiscordPresence) Stop() {
+	if d.Connected {
+		client.Logout()
+		d.Connected = false
+	}
 }
 
 func (d *DiscordPresence) startListening() {
