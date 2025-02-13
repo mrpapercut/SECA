@@ -14,7 +14,7 @@ func UpdateDiscordPresence() {
 	dcState := fmt.Sprintf("System: %s", status.CurrentSystem)
 	param := status.CurrentBody
 
-	if status.State == models.StateJumpingToSystem {
+	if status.State == models.StateJumpingToSystem || status.State == models.StateChargeHyperdrive {
 		nextStop, err := models.GetNextStop()
 		if err != nil {
 			slog.Warn(fmt.Sprintf("error getting next stop: %v", err))
