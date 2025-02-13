@@ -58,6 +58,19 @@ func GetRoute() ([]*RouteWithSystems, error) {
 	return mappedRoute, nil
 }
 
+func GetNextStop() (*RouteWithSystems, error) {
+	route, err := GetRoute()
+	if err != nil {
+		return nil, err
+	}
+
+	if len(route) < 2 {
+		return nil, fmt.Errorf("error getting next stop: route has only 1 stop")
+	}
+
+	return route[1], nil
+}
+
 func UpdateRoute(route []*Route) error {
 	err := db.Where("1 = 1").Delete(&Route{}).Error
 	if err != nil {

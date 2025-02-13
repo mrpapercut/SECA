@@ -1,6 +1,9 @@
 package discord
 
 import (
+	"fmt"
+	"log/slog"
+
 	"github.com/hugolgst/rich-go/client"
 	"github.com/mrpapercut/seca/models"
 )
@@ -8,11 +11,16 @@ import (
 func UpdateDiscordPresence() {
 	status := models.GetStatus()
 
-	dcState := status.CurrentSystem
+	dcState := fmt.Sprintf("System: %s", status.CurrentSystem)
 	param := status.CurrentBody
 
 	if status.State == models.StateJumpingToSystem {
-		// Get first of route
+		nextStop, err := models.GetNextStop()
+		if err != nil {
+			slog.Warn(fmt.Sprintf("error getting next stop: %v", err))
+		} else {
+			param = nextStop.System.Name
+		}
 	}
 
 	dcDetails := TranslateStateForDiscord(status.State, param)
