@@ -1,6 +1,8 @@
 package main
 
 import (
+	"embed"
+	"flag"
 	"fmt"
 	"log"
 	"log/slog"
@@ -13,7 +15,17 @@ import (
 	"github.com/mrpapercut/seca/server"
 )
 
+//go:embed nextjs/dist
+//go:embed nextjs/dist/_next/static/chunks/pages/*.js
+//go:embed nextjs/dist/_next/static/*/*.js
+//go:embed nextjs/dist/_next/static/*/*.css
+var nextFS embed.FS
+
 func main() {
+	// Flags
+	disableWebserverPtr := flag.Bool("disable-webserver", false, "Disable frontend server")
+	flag.Parse()
+
 	// Setup config
 	_, err := config.GetConfig()
 	if err != nil {
@@ -27,10 +39,13 @@ func main() {
 	// Setup database
 	models.Setup()
 
-	ws := server.GetWebserverInstance()
+	// Websockets
+	sockets := server.GetSocketServerInstance()
 
+	// Journal watcher
 	jw := journal.GetWatcher()
 
+	// Discord
 	err = discord.GetDiscordInstance().Start()
 	if err != nil {
 		slog.Warn(fmt.Sprintf("error starting discord presence: %v", err))
@@ -39,7 +54,14 @@ func main() {
 	go jw.ProcessExistingFiles()
 
 	go jw.StartWatcher()
-	go ws.Start()
+	go sockets.Start()
+
+	// Fileserver frontend
+	if !*disableWebserverPtr {
+		files := server.GetFileServerInstance()
+
+		go files.Start(nextFS)
+	}
 
 	select {}
 }

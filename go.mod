@@ -11,7 +11,10 @@ require (
 	gorm.io/gorm v1.25.12
 )
 
-require gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
+require (
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
+	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
+)
 
 require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
@@ -29,7 +32,8 @@ require (
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
 	github.com/spf13/cast v1.6.0 // indirect
-	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/spf13/cobra v1.9.0
+	github.com/spf13/pflag v1.0.6 // indirect
 	github.com/spf13/viper v1.19.0
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect

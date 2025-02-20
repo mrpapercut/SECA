@@ -13,7 +13,7 @@ export default class SocketConnection {
 
     connect() {
         console.log('Connecting to WebSocket server...');
-        this.socket = new WebSocket(`ws://${window.location.hostname}:8080/`);
+        this.socket = new WebSocket(`ws://${window.location.hostname}:8080/ws`);
 
         this.socket.onopen = () => {
             console.log('Connected to WebSocket server');

@@ -7,6 +7,8 @@ dumps/
 wallpapers/
 elasticsearch/data
 old-docker-files
+old-code/
+gamelogs/
 # From EDDiscovery
 **/public/img/Bodies/
 
