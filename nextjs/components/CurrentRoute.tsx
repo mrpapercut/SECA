@@ -26,7 +26,7 @@ export default function CurrentRoute({}): ReactNode {
 
     }, [socket, isConnected]);
 
-    if (currentRoute.length === 0) {
+    if (currentRoute.length === 1) {
         return <></>
     }
 
