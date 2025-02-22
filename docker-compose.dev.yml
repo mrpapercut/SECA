@@ -1,0 +1,27 @@
+networks:
+  default:
+    name: ${COMPOSE_PROJECT_NAME}_network
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: ${COMPOSE_PROJECT_NAME}_backend
+    command: "/bin/sh -c '/app/seca --disable-webserver'"
+    volumes:
+      - ./nextjs:/app/nextjs
+      - ./seca.db:/app/seca.db
+      - ./gamelogs:/app/gamelogs
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./nextjs
+    container_name: ${COMPOSE_PROJECT_NAME}_frontend
+    # command: "/bin/sh -c 'npm run start'"
+    volumes:
+      - ./nextjs/dist:/app/dist
+    ports:
+      - "3000:3000"

@@ -10,23 +10,23 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-type Webserver struct {
+type SocketServer struct {
 	clients   map[*websocket.Conn]bool
 	broadcast chan []byte
 	mutex     *sync.Mutex
 	upgrader  websocket.Upgrader
 }
 
-var webserverInstance *Webserver
-var webserverLock = &sync.Mutex{}
+var socketserverInstance *SocketServer
+var socketserverLock = &sync.Mutex{}
 
-func GetWebserverInstance() *Webserver {
-	if webserverInstance == nil {
-		webserverLock.Lock()
-		defer webserverLock.Unlock()
+func GetSocketServerInstance() *SocketServer {
+	if socketserverInstance == nil {
+		socketserverLock.Lock()
+		defer socketserverLock.Unlock()
 
-		if webserverInstance == nil {
-			webserverInstance = &Webserver{
+		if socketserverInstance == nil {
+			socketserverInstance = &SocketServer{
 				clients:   make(map[*websocket.Conn]bool),
 				broadcast: make(chan []byte),
 				mutex:     &sync.Mutex{},
@@ -39,15 +39,15 @@ func GetWebserverInstance() *Webserver {
 		}
 	}
 
-	return webserverInstance
+	return socketserverInstance
 }
 
 func SendMessage(message []byte) {
-	ws := GetWebserverInstance()
+	ws := GetSocketServerInstance()
 	ws.sendMessage(message)
 }
 
-func (s *Webserver) wsHandler(w http.ResponseWriter, r *http.Request) {
+func (s *SocketServer) wsHandler(w http.ResponseWriter, r *http.Request) {
 	conn, err := s.upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Printf("error upgrading connection: %v\n", err)
@@ -72,7 +72,7 @@ func (s *Webserver) wsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *Webserver) handleIncoming() {
+func (s *SocketServer) handleIncoming() {
 	for {
 		message := <-s.broadcast
 
@@ -106,7 +106,7 @@ func (s *Webserver) handleIncoming() {
 	}
 }
 
-func (s *Webserver) sendMessage(message []byte) {
+func (s *SocketServer) sendMessage(message []byte) {
 	s.mutex.Lock()
 	for client := range s.clients {
 		err := client.WriteMessage(websocket.TextMessage, message)
@@ -118,10 +118,10 @@ func (s *Webserver) sendMessage(message []byte) {
 	s.mutex.Unlock()
 }
 
-func (s *Webserver) Start() {
-	http.HandleFunc("/", s.wsHandler)
+func (s *SocketServer) Start() {
+	http.HandleFunc("/ws", s.wsHandler)
 	go s.handleIncoming()
 
-	slog.Info("Webserver starts listening on port :8080...")
+	slog.Info("SocketServer starts listening on port :8080...")
 	log.Fatal(http.ListenAndServe("0.0.0.0:8080", nil))
 }

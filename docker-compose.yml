@@ -5,20 +5,12 @@ networks:
 services:
   backend:
     build:
-      context: ./go
+      context: .
     container_name: ${COMPOSE_PROJECT_NAME}_backend
     volumes:
-      - ./go/seca.db:/app/seca.db
+      # - ./nextjs:/app/nextjs
+      - ./seca.db:/app/seca.db
       - ./gamelogs:/app/gamelogs
     ports:
       - "8080:8080"
-
-  frontend:
-    build:
-      context: ./frontend
-    container_name: ${COMPOSE_PROJECT_NAME}_frontend
-    # command: "/bin/sh -c 'npm run start'"
-    volumes:
-      - ./frontend/dist:/app/dist
-    ports:
       - "3000:3000"

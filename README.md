@@ -5,4 +5,4 @@
 
 <h2 align="center" >SuperElite Companion App for Elite Dangerous</h2>
 
-<p align="center">Coming in 3311</p>
+<p align="center">Coming in 3311, maybe</p>

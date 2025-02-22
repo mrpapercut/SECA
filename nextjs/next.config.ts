@@ -12,9 +12,10 @@ const nextConfig: NextConfig = {
         pathname: '/img/**',
       },
     ],
+    unoptimized: true,
   },
 
-  // output: 'export', // Static export
+  output: 'export', // Static export
   distDir: 'dist',
 };
 
