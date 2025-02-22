@@ -27,7 +27,7 @@ export default function CurrentRoute({}): ReactNode {
 
     }, [socket, isConnected]);
 
-    if (currentRoute.length === 1) {
+    if (currentRoute.length === 0) {
         return <></>
     }
 
@@ -41,6 +41,10 @@ export default function CurrentRoute({}): ReactNode {
         const nextMainStar = findMainStarInBodies(currentRoute[1].System.Bodies);
         discoveredNextStop = nextMainStar.WasDiscovered;
         primaryStarTypeNextStop = currentRoute[1].System.PrimaryStarType;
+    }
+
+    if (currentRoute.length === 1) {
+        return <></>
     }
 
     return <>
