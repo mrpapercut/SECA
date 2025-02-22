@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from 'react';
 
 import { useSocket } from '@/contexts/SocketContext';
 import findMainStarInBodies from '@/util/findMainStarInBodies';
+import findNextScoopable from '@/util/findNextScoopable';
 
 import styles from '../styles/layout.module.scss';
 
@@ -58,5 +59,8 @@ export default function CurrentRoute({}): ReactNode {
 
         <div>Total stops:</div>
         <div>{currentRoute.length - 1}</div>
+
+        <div>{findNextScoopable(currentRoute)}</div>
+        <div></div>
     </>
 }
