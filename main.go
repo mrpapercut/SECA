@@ -17,8 +17,8 @@ import (
 
 //go:embed nextjs/dist
 //go:embed nextjs/dist/_next/static/chunks/pages/*.js
-//go:embed nextjs/dist/_next/static/*/*.js
-//go:embed nextjs/dist/_next/static/*/*.css
+//go:embed nextjs/dist/_next/static/**/*.js
+//go:embed nextjs/dist/_next/static/**/*.css
 var nextFS embed.FS
 
 func main() {
