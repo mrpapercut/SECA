@@ -26,6 +26,11 @@ const (
 	StateOnFootExterior       State = "on_foot_exterior"
 	StateFuelScooping         State = "fuel_scooping"
 	StateFSSMode              State = "in_fss_mode"
+	StateSAAMode              State = "in_saa_mode"
+	StateViewGalaxyMap        State = "viewing_galaxy_map"
+	StateViewSystemMap        State = "viewing_system_map"
+	StateViewOrrery           State = "viewing_orrery"
+	StateViewStationServices  State = "viewing_station_services"
 	StateBioScanning          State = "bio_scanning"
 )
 

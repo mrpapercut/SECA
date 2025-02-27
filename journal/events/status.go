@@ -159,6 +159,26 @@ func getNewState(event *StatusEvent) models.State {
 		newState = models.StateFSSMode
 	}
 
+	if event.GuiFocus == GuiSAAMode {
+		newState = models.StateSAAMode
+	}
+
+	if event.GuiFocus == GuiGalaxyMap {
+		newState = models.StateViewGalaxyMap
+	}
+
+	if event.GuiFocus == GuiSystemMap {
+		newState = models.StateViewSystemMap
+	}
+
+	if event.GuiFocus == GuiOrrery {
+		newState = models.StateViewOrrery
+	}
+
+	if event.GuiFocus == GuiStationServices {
+		newState = models.StateViewStationServices
+	}
+
 	if event.SelectedWeapon == "Genetic Sampler" {
 		newState = models.StateBioScanning
 	}

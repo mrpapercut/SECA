@@ -4,7 +4,7 @@ export function translateState(state: string): string {
         supercruise: 'In supercruise',
         supercruise_charging: 'Charging supercruise',
         jumping_to_supercruise: 'Jumping to supercruise',
-        hyperdrive_charging: 'Charging friendship drive',
+        hyperdrive_charging: 'Charging frameshift drive',
         jumping_to_system: 'Jumping to system',
         docked: 'Docked',
         landed: 'Landed',
@@ -17,6 +17,11 @@ export function translateState(state: string): string {
         on_foot_exterior: 'On foot outside',
         fuel_scooping: 'Fuel scooping',
         in_fss_mode: 'Scanning bodies',
+        in_saa_mode: 'Mapping body',
+        viewing_galaxy_map: 'Viewing galaxy map',
+        viewing_system_map: 'Viewing system map',
+        viewing_orrery: 'Viewing system map (orrery)',
+        viewing_station_services: 'Viewing station services',
         bio_scanning: 'Scanning lifeforms',
     }
 
@@ -43,17 +48,17 @@ export function translateDiscordState(state: string, systemName: string, bodyNam
                 response = 'Supercruising' + systemSuffix;
             }
             break;
-        case 'supercruise_charging':
-            response = 'Preparing to jump to supercruise';
-            break;
-        case 'jumping_to_supercruise':
-            response = 'Jumping to supercruise';
-            break;
         case 'hyperdrive_charging':
             response = `Preparing to jump to system ${systemName}`;
             break;
         case 'jumping_to_system':
             response = `Jumping to system ${systemName}`;
+            break;
+        case 'supercruise_charging':
+            response = 'Preparing to jump to supercruise';
+            break;
+        case 'jumping_to_supercruise':
+            response = 'Jumping to supercruise';
             break;
         case 'docked':
             response = `Docked at ${bodyName}` + systemSuffix;
@@ -66,9 +71,9 @@ export function translateDiscordState(state: string, systemName: string, bodyNam
             break;
         case 'on_foot':
             if (bodyName !== '') {
-                response = `Walking on body ${bodyName}` + systemSuffix;
+                response = `Walking outside on body ${bodyName}` + systemSuffix;
             } else {
-                response = 'Walking' + systemSuffix;
+                response = 'Walking outside' + systemSuffix;
             }
             break;
         case 'on_foot_station':
@@ -95,6 +100,29 @@ export function translateDiscordState(state: string, systemName: string, bodyNam
             break;
         case 'in_fss_mode':
             response = 'Scanning bodies' + systemSuffix;
+            break;
+        case 'in_saa_mode':
+            if (bodyName !== '') {
+                response = `Mapping ${bodyName}` + systemSuffix;
+            } else {
+                response = 'Mapping body' + systemSuffix;
+            }
+            break;
+        case 'viewing_galaxy_map':
+            response = 'Viewing galaxy map';
+            break;
+        case 'viewing_system_map':
+            response = 'Viewing system map' + systemSuffix;
+            break;
+        case 'viewing_orrery':
+            response = 'Viewing system map (orrery)' + systemSuffix;
+            break;
+        case 'viewing_station_services':
+            if (bodyName !== '') {
+                response = `Viewing ${bodyName}'s station services` + systemSuffix;
+            } else {
+                response = 'Viewing station services' + systemSuffix;
+            }
             break;
         case 'bio_scanning':
             response = `Scanning lifeforms on body ${bodyName}` + systemSuffix;

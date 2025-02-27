@@ -7,6 +7,7 @@ export default function translateShipType(shipType: string): string {
         belugaliner: 'Beluga Liner',
         cobramkiii: 'Cobra MkIII',
         cobramkiv: 'Cobra MkIV',
+        corvair: 'Corvair',
         clipper: 'Panther Clipper',
         cutter: 'Imperial Cutter',
         diamondback: 'Diamondback Scout',
