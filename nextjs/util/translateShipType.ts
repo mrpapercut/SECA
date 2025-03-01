@@ -48,5 +48,5 @@ export default function translateShipType(shipType: string): string {
         vulture: 'Vulture',
     }
 
-    return shipNames[shipType.toLowerCase()] || '';
+    return shipNames[(shipType || '').toLowerCase()] || '';
 }
