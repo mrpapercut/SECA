@@ -56,6 +56,24 @@ func TranslateStateForDiscord(state models.State, param string) string {
 		newState = "Fuel scooping"
 	case models.StateFSSMode:
 		newState = "Scanning bodies"
+	case models.StateSAAMode:
+		if param != "" {
+			newState = fmt.Sprintf("Mapping %s", param)
+		} else {
+			newState = "Mapping body"
+		}
+	case models.StateViewGalaxyMap:
+		newState = "Viewing galaxy map"
+	case models.StateViewSystemMap:
+		newState = "Viewing system map"
+	case models.StateViewOrrery:
+		newState = "Viewing system map (orrery)"
+	case models.StateViewStationServices:
+		if param != "" {
+			newState = fmt.Sprintf("Viewing %s's station services", param)
+		} else {
+			newState = "Viewing station services"
+		}
 	case models.StateBioScanning:
 		newState = fmt.Sprintf("Scanning lifeforms on %s", param)
 	}
