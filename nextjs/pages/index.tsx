@@ -13,7 +13,6 @@ import getUnmappedWorthyBodies from '@/util/getUnmappedWorthyBodies';
 import getBodiesWithBioSignals from '@/util/getBodiesWithBioSignals';
 import getSystemSignals from '@/util/getSystemSignals';
 import {translateState} from '@/util/translateState';
-import { setActivity } from '@/util/setDiscordPresence';
 
 export default function Dashboard() {
     const { socket, isConnected } = useSocket();
@@ -39,10 +38,6 @@ export default function Dashboard() {
 
     console.log({currentStatus, currentSystem});
 
-    if (currentStatus.state !== '' && currentStatus.current_system !== '') {
-        setActivity(currentStatus.state, currentStatus.current_system, currentStatus.current_body);
-    }
-
     let worthMapping: string[] = [];
     let bodiesWithBioSignals: BodyWithBioSignals[] = [];
     if (currentSystem && Object.hasOwn(currentSystem, 'Bodies')) {
@@ -54,8 +49,6 @@ export default function Dashboard() {
     if (currentSystem && Object.hasOwn(currentSystem, 'FSSSignals') && Array.isArray(currentSystem.FSSSignals)) {
         systemSignals = getSystemSignals(currentSystem);
     }
-
-
 
     return <>
         <div className={isConnected ? styles.isConnected : styles.isNotConnected}>
