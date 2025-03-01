@@ -12,7 +12,7 @@ export default function CommanderInfo(): ReactNode {
         if (!socket) return;
 
         const infoListenerId = socket.addListener('getStatusCommanderInfo', response => setCommanderInfo(response.commander_info as CommanderInfo))
-        const creditsListenerId = socket.addListener('getStatusCredits', response => {console.log(response); setCredits(response.credits as number)})
+        const creditsListenerId = socket.addListener('getStatusCredits', response => setCredits(response.credits as number))
 
         socket.sendMessage('getStatusCommanderInfo');
         socket.sendMessage('getStatusCredits');
