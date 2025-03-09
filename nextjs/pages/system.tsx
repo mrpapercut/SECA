@@ -87,6 +87,7 @@ function getSystemMoonStats(currentSystem: System): Record<string, {name: string
         const moon = moons[i];
         const moonName = moon.Name.replace(currentSystem.Name, '');
 
+        if (moon.SemiMajorAxis < res.closestOrbit.value) res.closestOrbit = {name: moonName, value: moon.SemiMajorAxis};
         if (moon.OrbitalPeriod < res.fastestOrbit.value) res.fastestOrbit = {name: moonName, value: moon.OrbitalPeriod};
         if (moon.RotationPeriod < res.fastestRotating.value) res.fastestRotating = {name: moonName, value: moon.RotationPeriod};
         if (moon.MassEM > res.heaviest.value) res.heaviest = {name: moonName, value: moon.MassEM};
@@ -151,6 +152,9 @@ export default function System() {
 
                     <div>Livable moons</div>
                     <div>{moonStats.livableMoons.value}</div>
+
+                    <div>Closest orbit</div>
+                    <div>{moonStats.closestOrbit.name}: {(moonStats.closestOrbit.value / 1000000).toFixed(2)} Mm</div>
 
                     <div>Fastest orbit</div>
                     <div>{moonStats.fastestOrbit.name}: {(moonStats.fastestOrbit.value / 60 / 60 / 24).toFixed(1)} D</div>
