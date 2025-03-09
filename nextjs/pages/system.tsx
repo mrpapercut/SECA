@@ -171,7 +171,7 @@ export default function System() {
                     <div>{moonStats.smallest.name}: {(moonStats.smallest.value / 1000).toFixed(0)} KM</div>
 
                     <div>Highest gravity</div>
-                    <div>{moonStats.highestGravity.name}: {moonStats.highestGravity.value.toFixed(2)} G</div>
+                    <div>{moonStats.highestGravity.name}: {(moonStats.highestGravity.value / 9.80665).toFixed(2)} G</div>
 
                     {moonStats.mostBioSignals.value > 0 && <>
                         <div>Most bio signals</div>
