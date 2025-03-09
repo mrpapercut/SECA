@@ -76,7 +76,7 @@ function getSystemMoonStats(currentSystem: System): Record<string, {name: string
         largest: {name: '', value: 0},
         smallest: {name: '', value: Number.MAX_SAFE_INTEGER},
         highestGravity: {name: '', value: 0},
-        mostBioSignals: {name: '', value: 0},
+        mostBioSignals: {name: '<none>', value: 0},
     }
 
     for (let i = 0; i < moons.length; i++) {
@@ -146,28 +146,30 @@ export default function System() {
                     <div>{moonStats.moonsInSystem.value}</div>
 
                     <div>Fastest orbit</div>
-                    <div>{moonStats.fastestOrbit.name}: {moonStats.fastestOrbit.value}</div>
+                    <div>{moonStats.fastestOrbit.name}: {(moonStats.fastestOrbit.value / 60 / 60 / 24).toFixed(1)} D</div>
 
                     <div>Fastest rotating</div>
-                    <div>{moonStats.fastestRotating.name}: {moonStats.fastestRotating.value}</div>
+                    <div>{moonStats.fastestRotating.name}: {(moonStats.fastestRotating.value / 60 / 60 / 24).toFixed(1)} D</div>
 
                     <div>Heaviest</div>
-                    <div>{moonStats.heaviest.name}: {moonStats.heaviest.value}</div>
+                    <div>{moonStats.heaviest.name}: {moonStats.heaviest.value.toFixed(4)} EM</div>
 
                     <div>Lightest</div>
-                    <div>{moonStats.lightest.name}: {moonStats.lightest.value}</div>
+                    <div>{moonStats.lightest.name}: {moonStats.lightest.value.toFixed(4)} EM</div>
 
                     <div>Largest</div>
-                    <div>{moonStats.largest.name}: {moonStats.largest.value}</div>
+                    <div>{moonStats.largest.name}: {(moonStats.largest.value / 1000).toFixed(0)}</div>
 
                     <div>Smallest</div>
-                    <div>{moonStats.smallest.name}: {moonStats.smallest.value}</div>
+                    <div>{moonStats.smallest.name}: {(moonStats.smallest.value / 1000).toFixed(0)}</div>
 
                     <div>Highest gravity</div>
-                    <div>{moonStats.highestGravity.name}: {moonStats.highestGravity.value}</div>
+                    <div>{moonStats.highestGravity.name}: {moonStats.highestGravity.value.toFixed(2)}</div>
 
-                    <div>Most bio signals</div>
-                    <div>{moonStats.mostBioSignals.name}: {moonStats.mostBioSignals.value}</div>
+                    {moonStats.mostBioSignals.value > 0 && <>
+                        <div>Most bio signals</div>
+                        <div>{moonStats.mostBioSignals.name}: {moonStats.mostBioSignals.value}</div>
+                    </>}
                 </div>
             </>}
 
