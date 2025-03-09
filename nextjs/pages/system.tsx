@@ -59,6 +59,45 @@ function getSystemDistances(currentSystem: System): Record<string, number> {
     return distances
 }
 
+function getSystemMoonStats(currentSystem: System): Record<string, {name: string, value: number}> {
+    const moonRegex = new RegExp('*\s[a-z]$');
+    const moons = currentSystem.Bodies.filter(b => moonRegex.test(b.Name) && b.WasDiscovered === false && b.Discovered === true);
+
+    if (moons.length === 0) return {};
+
+    const res = {
+        moonsInSystem: {name: currentSystem.Name, value: moons.length},
+        moonsPerBody: {name: '', value: 0},
+        closestOrbit: {name: '', value: Number.MAX_SAFE_INTEGER},
+        fastestOrbit: {name: '', value: Number.MAX_SAFE_INTEGER},
+        fastestRotating: {name: '', value: Number.MAX_SAFE_INTEGER},
+        heaviest: {name: '', value: 0},
+        lightest: {name: '', value: Number.MAX_SAFE_INTEGER},
+        largest: {name: '', value: 0},
+        smallest: {name: '', value: Number.MAX_SAFE_INTEGER},
+        highestGravity: {name: '', value: 0},
+        mostBioSignals: {name: '', value: 0},
+    }
+
+    for (let i = 0; i < moons.length; i++) {
+        const moon = moons[i];
+        const moonName = moon.Name.replace(currentSystem.Name, '');
+
+        if (moon.OrbitalPeriod < res.fastestOrbit.value) res.fastestOrbit = {name: moonName, value: moon.OrbitalPeriod};
+        if (moon.RotationPeriod < res.fastestRotating.value) res.fastestRotating = {name: moonName, value: moon.RotationPeriod};
+        if (moon.MassEM > res.heaviest.value) res.heaviest = {name: moonName, value: moon.MassEM};
+        if (moon.MassEM < res.lightest.value) res.lightest = {name: moonName, value: moon.MassEM};
+        if (moon.Radius > res.largest.value) res.largest = {name: moonName, value: moon.Radius};
+        if (moon.Radius < res.smallest.value) res.smallest = {name: moonName, value: moon.Radius};
+        if (moon.SurfaceGravity > res.highestGravity.value) res.highestGravity = {name: moonName, value: moon.SurfaceGravity};
+
+        const moonSignals = moon.signals?.filter(s => s.Type === 'Biological').length || 0;
+        if (moonSignals > res.mostBioSignals.value) res.mostBioSignals = {name: moonName, value: moonSignals};
+    }
+
+    return res;
+}
+
 export default function System() {
     const {socket, isConnected} = useSocket();
     const [currentSystem, setCurrentSystem] = useState({} as System);
@@ -84,6 +123,9 @@ export default function System() {
 
     const calculatedDistances = getSystemDistances(currentSystem);
 
+    const moonStats = getSystemMoonStats(currentSystem);
+    const hasMoonStats = Object.keys(moonStats).length > 0;
+
     return <>
         <div>
             <h3>{currentSystem.Name} ({currentSystem.Bodies.length} bodies)</h3>
@@ -94,6 +136,41 @@ export default function System() {
                     <div key={`dist_${key}_value`}>{calculatedDistances[key].toFixed(2)} ly</div>
                 </>)}
             </div>
+
+            {hasMoonStats && <>
+                <hr className={styles.divider} />
+
+                <h3>Moons:</h3>
+                <div className={styles.grid}>
+                    <div>Moons in system</div>
+                    <div>{moonStats.moonsInSystem.value}</div>
+
+                    <div>Fastest orbit</div>
+                    <div>{moonStats.fastestOrbit.name}: {moonStats.fastestOrbit.value}</div>
+
+                    <div>Fastest rotating</div>
+                    <div>{moonStats.fastestRotating.name}: {moonStats.fastestRotating.value}</div>
+
+                    <div>Heaviest</div>
+                    <div>{moonStats.heaviest.name}: {moonStats.heaviest.value}</div>
+
+                    <div>Lightest</div>
+                    <div>{moonStats.lightest.name}: {moonStats.lightest.value}</div>
+
+                    <div>Largest</div>
+                    <div>{moonStats.largest.name}: {moonStats.largest.value}</div>
+
+                    <div>Smallest</div>
+                    <div>{moonStats.smallest.name}: {moonStats.smallest.value}</div>
+
+                    <div>Highest gravity</div>
+                    <div>{moonStats.highestGravity.name}: {moonStats.highestGravity.value}</div>
+
+                    <div>Most bio signals</div>
+                    <div>{moonStats.mostBioSignals.name}: {moonStats.mostBioSignals.value}</div>
+                </div>
+            </>}
+
             <div className={styles.grid3}>
                 {currentSystem.Bodies.map(body => {
                     const isStar = body.BodyType === 'Star';
