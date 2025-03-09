@@ -7,6 +7,7 @@ import getBodyIcon from '@/util/getBodyIcon';
 import calculateDistance from '@/util/calculateDistance';
 
 import styles from '../styles/layout.module.scss';
+import { PlanetClass } from '@/@types/Bodies';
 
 function getBodyImageSize(body: Body): number {
     let imgWidth = 100;
@@ -65,8 +66,11 @@ function getSystemMoonStats(currentSystem: System): Record<string, {name: string
 
     if (moons.length === 0) return {};
 
+    const livableMoons = moons.filter(m => m.TerraformState !== '' || m.PlanetClass === PlanetClass.WaterWorld || m.PlanetClass === PlanetClass.EarthLikeWorld);
+
     const res = {
         moonsInSystem: {name: currentSystem.Name, value: moons.length},
+        livableMoons: {name: currentSystem.Name, value: livableMoons.length},
         moonsPerBody: {name: '', value: 0},
         closestOrbit: {name: '', value: Number.MAX_SAFE_INTEGER},
         fastestOrbit: {name: '', value: Number.MAX_SAFE_INTEGER},
@@ -144,6 +148,9 @@ export default function System() {
                 <div className={styles.grid}>
                     <div>Moons in system</div>
                     <div>{moonStats.moonsInSystem.value}</div>
+
+                    <div>Livable moons</div>
+                    <div>{moonStats.livableMoons.value}</div>
 
                     <div>Fastest orbit</div>
                     <div>{moonStats.fastestOrbit.name}: {(moonStats.fastestOrbit.value / 60 / 60 / 24).toFixed(1)} D</div>
