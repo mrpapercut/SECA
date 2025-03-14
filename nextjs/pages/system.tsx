@@ -62,7 +62,12 @@ function getSystemDistances(currentSystem: System): Record<string, number> {
 
 function getSystemMoonStats(currentSystem: System): Record<string, {name: string, value: number}> {
     const moonRegex = new RegExp('\\s[a-z]$');
-    const moons = currentSystem.Bodies.filter(b => moonRegex.test(b.Name) && b.WasDiscovered === false && b.Discovered === true);
+    const moons = currentSystem.Bodies.filter(b => moonRegex.test(b.Name) && b.WasDiscovered === false && b.Discovered === true).filter(m => {
+            const parentName = m.Name.replace(/(\s[a-z])*$/, '')
+            const parent = currentSystem.Bodies.find(b => b.Name === parentName);
+
+            return parent?.BodyType === 'Planet';
+        });
 
     if (moons.length === 0) return {};
 
@@ -88,8 +93,8 @@ function getSystemMoonStats(currentSystem: System): Record<string, {name: string
         const moonName = moon.Name.replace(currentSystem.Name, '');
 
         if (moon.SemiMajorAxis < res.closestOrbit.value) res.closestOrbit = {name: moonName, value: moon.SemiMajorAxis};
-        if (moon.OrbitalPeriod < res.fastestOrbit.value) res.fastestOrbit = {name: moonName, value: moon.OrbitalPeriod};
-        if (moon.RotationPeriod < res.fastestRotating.value) res.fastestRotating = {name: moonName, value: moon.RotationPeriod};
+        if (Math.abs(moon.OrbitalPeriod) < res.fastestOrbit.value) res.fastestOrbit = {name: moonName, value: moon.OrbitalPeriod};
+        if (Math.abs(moon.RotationPeriod) < res.fastestRotating.value) res.fastestRotating = {name: moonName, value: moon.RotationPeriod};
         if (moon.MassEM > res.heaviest.value) res.heaviest = {name: moonName, value: moon.MassEM};
         if (moon.MassEM < res.lightest.value) res.lightest = {name: moonName, value: moon.MassEM};
         if (moon.Radius > res.largest.value) res.largest = {name: moonName, value: moon.Radius};
