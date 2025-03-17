@@ -47,6 +47,8 @@ export default function CurrentRoute({}): ReactNode {
         return <></>
     }
 
+    const nextScoopable = findNextScoopable(currentRoute);
+
     return <>
         <hr className={styles.divider} />
 
@@ -64,7 +66,9 @@ export default function CurrentRoute({}): ReactNode {
         <div>Total stops:</div>
         <div>{currentRoute.length - 1}</div>
 
-        <div>{findNextScoopable(currentRoute)}</div>
-        <div></div>
+        {nextScoopable !== '' && <>
+            <div>Next scoopable star:</div>
+            <div>{nextScoopable}</div>
+        </>}
     </>
 }
