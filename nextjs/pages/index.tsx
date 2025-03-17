@@ -80,6 +80,9 @@ export default function Dashboard() {
 
                     <div>Sample base value:</div>
                     <div>{(currentStatus.sample_base_value || 0).toLocaleString()}</div>
+
+                    <div>CCR:</div>
+                    <div>{currentStatus.sample_ccr}</div>
                 </>}
 
                 {currentSystem && (worthMapping.length > 0 || bodiesWithBioSignals.length > 0) && <>

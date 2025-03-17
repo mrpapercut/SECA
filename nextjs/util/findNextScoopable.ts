@@ -24,7 +24,7 @@ export default function findNextScoopable(route: CurrentRoute[]): string {
         }
     }
 
-    if (distanceToScoopable === 0) return '';
+    if (distanceToScoopable === 0 || stopsToScoopable === 1) return '';
 
     if (!foundScoopable) return 'No scoopable stars found in route';
 
