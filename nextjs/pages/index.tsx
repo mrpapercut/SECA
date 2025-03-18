@@ -56,8 +56,6 @@ export default function Dashboard() {
     if (currentSystem) {
         const systemCoordinates = getSystemCoordinates(currentSystem);
         galacticRegion = getGalacticRegion(systemCoordinates);
-
-        console.log({systemCoordinates, galacticRegion});
     }
 
     return <>
