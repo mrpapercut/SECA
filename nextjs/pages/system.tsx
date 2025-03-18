@@ -196,7 +196,7 @@ export default function System() {
             </>}
 
             <div className={styles.grid3}>
-                {currentSystem.Bodies.map(body => {
+                {currentSystem.Bodies.filter(b => b.BodyType !== '').map(body => {
                     const isStar = body.BodyType === 'Star';
                     const imgWidth = getBodyImageSize(body);
                     const bodyStatIcons = getBodyStateIcons(body);
