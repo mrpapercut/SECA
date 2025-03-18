@@ -43,7 +43,7 @@ function getBodyStateIcons(body: Body): React.ReactNode {
     }
 
     return <>
-        {icons.map(icon => <Image key={`icon_${icon}`} src={`/images/icons/${icon}.png`} width={32} height={32} alt={icon} />)}
+        {icons.map(icon => <Image key={`icon_${icon}`} src={`/images/icons/${icon}.png`} width={48} height={48} alt={icon} />)}
     </>
 }
 
@@ -130,7 +130,6 @@ export default function System() {
         }
     }, [socket, isConnected]);
 
-    console.log(currentSystem);
     if (Object.keys(currentSystem).length === 0) {
         return <></>;
     }
@@ -177,7 +176,7 @@ export default function System() {
                     <div>{moonStats.heaviest.name}: {moonStats.heaviest.value.toFixed(4)} EM</div>
 
                     <div>Lightest</div>
-                    <div>{moonStats.lightest.name}: {moonStats.lightest.value.toFixed(4)} EM</div>
+                    <div>{moonStats.lightest.name}: {moonStats.lightest.value.toFixed(6)} EM</div>
 
                     <div>Largest</div>
                     <div>{moonStats.largest.name}: {(moonStats.largest.value / 1000).toFixed(0)} KM</div>
@@ -186,7 +185,7 @@ export default function System() {
                     <div>{moonStats.smallest.name}: {(moonStats.smallest.value / 1000).toFixed(0)} KM</div>
 
                     <div>Highest gravity</div>
-                    <div>{moonStats.highestGravity.name}: {(moonStats.highestGravity.value / 9.80665).toFixed(2)} G</div>
+                    <div>{moonStats.highestGravity.name}: {(moonStats.highestGravity.value / 9.8).toFixed(2)} G</div>
 
                     {moonStats.mostBioSignals.value > 0 && <>
                         <div>Most bio signals</div>
