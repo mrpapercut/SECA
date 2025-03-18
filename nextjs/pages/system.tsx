@@ -68,12 +68,7 @@ function getSystemDistances(currentSystem: System): Record<string, number> {
 
 function getSystemMoonStats(currentSystem: System): Record<string, {name: string, value: number}> {
     const moonRegex = new RegExp('\\s[a-z]$');
-    const moons = currentSystem.Bodies.filter(b => moonRegex.test(b.Name) && b.WasDiscovered === false && b.Discovered === true).filter(m => {
-            const parentName = m.Name.replace(/(\s[a-z])*$/, '')
-            const parent = currentSystem.Bodies.find(b => b.Name === parentName);
-
-            return parent?.BodyType === 'Planet';
-        });
+    const moons = currentSystem.Bodies.filter(b => moonRegex.test(b.Name) && b.WasDiscovered === false && b.Discovered === true);
 
     if (moons.length === 0) return {};
 
