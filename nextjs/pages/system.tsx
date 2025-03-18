@@ -13,6 +13,11 @@ function getBodyImageSize(body: Body): number {
     let imgWidth = 100;
 
     if (body.BodyType === 'Star') {
+        imgWidth = 125;
+    }
+
+    /*
+    if (body.BodyType === 'Star') {
         if (body.StellarMass <= 1.5) imgWidth = 250 * body.StellarMass;
         else imgWidth = 100 * body.StellarMass;
     } else {
@@ -23,6 +28,7 @@ function getBodyImageSize(body: Body): number {
 
     // Clamp between 50 and 200px
     imgWidth = Math.min(200, Math.max(50, imgWidth));
+    */
 
     return imgWidth;
 }
@@ -37,7 +43,7 @@ function getBodyStateIcons(body: Body): React.ReactNode {
     }
 
     return <>
-        {icons.map(icon => <Image key={`icon_${icon}`} src={`/images/icons/${icon}.png`} width={48} height={48} alt={icon} />)}
+        {icons.map(icon => <Image key={`icon_${icon}`} src={`/images/icons/${icon}.png`} width={32} height={32} alt={icon} />)}
     </>
 }
 
