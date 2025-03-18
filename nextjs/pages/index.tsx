@@ -13,6 +13,8 @@ import getUnmappedWorthyBodies from '@/util/getUnmappedWorthyBodies';
 import getBodiesWithBioSignals from '@/util/getBodiesWithBioSignals';
 import getSystemSignals from '@/util/getSystemSignals';
 import {translateState} from '@/util/translateState';
+import getSystemCoordinates from '@/util/getSystemCoordinates';
+import getGalacticRegion from '@/util/getGalacticRegion';
 
 export default function Dashboard() {
     const { socket, isConnected } = useSocket();
@@ -50,6 +52,12 @@ export default function Dashboard() {
         systemSignals = getSystemSignals(currentSystem);
     }
 
+    let galacticRegion = '';
+    if (currentSystem) {
+        const systemCoordinates = getSystemCoordinates(currentSystem);
+        galacticRegion = getGalacticRegion(systemCoordinates);
+    }
+
     return <>
         <div className={isConnected ? styles.isConnected : styles.isNotConnected}>
             <div className={styles.cmdrProfileWrapper}>
@@ -67,6 +75,11 @@ export default function Dashboard() {
                 {currentStatus.current_body !== '' && currentStatus.current_body !== currentStatus.current_system && <>
                     <div>Current body:</div>
                     <div>{currentStatus.current_body}</div>
+                </>}
+
+                {galacticRegion !== '' && <>
+                    <div>Region:</div>
+                    <div>{galacticRegion}</div>
                 </>}
 
                 {currentStatus.current_sample !== '' && <>
