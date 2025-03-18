@@ -15,6 +15,8 @@ export default function getGalacticRegion(coordinates: Coordinates): string {
         let rx = 0;
         let pv = 0;
 
+        if (!row) return '';
+
         for (const [rl, rv] of row) {
             if (px < rx + rl) {
                 pv = rv;
