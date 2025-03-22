@@ -94,8 +94,8 @@ function getSystemMoonStats(currentSystem: System): Record<string, {name: string
         const moonName = moon.Name.replace(currentSystem.Name, '');
 
         if (moon.SemiMajorAxis < res.closestOrbit.value) res.closestOrbit = {name: moonName, value: moon.SemiMajorAxis};
-        if (Math.abs(moon.OrbitalPeriod) < res.fastestOrbit.value) res.fastestOrbit = {name: moonName, value: moon.OrbitalPeriod};
-        if (Math.abs(moon.RotationPeriod) < res.fastestRotating.value) res.fastestRotating = {name: moonName, value: moon.RotationPeriod};
+        if (Math.abs(moon.OrbitalPeriod) < Math.abs(res.fastestOrbit.value)) res.fastestOrbit = {name: moonName, value: Math.abs(moon.OrbitalPeriod)};
+        if (Math.abs(moon.RotationPeriod) < Math.abs(res.fastestRotating.value)) res.fastestRotating = {name: moonName, value: Math.abs(moon.RotationPeriod)};
         if (moon.MassEM > res.heaviest.value) res.heaviest = {name: moonName, value: moon.MassEM};
         if (moon.MassEM < res.lightest.value) res.lightest = {name: moonName, value: moon.MassEM};
         if (moon.Radius > res.largest.value) res.largest = {name: moonName, value: moon.Radius};
@@ -162,22 +162,22 @@ export default function System() {
                     <div>{moonStats.closestOrbit.name}: {(moonStats.closestOrbit.value / 1000000).toFixed(2)} Mm</div>
 
                     <div>Fastest orbit</div>
-                    <div>{moonStats.fastestOrbit.name}: {(moonStats.fastestOrbit.value / 60 / 60 / 24).toFixed(1)} D</div>
+                    <div>{moonStats.fastestOrbit.name}: {(moonStats.fastestOrbit.value / 60 / 60 / 24).toFixed(1)} D ({moonStats.fastestOrbit.value}s)</div>
 
                     <div>Fastest rotating</div>
-                    <div>{moonStats.fastestRotating.name}: {(moonStats.fastestRotating.value / 60 / 60 / 24).toFixed(1)} D</div>
+                    <div>{moonStats.fastestRotating.name}: {(moonStats.fastestRotating.value / 60 / 60 / 24).toFixed(1)} D ({moonStats.fastestRotating.value}s)</div>
 
                     <div>Heaviest</div>
                     <div>{moonStats.heaviest.name}: {moonStats.heaviest.value.toFixed(4)} EM</div>
 
                     <div>Lightest</div>
-                    <div>{moonStats.lightest.name}: {moonStats.lightest.value.toFixed(6)} EM</div>
+                    <div>{moonStats.lightest.name}: {moonStats.lightest.value.toFixed(moonStats.lightest.value < 0.0001 ? 6 : 4)} EM</div>
 
                     <div>Largest</div>
-                    <div>{moonStats.largest.name}: {(moonStats.largest.value / 1000).toFixed(0)} KM</div>
+                    <div>{moonStats.largest.name}: {(moonStats.largest.value / 1000).toFixed(2)} KM</div>
 
                     <div>Smallest</div>
-                    <div>{moonStats.smallest.name}: {(moonStats.smallest.value / 1000).toFixed(0)} KM</div>
+                    <div>{moonStats.smallest.name}: {(moonStats.smallest.value / 1000).toFixed(2)} KM</div>
 
                     <div>Highest gravity</div>
                     <div>{moonStats.highestGravity.name}: {(moonStats.highestGravity.value / 9.8).toFixed(2)} G</div>
