@@ -9,6 +9,12 @@ import (
 )
 
 func UpdateDiscordPresence() {
+	dc := GetDiscordInstance()
+
+	if !dc.Connected {
+		return
+	}
+
 	status := models.GetStatus()
 
 	dcState := fmt.Sprintf("System: %s", status.CurrentSystem)
@@ -24,8 +30,6 @@ func UpdateDiscordPresence() {
 	}
 
 	dcDetails := TranslateStateForDiscord(status.State, param)
-
-	dc := GetDiscordInstance()
 
 	dc.Message <- &client.Activity{
 		State:   dcState,
