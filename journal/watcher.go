@@ -74,6 +74,10 @@ func (jw *JournalWatcher) ProcessExistingFiles() {
 
 	for _, file := range files {
 		filepath := path.Join(jw.logdirPath, file.Name())
+		if !strings.HasSuffix(filepath, ".log") || !strings.HasSuffix(filepath, ".json") {
+			continue
+		}
+
 		slog.Info(fmt.Sprintf("Processing file %s", filepath))
 
 		contents, err := os.ReadFile(filepath)
