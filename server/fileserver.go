@@ -32,7 +32,6 @@ func (f *FileServer) Start(nextFS embed.FS) {
 		log.Fatal(err)
 	}
 
-	// The static Next.js app will be served under `/`.
 	http.Handle("/", http.FileServer(http.FS(distFS)))
 
 	log.Println("Starting HTTP server at http://localhost:3000 ...")
