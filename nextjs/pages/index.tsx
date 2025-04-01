@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 
 import styles from '../styles/layout.module.scss';
 
@@ -109,9 +109,18 @@ export default function Dashboard() {
                     {bodiesWithBioSignals.length > 0 && <>
                         <div>Bodies with bio signals:</div>
                         <div>
-                            {bodiesWithBioSignals.map((b, i) =>
-                                <div key={`bodyBio_${i}`}>{b.name} {b.bioSubtype.length > 0 ? `(${b.bioSubtype.join(', ')})` : `(${b.count > 1 ? `${b.count} signals` : `${b.count} signal`}, ${b.planetClass}, ${b.distance.toFixed(0)} ls)`}</div>
-                            )}
+                            {bodiesWithBioSignals.map((b, i) => {
+                                let subtype = '';
+                                if (b.bioSubtype.length > 0) {
+                                    const subtypes: ReactElement[] = [];
+                                    b.bioSubtype.forEach((s, i) => subtypes.push(<span key={`bodyBioSub_${i}`} className={s.sampled ? styles.bioSampled : ''}>{s.type}</span>))
+                                    subtype = subtypes.join(', ');
+                                } else {
+                                    subtype = `${b.count} signal`;
+                                    if (b.count > 1) subtype += 's';
+                                }
+                                return <div key={`bodyBio_${i}`}>{b.name} {`(${subtype}, ${b.planetClass}, ${b.distance.toFixed(0)} ls)`}</div>
+                            })}
                         </div>
                     </>}
                 </>}

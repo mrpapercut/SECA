@@ -129,7 +129,10 @@ interface BodyWithBioSignals {
     bodyID: number
     planetClass: PlanetClass
     distance: number
-    bioSubtype: string[]
+    bioSubtype: {
+        type: string,
+        sampled: boolean
+    }[]
     count: number
 }
 

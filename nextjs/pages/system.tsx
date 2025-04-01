@@ -7,7 +7,6 @@ import getBodyIcon from '@/util/getBodyIcon';
 import calculateDistance from '@/util/calculateDistance';
 
 import styles from '../styles/layout.module.scss';
-import { PlanetClass } from '@/@types/Bodies';
 
 function getBodyImageSize(body: Body): number {
     let imgWidth = 100;
@@ -15,20 +14,6 @@ function getBodyImageSize(body: Body): number {
     if (body.BodyType === 'Star') {
         imgWidth = 125;
     }
-
-    /*
-    if (body.BodyType === 'Star') {
-        if (body.StellarMass <= 1.5) imgWidth = 250 * body.StellarMass;
-        else imgWidth = 100 * body.StellarMass;
-    } else {
-        if (body.MassEM < 0.01) imgWidth = 10000 * body.MassEM;
-        else if (body.MassEM < 0.1) imgWidth = 1000 * body.MassEM;
-        else imgWidth = 100 * body.MassEM;
-    }
-
-    // Clamp between 50 and 200px
-    imgWidth = Math.min(200, Math.max(50, imgWidth));
-    */
 
     return imgWidth;
 }
@@ -66,47 +51,10 @@ function getSystemDistances(currentSystem: System): Record<string, number> {
     return distances
 }
 
-function getSystemMoonStats(currentSystem: System): Record<string, {name: string, value: number}> {
-    const moonRegex = new RegExp('\\s[a-z]$');
-    const moons = currentSystem.Bodies.filter(b => moonRegex.test(b.Name) && b.WasDiscovered === false && b.Discovered === true);
-
-    if (moons.length === 0) return {};
-
-    const livableMoons = moons.filter(m => m.TerraformState !== '' || m.PlanetClass === PlanetClass.WaterWorld || m.PlanetClass === PlanetClass.EarthLikeWorld);
-
-    const res = {
-        moonsInSystem: {name: currentSystem.Name, value: moons.length},
-        livableMoons: {name: currentSystem.Name, value: livableMoons.length},
-        moonsPerBody: {name: '', value: 0},
-        closestOrbit: {name: '', value: Number.MAX_SAFE_INTEGER},
-        fastestOrbit: {name: '', value: Number.MAX_SAFE_INTEGER},
-        fastestRotating: {name: '', value: Number.MAX_SAFE_INTEGER},
-        heaviest: {name: '', value: 0},
-        lightest: {name: '', value: Number.MAX_SAFE_INTEGER},
-        largest: {name: '', value: 0},
-        smallest: {name: '', value: Number.MAX_SAFE_INTEGER},
-        highestGravity: {name: '', value: 0},
-        mostBioSignals: {name: '<none>', value: 0},
-    }
-
-    for (let i = 0; i < moons.length; i++) {
-        const moon = moons[i];
-        const moonName = moon.Name.replace(currentSystem.Name, '');
-
-        if (moon.SemiMajorAxis < res.closestOrbit.value) res.closestOrbit = {name: moonName, value: moon.SemiMajorAxis};
-        if (Math.abs(moon.OrbitalPeriod) < Math.abs(res.fastestOrbit.value)) res.fastestOrbit = {name: moonName, value: Math.abs(moon.OrbitalPeriod)};
-        if (Math.abs(moon.RotationPeriod) < Math.abs(res.fastestRotating.value)) res.fastestRotating = {name: moonName, value: Math.abs(moon.RotationPeriod)};
-        if (moon.MassEM > res.heaviest.value) res.heaviest = {name: moonName, value: moon.MassEM};
-        if (moon.MassEM < res.lightest.value) res.lightest = {name: moonName, value: moon.MassEM};
-        if (moon.Radius > res.largest.value) res.largest = {name: moonName, value: moon.Radius};
-        if (moon.Radius < res.smallest.value) res.smallest = {name: moonName, value: moon.Radius};
-        if (moon.SurfaceGravity > res.highestGravity.value) res.highestGravity = {name: moonName, value: moon.SurfaceGravity};
-
-        const moonSignals = moon.signals?.filter(s => s.Type === 'Biological').length || 0;
-        if (moonSignals > res.mostBioSignals.value) res.mostBioSignals = {name: moonName, value: moonSignals};
-    }
-
-    return res;
+function getSystemBioPredictions(currentSystem: System) {
+    currentSystem.Bodies.forEach(body => {
+        console.log(body.signals)
+    });
 }
 
 export default function System() {
@@ -133,8 +81,7 @@ export default function System() {
 
     const calculatedDistances = getSystemDistances(currentSystem);
 
-    const moonStats = getSystemMoonStats(currentSystem);
-    const hasMoonStats = Object.keys(moonStats).length > 0;
+    getSystemBioPredictions(currentSystem);
 
     return <>
         <div>
@@ -146,48 +93,6 @@ export default function System() {
                     <div key={`dist_${key}_value`}>{calculatedDistances[key].toFixed(2)} ly</div>
                 </>)}
             </div>
-
-            {hasMoonStats && <>
-                <hr className={styles.divider} />
-
-                <h3>Moons:</h3>
-                <div className={styles.grid}>
-                    <div>Moons in system</div>
-                    <div>{moonStats.moonsInSystem.value}</div>
-
-                    <div>Livable moons</div>
-                    <div>{moonStats.livableMoons.value}</div>
-
-                    <div>Closest orbit</div>
-                    <div>{moonStats.closestOrbit.name}: {(moonStats.closestOrbit.value / 1000000).toFixed(2)} Mm</div>
-
-                    <div>Fastest orbit</div>
-                    <div>{moonStats.fastestOrbit.name}: {(moonStats.fastestOrbit.value / 60 / 60 / 24).toFixed(1)} D ({moonStats.fastestOrbit.value}s)</div>
-
-                    <div>Fastest rotating</div>
-                    <div>{moonStats.fastestRotating.name}: {(moonStats.fastestRotating.value / 60 / 60 / 24).toFixed(1)} D ({moonStats.fastestRotating.value}s)</div>
-
-                    <div>Heaviest</div>
-                    <div>{moonStats.heaviest.name}: {moonStats.heaviest.value.toFixed(4)} EM</div>
-
-                    <div>Lightest</div>
-                    <div>{moonStats.lightest.name}: {moonStats.lightest.value.toFixed(moonStats.lightest.value < 0.0001 ? 6 : 4)} EM</div>
-
-                    <div>Largest</div>
-                    <div>{moonStats.largest.name}: {(moonStats.largest.value / 1000).toFixed(2)} KM</div>
-
-                    <div>Smallest</div>
-                    <div>{moonStats.smallest.name}: {(moonStats.smallest.value / 1000).toFixed(2)} KM</div>
-
-                    <div>Highest gravity</div>
-                    <div>{moonStats.highestGravity.name}: {(moonStats.highestGravity.value / 9.8).toFixed(2)} G</div>
-
-                    {moonStats.mostBioSignals.value > 0 && <>
-                        <div>Most bio signals</div>
-                        <div>{moonStats.mostBioSignals.name}: {moonStats.mostBioSignals.value}</div>
-                    </>}
-                </div>
-            </>}
 
             <div className={styles.grid3}>
                 {currentSystem.Bodies.filter(b => b.BodyType !== '').map(body => {
